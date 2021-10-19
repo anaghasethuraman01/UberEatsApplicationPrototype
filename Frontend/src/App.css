@@ -1,0 +1,315 @@
+.form-buttons{
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+.form-buttons-offcanvas{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 10;
+}
+
+.btn-offcanvas{
+  width: 8rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-bottom: 1rem;
+  
+}
+
+.btn-offcanvas-show{
+  width: 1rem;
+  position: absolute;
+  color:black;
+  border: none;
+  width:10rem;
+  left: 10px;
+  top: 90px;
+
+
+}
+
+
+.offcanvas{
+  width: 200px;
+}
+.btn{
+  font-size:large;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: 1rem;
+}
+.login-form .form-control {
+  background: #f7f7f7 none repeat scroll 0 0;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  font-size: 14px;
+  height: 50px;
+  line-height: 50px;
+}
+input[type=radio] {
+  
+    width:0.8em;
+    height: 0.5em;
+   
+}
+/* .radiobtn{
+   width: 2.5em;
+   
+} */
+.btngrp{
+   display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+.cardbtn{
+  text-align: center;
+  border: none;
+  color: black;
+  display: inline-block;
+  width: 40%;
+  font-size: large;
+  background-color: white;
+}
+.navbar-brand{
+  background-color: #282c34;
+  color: black;
+  width: 88rem;
+
+}
+.body-login {
+  
+  background-image: url("bckimg.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  padding-bottom: 5rem;
+  
+  
+}
+
+
+.listgroup{
+  width: 10rem;
+}
+.favbtn{
+  width: 12rem;
+}
+.detailsincard{
+   font-size: medium;
+}
+/* .card{
+  display: flex;
+  flex-direction: row;
+  width: auto;
+} */
+.ubereats{
+  font-size: 150%;
+}
+.receipt{
+  
+  padding-left: 2rem;
+}
+.cardbtn2{
+  text-align: center;
+  border: none;
+  color: white;
+  display: inline-block;
+  width: 75%;
+  background-color: black;
+}
+.cartitems{
+    display: flex;
+    flex-direction: row;
+    
+    
+}
+
+.cartitem{
+  padding-left: 6.5rem;
+   
+}
+
+.cartleft {
+  color: black;
+ 
+  position: absolute;
+  right: 125px;
+  top: 4px;
+  height: 2rem;
+  margin-bottom: 6rem;
+  margin-top: 1rem;
+  padding-top: 0rem;
+  
+}
+
+.btn-logout{
+  color: black;
+  position: absolute;
+  right: 23px;
+  top: 4px;
+  height: 2rem;
+  margin-bottom: 4rem;
+  margin-top: 1rem;
+  padding-top: 0rem;
+}
+
+.cardbtn1{
+  text-align: center;
+  border: none;
+  color: black;
+  display: inline-block;
+  width: 65%;
+  background-color: white;
+}
+
+.login-form .form-group {
+  margin-bottom:10px;
+}
+.form-group1{
+  margin-left:1px;
+  width: 7%;
+}
+.logout{
+  color: white;
+}
+.linkd{
+  size: 100rem;
+  right: 1150%;
+}
+.container{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.container1{
+  position: absolute;
+  right: 20px;
+  color: green;
+  width: 25%;
+  text-align: center;
+}
+
+select{
+  width: 40%;
+  height: 2rem;
+}
+.filefolder{
+  width: 100%;
+  height: 50%;
+}
+.main-div {
+  background: #ffffff none repeat scroll 0 0;
+  border-radius: 20px;
+  margin: 10px auto 30px;
+  max-width: 100%;
+  padding: 50px 70px 70px 71px;
+  border: 2px solid green;
+}
+.login-form  .btn.btn-primary {
+  background: green none repeat scroll 0 0;
+  border-color: green;
+  color: #ffffff;
+  font-size: 24px;
+  width: 25%;
+  height: 40px;
+  padding: 0;
+}
+.form-control{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 2 auto;
+  margin-bottom: 2rem;
+}
+.form-control-add{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height:2rem;
+  margin: 2 auto;
+  margin-bottom: 2rem;
+}
+.form-control-order{
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 2 auto;
+  margin-bottom: 2rem;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  
+}
+input {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+  height: 0.5rem;
+  font-size: 1.3rem;
+  font-family: "Times New Roman", Times, serif;
+}
+.link{
+  font-size: 2rem;
+  padding-left: 1rem;
+  text-decoration: none;
+}
+.form-date{
+  width:43.5%;
+  height :40px;
+
+}
+.usertype{
+  width : 25%;
+  height: 40px;
+  margin-bottom: 2rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+
+
+/* Style the front side (fallback if image is missing) */
+
+
+/* Style the back side */
+
+
+/* Position the front and back side */
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
