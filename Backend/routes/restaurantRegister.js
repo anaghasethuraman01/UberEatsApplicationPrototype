@@ -5,13 +5,10 @@ const router = express();
 
 const Restaurants = require('../Models/RestaurantModel');
 
-
-
-
 app.post('/restaurantRegister', (req, res) => {
 	
 	var newuser = new Restaurants({
-		username : req.body.name,
+		restaurantname : req.body.name,
 		email:req.body.email,
 		password:req.body.password,
 		owner:req.body.owner,

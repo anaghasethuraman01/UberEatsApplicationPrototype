@@ -1,8 +1,8 @@
-//loading all the restaurants for the customer
+//getting customer profile details
 
 const express = require("express");
 const router = express();
- const app = require('../app');
+const app = require('../app');
 
 const Users = require('../Models/UserModel');
 

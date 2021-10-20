@@ -14,9 +14,7 @@ app.post('/register', (req, res) => {
 		owner:req.body.owner,
 		city:req.body.city
 	});
-	// console.log("newuser")
- 	// console.log(newuser)
-	//  console.log("****")
+
 	Users.findOne({ email: req.body.email }, (error, register) => {
 	   
 		if (error) {

@@ -1,4 +1,4 @@
-//loading all the dishes for a restaurant
+//loading all the dishes for a restaurant  getrestaurantdishes
 const express = require("express");
 const router = express.Router();
 var mysql = require("mysql");

@@ -1,60 +1,55 @@
 //inserting dishes into restaurant
-
-// //register page for customer and restuarant
 const express = require("express");
 const router = express();
- const app = require('../app');
+const app = require('../app');
+const Dishes = require('../Models/DishModel');
 
-const Users = require('../Models/UserModel');
 
-
-app.post('/register', (req, res) => {
+app.post('/restaurantdish', (req, res) => {
 	
-	var newuser = new Users({
-		username : req.body.name,
-		email:req.body.email,
-		password:req.body.password,
-		owner:req.body.owner,
-		city:req.body.city
-	});
-	// console.log("newuser")
- 	// console.log(newuser)
-	//  console.log("****")
-	Users.findOne({ email: req.body.email }, (error, register) => {
+	var newdish = {
+		dishname : req.body.dishname,
+		ingrediants:req.body.ingrediants,
+		price:req.body.price,
+		description:req.body.description,
+		category:req.body.category,
+		foodtype:req.body.foodtype,
+		restaurantid:req.body.restaurantid
+	};
+
+	console.log(newdish)
+	Dishes.create(newdish, (error, dishresult) => {
 	   
 		if (error) {
 			// res.writeHead(500, {
 			// 	'Content-Type': 'text/plain'
 			// })
-			res.send();
+			console.log(error.message)
 		}
-		if (register) {
-			
-			 console.log("Email already exists");
-			 res.send({ message: "User email already registered" });
-			
-		}
-		else {
-		  newuser.save((error, data) => {
-				if (error) {
-					// res.writeHead(500, {
-					// 	'Content-Type': 'text/plain'
-					// })
-					res.send();
-				}
-				else {
-					console.log("added");
-					// res.writeHead(200, {
-					// 	'Content-Type': 'text/plain'
-					// })
-					res.send({message: "User Registration successful"});
-				}
-			});
-		}
+		if (dishresult) {
+			res.send({message: "New Dish Added"});
+		}	
 	});
+			
+		
   });
 module.exports = router;
 
+// newdish.insertOne((error, data) => {
+	// 	if (error) {
+	// 		// res.writeHead(500, {
+	// 		// 	'Content-Type': 'text/plain'
+	// 		// })
+	// 		res.send();
+	// 	}
+	// 	else {
+	// 		console.log("added");
+	// 		// res.writeHead(200, {
+	// 		// 	'Content-Type': 'text/plain'
+	// 		// })
+	// 		res.send({message: "New Dish added"});
+	// 	}
+	// });
 
 
 
