@@ -1,4 +1,4 @@
-import { USER_PROFILE } from "../actions/types";
+import { USER_PROFILE,RESTAURANT_PROFILE } from "../actions/types";
 
 const initialState = {
   profile: {},
@@ -10,13 +10,12 @@ export default function (state = initialState, action) {
         ...state,
         profile: action.payload,
       };
-    //   case RESTAURANT_LOGIN:
-    //   return {
-    //     ...state,
-    //     login: action.payload,
-    //   };
-    //   case USER_LOGOUT:
-    //     return {};
+      case RESTAURANT_PROFILE:
+      return {
+        ...state,
+        profile: action.payload,
+      };
+    
     default:
       return state;
   }
