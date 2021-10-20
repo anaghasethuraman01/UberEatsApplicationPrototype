@@ -48,9 +48,19 @@ class CustomerProfile extends Component {
                 userid: profile._id || this.state.userid,
                 username: profile.username || this.state.username,
                 email: profile.email || this.state.email,
+                about:profile.about|| this.state.about,
+                phone:profile.phone|| this.state.phone,
+                city:profile.city|| this.state.city,
+                address:profile.address|| this.state.address,
+                state:profile.state|| this.state.state,
+                country:profile.country|| this.state.country,
+                nickname:profile.nickname|| this.state.nickname,
+                dob:profile.dob||this.state.dob
+
             };
 
             this.setState({customerdetails:userData});
+            localStorage.setItem("city",profile.city)
         }
     }
     
@@ -131,19 +141,10 @@ class CustomerProfile extends Component {
        
           
     render(){
-    
-        // this.setState({
-        //   customerdetails: this.props.profile,
-        // });
-      
-      //console.log(this.state.customerdetails)
-      
      let username = "";
      let customerdetails = []
       const imgLink = `${backendServer}/${localStorage.getItem("profilepic")}`;
       username = this.props.profile.username;
-      // console.log("Cus De")
-      //  console.log(this.state.customerdetails);
     return (
 
 
@@ -199,7 +200,7 @@ class CustomerProfile extends Component {
           // onClick = {this.handleSubmit} 
           >Update Profile</Button>
 
-          <Button onClick = {this.goback}>Back</Button>
+          <Button onClick = {this.goback}>Cancel</Button>
         </div>
       </div>
     </div>

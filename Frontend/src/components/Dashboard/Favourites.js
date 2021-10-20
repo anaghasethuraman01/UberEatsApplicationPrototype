@@ -26,7 +26,7 @@ class Favourites extends Component {
 			restaurants1: [],
             favrestaurants: [],
             favourites:null,
-			//favourites : []
+			
 		};
 		// this.handleChange = this.handleChange.bind(this);
 		// this.handleSubmit = this.handleSubmit.bind(this);

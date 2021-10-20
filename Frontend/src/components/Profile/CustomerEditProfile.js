@@ -68,10 +68,10 @@ class CustomerEditProfile extends Component {
                 alert('Enter valid Email!')
                 isValid = false;
                 }
-                if(this.state.customerDetails.phone.match(/\d/g).length !== 10){
-                  alert('Phone number should only be 10 numbers!')
-                  isValid = false;
-                }
+                // if(this.state.customerDetails.phone.match(/\d/g).length !== 10){
+                //   alert('Phone number should only be 10 numbers!')
+                //   isValid = false;
+                // }
             } 
         
         return isValid;
@@ -152,7 +152,7 @@ class CustomerEditProfile extends Component {
               
           }
           
-
+        console.log(customerData)
         this.sendRestAPI(customerData);
         this.setState({
           show : true 

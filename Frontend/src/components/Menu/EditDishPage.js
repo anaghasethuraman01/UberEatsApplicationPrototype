@@ -32,6 +32,7 @@ class EditDishPage extends Component {
             history.push('/restauranthome'); 
         }
     sendDishAPI = (data) => {
+        console.log(data);
           axios.post(`${backendServer}/editrestaurantdishes`, data)
               .then(res => {
                   if(res.data.message){
@@ -104,7 +105,7 @@ class EditDishPage extends Component {
         e.preventDefault();
         if (this.validateDish() === true){
             const dishdetails = {
-                dishid:this.state.selectedDish.dishid,
+                dishid:this.state.selectedDish._id,
                 dishname:this.state.selectedDish.dishname,
                 ingrediants:this.state.selectedDish.ingrediants,
                 price:this.state.selectedDish.price,
@@ -112,6 +113,7 @@ class EditDishPage extends Component {
                 category:this.state.selectedDish.category,
                 foodtype:this.state.selectedDish.foodtype
             }
+           
             this.sendDishAPI(dishdetails);
             this.setState({
                 show : true 

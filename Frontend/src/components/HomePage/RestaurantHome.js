@@ -35,6 +35,7 @@ class RestaurantHome extends Component {
         const data = {
           restaurantid : this.state.restaurantid
         }
+       
          axios.post(`${backendServer}/getrestaurantwithid`,data).then((response) => {
           //  console.log(response.data.length)
            if(response.data.length > 0){
@@ -77,7 +78,7 @@ class RestaurantHome extends Component {
             this.editdish(dish);
             }}>Edit Dish
             </Button>
-          </Card.Body>
+          </Card.Body> 
           </Card>                           
         </div>
         

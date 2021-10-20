@@ -27,9 +27,9 @@ class AddRestaurantMenu extends Component {
         localStorage.setItem("dishname",data.dishname);
           axios.post(`${backendServer}/restaurantdish`, data)
               .then(res => {
-                  if(res.data.message){
-                      this.setState({message:res.data.message})
-                  }
+              //     if(res.data.message){
+              //         this.setState({message:res.data.message})
+              //     }
               }).catch(
                   (error) => {
                     console.log(error);

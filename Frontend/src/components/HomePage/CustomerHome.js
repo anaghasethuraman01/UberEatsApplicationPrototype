@@ -47,6 +47,8 @@ class CustomerHome extends Component {
       const data = {
 			city: city,
 		  };
+      console.log("city")
+      console.log(data)
       axios.post(`${backendServer}/getrestaurantwithcity`,data).then((response) => {
         //this.setState({ status: "notdone" });
         //console.log(response.data);
@@ -60,7 +62,8 @@ class CustomerHome extends Component {
       
       axios.get(`${backendServer}/getrestaurant`).then((response) => {
 			//this.setState({ status: "notdone" });
-			//console.log(response.data);
+      console.log("all det")
+			console.log(response.data);
 			//update the state with the response data
 			this.setState({
 				restaurants1: this.state.restaurants1.concat(response.data),
@@ -91,7 +94,7 @@ class CustomerHome extends Component {
 		const customerid = localStorage.getItem("userid");	
 		const favourites = {
 			customerid : customerid,
-			restid:restid	
+			restaurantid:restid	
 			};
 		this.addToFavouritesTable(favourites);	
     
@@ -116,8 +119,8 @@ class CustomerHome extends Component {
         console.log(val1);
         console.log(val2);
         //  window.location.href='/SingleRestDashboard';
-        localStorage.setItem("restid", val1);
-        localStorage.setItem("restname", val2);
+        localStorage.setItem("restaurantid", val1);
+        localStorage.setItem("restaurantname", val2);
         const { history } = this.props;
         console.log(history);
         history.push("/singlerestdashboard");
@@ -127,7 +130,6 @@ class CustomerHome extends Component {
     render(){
       var beforeSearch = null;
       var afterSearch = null;
-      var favouriterest = null;
       var fav=null;
 
       if(this.state.message){
@@ -163,7 +165,7 @@ class CustomerHome extends Component {
                       <div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant.restaurantid,restaurant.username);
+												this.navigatetorestaurant(restaurant._id,restaurant.username);
 											}}
 										>
 										<IoIosRestaurant/>
@@ -172,7 +174,7 @@ class CustomerHome extends Component {
 										
                       <Button className="cardbtn" data-tip="Add To Favourites"
 										  onClick={() => {
-												this.addToFavourites(restaurant.restaurantid);
+												this.addToFavourites(restaurant._id);
 											}}
 											>
 											<MdFavoriteBorder/></Button>
@@ -210,16 +212,15 @@ class CustomerHome extends Component {
                       <div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant.restaurantid,restaurant.username);
+												this.navigatetorestaurant(restaurant._id,restaurant.username);
 											}}
 										>
 										<IoIosRestaurant/>
 										</Button>
 										<ReactTooltip />
-										
                       <Button className="cardbtn" data-tip="Add To Favourites"
 										  onClick={() => {
-												this.addToFavourites(restaurant.restaurantid);
+												this.addToFavourites(restaurant._id);
 											}}
 											>
 											<MdFavoriteBorder/></Button>
@@ -236,45 +237,45 @@ class CustomerHome extends Component {
       }
 
 
-      if(this.state.favourites === "found"){
-         favouriterest = ( 
-          <div>
-          <h1>Your Favourites</h1>
-          <div className="card-list">
+      // if(this.state.favourites === "found"){
+      //    favouriterest = ( 
+      //     <div>
+      //     <h1>Your Favourites</h1>
+      //     <div className="card-list">
           
-            {this.state.favrestaurants.map((restaurant) => (
-              <div>
-                <Card >
-                  <Card.Img
-                    style={{ width: "18rem" }}
-                    variant="top"
-                    src={`${backendServer}/${restaurant.profilepic}`}
-                  />
-                  <Card.Body>
-                    <Card.Title>{restaurant.username}</Card.Title>
-                    <ListGroup className="list-group-flush">
-                      <ListGroupItem> {restaurant.phone} </ListGroupItem>
-                      <ListGroupItem> {restaurant.email}</ListGroupItem>
-                      <div className ="form-buttons">
-                      <Button  
-                        onClick={() => {
-                          this.navigatetorestaurant(restaurant.restaurantid,restaurant.username);
-                        }}
-                      >
-                        Explore
-                      </Button>
-                      <Button className="cardbtn"><BiCartAlt/></Button>
-                      </div>
-                    </ListGroup>
+      //       {this.state.favrestaurants.map((restaurant) => (
+      //         <div>
+      //           <Card >
+      //             <Card.Img
+      //               style={{ width: "18rem" }}
+      //               variant="top"
+      //               src={`${backendServer}/${restaurant.profilepic}`}
+      //             />
+      //             <Card.Body>
+      //               <Card.Title>{restaurant.username}</Card.Title>
+      //               <ListGroup className="list-group-flush">
+      //                 <ListGroupItem> {restaurant.phone} </ListGroupItem>
+      //                 <ListGroupItem> {restaurant.email}</ListGroupItem>
+      //                 <div className ="form-buttons">
+      //                 <Button  
+      //                   onClick={() => {
+      //                     this.navigatetorestaurant(restaurant.restaurantid,restaurant.username);
+      //                   }}
+      //                 >
+      //                   Explore
+      //                 </Button>
+      //                 <Button className="cardbtn"><BiCartAlt/></Button>
+      //                 </div>
+      //               </ListGroup>
                    
-                  </Card.Body>
-                </Card>
-              </div>
-            ))}
-          </div>
-          </div>
-        );
-      }
+      //             </Card.Body>
+      //           </Card>
+      //         </div>
+      //       ))}
+      //     </div>
+      //     </div>
+      //   );
+      // }
      
     return (
       
@@ -284,8 +285,6 @@ class CustomerHome extends Component {
             <form >
             <h1>Welcome {this.state.username} !</h1>
            
-      
-            
             <div>
               <Modal size="md-down"
               aria-labelledby="contained-modal-title-vcenter"

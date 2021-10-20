@@ -136,7 +136,7 @@ viewCart = (e) => {
     const userNameSessionVal = localStorage.getItem('userid');
     const restaurantNameSessionVal = localStorage.getItem('restaurantid');
     let sessionAvail = null;
-    if (userNameSessionVal != null && userNameSessionVal !== undefined && userNameSessionVal !== "" && (restaurantNameSessionVal === ""|| restaurantNameSessionVal ===null ||  restaurantNameSessionVal ===undefined) ) {
+    if (userNameSessionVal != null && userNameSessionVal !== undefined && userNameSessionVal !== "") {
       sessionAvail = (
         <div className = "cartitems  ">
            <Button className="cartleft " variant="light" onClick={this.viewCart}><FaShoppingCart/>Cart</Button>

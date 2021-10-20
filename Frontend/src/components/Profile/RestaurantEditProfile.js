@@ -8,6 +8,7 @@ import {Modal} from 'react-bootstrap';
 import { Button,Input } from 'reactstrap';
 import backendServer from "../../webConfig";
 import validator from 'validator';
+import { CountryDropdown } from 'react-country-region-selector';
 class RestaurantEditProfile extends Component {
     
     constructor(props){
@@ -85,7 +86,7 @@ class RestaurantEditProfile extends Component {
 
      handleChangeName = (e) =>{
       const { restaurantDetails }= this.state;
-      restaurantDetails.username = e.target.value;
+      restaurantDetails.restaurantname = e.target.value;
       this.setState({restaurantDetails});
       
     } 
@@ -123,9 +124,19 @@ class RestaurantEditProfile extends Component {
       restaurantDetails.deliverytype = e.target.value;
       this.setState({restaurantDetails}); 
     } 
+    handleChangeaddress = (e) =>{
+      const { restaurantDetails }= this.state;
+      restaurantDetails.address = e.target.value;
+      this.setState({restaurantDetails}); 
+    } 
     handleChangecity = (e) =>{
       const { restaurantDetails }= this.state;
       restaurantDetails.city = e.target.value;
+      this.setState({restaurantDetails}); 
+    } 
+    handleChangestate = (e) =>{
+      const { restaurantDetails }= this.state;
+      restaurantDetails.state = e.target.value;
       this.setState({restaurantDetails}); 
     } 
     handleChangezipcode = (e) =>{
@@ -138,13 +149,18 @@ class RestaurantEditProfile extends Component {
       restaurantDetails.foodtype = e.target.value;
       this.setState({restaurantDetails}); 
     } 
+    handleChangeCountry = (val) =>{
+      const { restaurantDetails }= this.state;
+      restaurantDetails.country = val;
+      this.setState({restaurantDetails}); 
+    } 
       handleSubmit = (e) => {
         e.preventDefault();
         // if (this.validateProfile() === true){
           
           const restuarantData = {
             restaurantid: this.state.restaurantDetails.restaurantid,
-            restaurantname: this.state.restaurantDetails.username,
+            restaurantname: this.state.restaurantDetails.restaurantname,
             email: this.state.restaurantDetails.email,
             zipcode: this.state.restaurantDetails.zipcode,
             phone:this.state.restaurantDetails.phone,
@@ -154,6 +170,8 @@ class RestaurantEditProfile extends Component {
             deliverytype:this.state.restaurantDetails.deliverytype,
             foodtype:this.state.restaurantDetails.foodtype,
             days:this.state.restaurantDetails.days,
+            country:this.state.restaurantDetails.country,
+            address:this.state.restaurantDetails.address,
             
           }     
         console.log(restuarantData)
@@ -226,7 +244,7 @@ class RestaurantEditProfile extends Component {
         
               </div>
           <div className="form-group">
-          Restaurant Name: <Input className="form-control" type="text" name="restaurantname" value={this.state.restaurantDetails.username} onChange={(e) => { this.handleChangeName(e)}} ></Input>
+          Restaurant Name: <Input className="form-control" type="text" name="restaurantname" value={this.state.restaurantDetails.restaurantname} onChange={(e) => { this.handleChangeName(e)}} ></Input>
           
           </div>
           <div className="form-group">
@@ -269,8 +287,25 @@ class RestaurantEditProfile extends Component {
             </select>
           </div>
           <div className="form-group">
-          City: <Input type="text"  className="form-control" name="city" defaultValue={this.state.restaurantDetails.city} onChange={(e) => { this.handleChangecity(e)}} ></Input>
-          </div>
+              Apt and Street No: <Input type="text" className="form-control" name="address" defaultValue={this.state.restaurantDetails.address} onChange={(e) => { this.handleChangeaddress(e)}} ></Input>
+              </div>
+              <div className="form-group">
+              City: <Input type="text" className="form-control" name="city" defaultValue={this.state.restaurantDetails.city} onChange={(e) => { this.handleChangecity(e)}} ></Input>
+              </div>
+              <div className="form-group">
+              State: <Input type="text" className="form-control" name="state" defaultValue={this.state.restaurantDetails.state} onChange={(e) => { this.handleChangestate(e)}} ></Input>
+              </div>
+             
+              <div className="form-group">
+              Country :
+              <CountryDropdown className="form-control"
+                    value={this.state.restaurantDetails.country}
+                    onChange={(val) => { this.handleChangeCountry(val)}}
+                     
+                  />
+
+             
+              </div>
           <div className="form-group">
           Location Zip Code: <Input type="number" name="zipcode" defaultValue={this.state.restaurantDetails.zipcode} onChange={(e) => { this.handleChangezipcode(e)}} ></Input>
           </div>

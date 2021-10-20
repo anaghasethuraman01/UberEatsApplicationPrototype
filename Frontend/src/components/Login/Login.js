@@ -75,11 +75,13 @@ class Login extends Component {
                 redirectHome = <Redirect to="/CustomerHome" />
                 localStorage.setItem("userid",this.props.login.result._id)
                 localStorage.setItem("username",this.props.login.result.username)
+                localStorage.setItem("city",this.props.login.result.city)
                 this.props.login.message = null;
                 message = null;
             }else if(this.props.login.message === "Restaurant Found"){
                 redirectHome = <Redirect to="/RestaurantHome" />
-                localStorage.setItem("restaurantid",this.props.login.result.userid)
+                localStorage.setItem("restaurantid",this.props.login.result._id)
+                localStorage.setItem("restaurantname",this.props.login.result.restaurantname)
                 this.props.login.message = null;
                 message = null;
             }

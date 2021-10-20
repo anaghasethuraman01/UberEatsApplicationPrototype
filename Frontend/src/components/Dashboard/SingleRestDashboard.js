@@ -16,8 +16,8 @@ class SingleRestDashboard extends Component {
   
         this.state = {
           show: true,
-          restname:localStorage.getItem("restname"),
-          restaurantid : localStorage.getItem("restid"),
+          restname:localStorage.getItem("restaurantname"),
+          restaurantid : localStorage.getItem("restaurantid"),
           restaurantname:null,
           description:null,
           restaurantname:null,
@@ -54,11 +54,11 @@ class SingleRestDashboard extends Component {
   }
       componentDidMount(){
         const restaurantid = {
-          restaurantid: this.state.restaurantid
+          restaurantid: localStorage.getItem("restaurantid")
       };
-        axios.post(`${backendServer}/getrestaurantdishes`,restaurantid)
+        axios.post(`${backendServer}/getrestaurantwithid`,restaurantid)
                 .then((response) => { 
-                  
+                  console.log(response.data)
                 //update the state with the response data
                 this.setState({
                   dishes : this.state.dishes.concat(response.data) 
@@ -73,15 +73,15 @@ class SingleRestDashboard extends Component {
               restaurants : this.state.restaurants.concat(response.data) 
             });
            
-            this.setState({
-              restaurantname : response.data[0].username
-            });
-            this.setState({
-              deliverytype : response.data[0].deliverytype
-            });
-            localStorage.setItem("DeliveryType",this.state.deliverytype);
+        //     this.setState({
+        //       restaurantname : response.data[0].username
+        //     });
+        //     this.setState({
+        //       deliverytype : response.data[0].deliverytype
+        //     });
+        //     localStorage.setItem("DeliveryType",this.state.deliverytype);
             
-        });    
+         });    
 
     }
 
