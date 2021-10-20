@@ -7,7 +7,7 @@ var usersSchema = new Schema({
     password: {type: String, required: true},
     owner:{type: Boolean, required: true},
     about:{type: String, required: false},
-    dob:{type:Date,required: false},
+    dob:{type:String,required: false},
     address:{type: String, required: false},
     state:{type: String, required: false},
     city:{type: String, required: false},
