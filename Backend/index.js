@@ -6,7 +6,7 @@ const app = require('./app');
 
 const { mongoDB } = require('./config');
 const mongoose = require('mongoose');
-
+mongoose.set('useFindAndModify', false);
 var options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
