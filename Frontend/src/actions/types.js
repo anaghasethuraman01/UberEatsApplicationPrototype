@@ -8,3 +8,5 @@ export const USER_LOGOUT = "USER_LOGOUT";
 
 export const USER_PROFILE = "USER_PROFILE";
 export const RESTAURANT_PROFILE = "RESTAURANT_PROFILE";
+
+export const FAVOURITES = "FAVOURITES";
