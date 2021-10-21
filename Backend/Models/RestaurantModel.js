@@ -9,14 +9,15 @@ var restaurantSchema = new Schema({
     city:{type:String,required:true},
     password: {type: String, required: true},
     description: {type: String, required: false},
-    phone: {type: String, required: false},
+    phone: {type: Number, required: false},
     address: {type: String, required: false},
     state: {type: String, required: false},
     country: {type: String, required: false},
     days: {type: String, required: false},
-    timings: {type: String, required: false},
+    timing: {type: String, required: false},
     deliverytype: {type: String, required: false},
     zipcode: {type: String, required: false},
+    foodtype:{type:String,required:false}
 },
 {
     versionKey: false
