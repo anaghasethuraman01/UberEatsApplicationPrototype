@@ -1,93 +1,106 @@
-//register page for customer and restuarant
+//edit customer profile
+
 const express = require("express");
-const router = express.Router();
-var mysql = require("mysql");
-const connection = require('../connection.js');
+const router = express();
+const app = require('../app');
 
-router.post("/", (req, res) => {
-    console.log("Cart");
-    
-	customerid = req.body.customerid;
-    restaurantid = req.body.restaurantid;
-    dishid = req.body.dishid;
-    dishname = req.body.dishname;
-    dishprice =req.body.dishprice;
-    quantity = req.body.quantity;
-    quantityprice = req.body.quantityprice;
-    let cartvalues = {
-        customerid: customerid,
-        restaurantid:restaurantid,
-        dishid:dishid,
-        dishname:dishname,
-        dishprice:dishprice,
-        quantity:quantity,
-        quantityprice:quantityprice
-    };
-    //console.log(cartvalues);
-	 let sql = "SELECT * FROM placeorder WHERE restaurantid != " +mysql.escape(restaurantid) + " AND customerid = "+mysql.escape(customerid) ;
-    
-	 connection.query(sql,(error, result) => {
-       
-         if(result.length > 0 ){
-             console.log("Cant place order");
-             res.send("Delete previous order")
-         }else{
+const AddToCart = require('../Models/CartModel');
 
-             sql1 = "SELECT * FROM placeorder WHERE dishid = "+mysql.escape(dishid)
-             +" AND customerid = "+mysql.escape(customerid);
-             //console.log(sql1)
-             connection.query(sql1,(error, result1) => {
-                if(error){
-                    console.log(error.message)
-                }
-                 if(result1.length == 0){
-                     sql2 = "INSERT INTO placeorder  SET ?";
-                    connection.query(sql2,cartvalues,(error, result) => {
-                        console.log("Values added to Cart");
-                        res.send("Quantity updated")
-                    });
-
-                 }
-                 else if(result1.length > 0){
-                    //  console.log("sfbnbfdns z")
-                    // //result1 = JSON.stringify(result1);
-                          
-                            quantity = result1[0].quantity + 1;
-                            quantityprice = quantity * dishprice;
-                            console.log(quantity)
-                            console.log(dishprice)
-                            console.log(quantityprice)
-                            let sql3 = "UPDATE placeorder SET quantity = " +mysql.escape(quantity)+ " , quantityprice = " 
-                            +mysql.escape(quantityprice) + " WHERE dishid = "
-                            + mysql.escape(dishid) + " AND customerid = "+ mysql.escape(customerid);
-                        //console.log(sql3);
-                            connection.query(sql3, (error, result3) => {
-                            if(error){
-                                console.log(error.message);
-                            }else{
-                                res.send("Quantity updated")
-                            }
-                            });    
-                }
-                 
-            //          let sql3 = "UPDATE placeorder SET quantity = "+ mysql.escape(img)  +
-            //    "  WHERE RESTAURANTID = "+mysql.escape(restaurantid) + " AND DISHNAME =  "
-            //      }
-             })
-
-
-
-            
-         }
-     });
-	// 	if (error) {
-	// 		console.log("already added as favourites");
-	// 	} 
-    //     else {
-            
-    //         console.log("Favourites added");
-	// 	}
-	// });	
+app.post('/addtocarttable', (req, res) => {
 	
-});
+	var newaddtocart = {
+        userid:req.body.customerid,
+		restaurantid : req.body.restaurantid,
+        dishid:req.body.dishid,
+		dishprice:req.body.dishprice,
+		dishname:req.body.dishname,
+		quantity:req.body.quantity,
+		quantityprice:req.body.quantityprice
+    };
+  // console.log(newaddtocart)
+
+    AddToCart.find({ userid: req.body.customerid , restaurantid : {$ne:req.body.restaurantid} }, (error, addtocart) => {
+	   
+		if (error) {   
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
+			res.send();
+		}
+		if (addtocart.length > 0 ) {
+			//console.log(addtocart.length) 
+			 res.send("Delete previous order");
+			
+		}
+		else if(addtocart.length == 0){
+            
+            AddToCart.find({dishid:req.body.dishid , userid:req.body.customerid}, (error, addnewdish)=>{
+                if (error) {
+                    res.writeHead(500, {
+                    	'Content-Type': 'text/plain'
+                    })
+                    res.send();
+                } 
+                if (addnewdish.length == 0) {
+                    
+                     //console.log("Add new dish");
+                     AddToCart.create(newaddtocart, (error, cartresult) => {
+	   
+                        if (error) {
+                            // res.writeHead(500, {
+                            // 	'Content-Type': 'text/plain'
+                            // })
+                            console.log(error.message)
+                        }
+                        if (cartresult) {
+                            res.send("Quantity updated")
+                            //res.send({message: "New Dish Added"});
+                        }	
+                    });
+                    
+                }
+                else if(addnewdish.length > 0) {
+                    
+                    let updatedprice = Number(addnewdish[0].quantityprice + req.body.dishprice);
+                    let updatedqty = Number(addnewdish[0].quantity + req.body.quantity) ;
+                   
+                    var updateaddtocart = {
+                        userid:req.body.customerid,
+                        restaurantid : req.body.restaurantid,
+                        dishid:req.body.dishid,
+                        dishprice:req.body.dishprice,
+                        dishname:req.body.dishname,
+                        quantity:updatedqty ,
+                        quantityprice:updatedprice
+                    };
+                    console.log(updateaddtocart)
+                    AddToCart.findOneAndUpdate({userid: req.body.customerid , dishid:req.body.dishid },updateaddtocart,(error, editdishquantity) => {
+	   
+                        if (error) {
+                            // res.writeHead(500, {
+                            // 	'Content-Type': 'text/plain'
+                            // })
+                            console.log(error.message)
+                        }
+                        if (editdishquantity) {
+                            res.send("Quantity updated")
+                        }	
+                    });
+                    
+                }
+            })
+		}
+	});
+
+  });
 module.exports = router;
+
+
+
+
+    	
+
+        
+
+
+                                
