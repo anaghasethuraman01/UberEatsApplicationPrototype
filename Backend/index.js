@@ -31,13 +31,11 @@ const editrestaurant = require("./routes/editrestaurant");
 const restsearch = require("./routes/restsearch");
 const getrestaurant = require("./routes/getrestaurant");
 const getrestaurantwithcity = require("./routes/getrestaurantwithcity");
-const getmenurestaurant = require("./routes/getmenurestaurant");
 const restaurantdish = require("./routes/restaurantdish");
 const editcustomer = require("./routes/editcustomer");
 const custimageupload = require("./routes/custimageupload");
 const restimageupload = require("./routes/restimageupload");
 const dishimageupload = require("./routes/dishimageupload");
-const getrestaurantdishes = require("./routes/getrestaurantdishes");
 const getrestaurantdetails = require("./routes/getrestaurantdetails");
 const restsearchonsubmit = require("./routes/restsearchonsubmit");
 const addtofavourites = require("./routes/addtofavourites");
@@ -66,12 +64,12 @@ app.use("/editrestaurant", editrestaurant);
 app.use("/restsearch", restsearch);
 app.use("/getrestaurant", getrestaurant);
 app.use("/getrestaurantwithcity", getrestaurantwithcity);
-app.use("/getmenurestaurant", getmenurestaurant);
+
 app.use("/restaurantdish", restaurantdish);
 app.use("/editcustomer", editcustomer);
 app.use("/custimageupload", custimageupload);
 app.use("/dishimageupload", dishimageupload);
-app.use("/getrestaurantdishes", getrestaurantdishes);
+
 app.use("/getrestaurantdetails", getrestaurantdetails);  
 app.use("/restimageupload",restimageupload);
 app.use("/restsearchonsubmit",restsearchonsubmit);
