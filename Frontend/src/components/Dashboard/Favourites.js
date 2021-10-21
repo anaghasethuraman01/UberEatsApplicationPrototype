@@ -9,51 +9,63 @@ import {IoMail} from 'react-icons/io5';
 
 import backendServer from "../../webConfig";
 import ReactTooltip from 'react-tooltip';
+
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { customerFavourite } from "../../actions/favouriteActions";
 class Favourites extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-            customerid : localStorage.getItem("userid"),
-			zipcode: null,
-			restid: null,
-			city: null,
-			dish: null,
-			foodtype: null,
-			status: "notdone",
-			deliverytype: null,
-			restaurants: [],
-			restaurants1: [],
-            favrestaurants: [],
-            favourites:null,
-			
+			favrestaurants : []
 		};
+            // customerid : localStorage.getItem("userid"),
+			// zipcode: null,
+			// restid: null,
+			// city: null,
+			// dish: null,
+			// foodtype: null,
+			// status: "notdone",
+			// deliverytype: null,
+			// restaurants: [],
+			// restaurants1: [],
+            // favrestaurants: [],
+            // favourites:null,
+			
+		
 		// this.handleChange = this.handleChange.bind(this);
 		// this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	componentDidMount() {
-        const customerid = this.state.customerid;
-     
-	    if(customerid){
-            const val = {
-                customerid:customerid
+            const customerid = {
+                customerid:localStorage.getItem("userid")
             }
-      
-            axios.post(`${backendServer}/getfavouriterestaurant`,val).then((response) => {
-               
-                if(response.data.length > 0){
-                    this.setState({ favourites: "found" });
-                }
-                //update the state with the response data
-                this.setState({
-                favrestaurants: this.state.favrestaurants.concat(response.data),
-                });
-            });
-
-        }
+			this.props.customerFavourite(customerid);
+            // axios.post(`${backendServer}/getfavouriterestaurant`,customerid).then((response) => {
+			// 	console.log(response.data)
+            //     if(response.data.length > 0){
+            //         this.setState({ favourites: "found" });
+            //     }
+            //     //update the state with the response data
+            //     this.setState({
+            //     favrestaurants: this.state.favrestaurants.concat(response.data),
+            //     });
+            // });
+   
 	}
+	componentWillReceiveProps(nextProps) {
+        if (nextProps.favourite) {
+            var { favourite } = nextProps;
+		}
+		this.setState({
+			favrestaurants: this.state.favrestaurants.concat(favourite)
+		});
+		// console.log(typeof(favourite))
+	
 
+	}
 
 	navigatetorestaurant = (val) => {
 		console.log(val);
@@ -74,29 +86,17 @@ class Favourites extends Component {
 	handleChange = (e) => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
-	addToFavourites = (restid) =>{
-		const customerid = localStorage.getItem("userid");	
-		const favourites = {
-			customerid : customerid,
-			restid:restid	
-			};
-		this.addToFavouritesTable(favourites);	
-	}
-	addToFavouritesTable = (data) => {
-		axios.defaults.withCredentials = true;
-		axios.post(`${backendServer}/addtofavourites`, data).then((res) => {
-			console.log("Status Code : ", res.status);
-			if (res.status === 200) {
-				this.setState({ authFlag: true });
-			} else {
-				this.setState({ authFlag: false });
-			}
-		});
-	}
+	
 	render() {
+		let favrestaurants = [];
+		console.log(this.state.favrestaurants)
+		// if(this.props){
+		//   favrestaurants = this.props.customerFavourite;
 		
+		// }
+		//console.log(favrestaurants)
 		var favouriterest = null;
-        if(this.state.favourites === "found"){
+        if(favrestaurants !== []){
                 favouriterest = ( 
                 <div>
                 <h1>Your Favourites</h1>
@@ -112,7 +112,7 @@ class Favourites extends Component {
                             src={`${backendServer}/${restaurant.profilepic}`}
                         />
                         <Card.Body>
-                            <Card.Title className = "detailsincard">{restaurant.username}</Card.Title>
+                            <Card.Title className = "detailsincard">{restaurant.restaurantname}</Card.Title>
                             <ListGroup >
                             <ListGroupItem className = "detailsincard"><RiPhoneFill/> : {restaurant.phone} </ListGroupItem>
                             <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
@@ -120,7 +120,7 @@ class Favourites extends Component {
                            <ReactTooltip />
                             <Button  className="cardbtn1" data-tip="Explore"
                                 onClick={() => {
-                                this.navigatetorestaurant(restaurant.restaurantid);
+                                this.navigatetorestaurant(restaurant._id);
                                 }}
                             > 
                             <IoIosRestaurant/>
@@ -156,4 +156,17 @@ class Favourites extends Component {
 	}
 }
 
-export default Favourites;
+
+
+Favourites.propTypes = {
+	customerFavourite: PropTypes.func.isRequired,
+	favourite: PropTypes.object.isRequired,
+  };
+  
+  const mapStateToProps = (state) => {
+	return {
+		favourite: state.favourite.favourite
+	};
+  };
+  
+  export default connect(mapStateToProps, {customerFavourite})(Favourites);

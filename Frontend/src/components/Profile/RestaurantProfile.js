@@ -56,7 +56,7 @@ class RestaurantProfile extends Component {
                 state:profile.state|| this.state.state,
                 country:profile.country|| this.state.country,
                 days:profile.days||this.state.days,
-                timings:profile.timings||this.state.timings,
+                timing:profile.timing||this.state.timing,
                 deliverytype:profile.deliverytype||this.state.deliverytype,
                 zipcode:profile.zipcode||this.state.zipcode,
                 foodtype:profile.foodtype|| this.state.foodtype

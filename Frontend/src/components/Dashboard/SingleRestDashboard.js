@@ -125,12 +125,12 @@ class SingleRestDashboard extends Component {
          }
     addToCart = (data) => {
       //  localStorage.setItem("oldrest",data.restaurantname)
-       localStorage.setItem("newrestid",data.restaurantid);
-       localStorage.setItem("customerid",data.customerid);
-       localStorage.setItem("dishid",data.dishid);
-       localStorage.setItem("dishname",data.dishname);
-       localStorage.setItem("dishprice",data.dishprice);
-       localStorage.setItem("quantity",data.quantity);
+      //  localStorage.setItem("newrestid",data.restaurantid);
+      //  localStorage.setItem("customerid",data.customerid);
+      //  localStorage.setItem("dishid",data.dishid);
+      //  localStorage.setItem("dishname",data.dishname);
+      //  localStorage.setItem("dishprice",data.dishprice);
+      //  localStorage.setItem("quantity",data.quantity);
       axios.defaults.withCredentials = true;
       axios.post(`${backendServer}/addtocarttable`, data).then((res) => {
         console.log("res.data")
@@ -191,7 +191,7 @@ class SingleRestDashboard extends Component {
            	<ReactTooltip />
             <Button className="cardbtn2" data-tip="Add To Cart"
             onClick={() => {
-												this.addtocart(this.state.restaurantid,dish.dishid,dish.dishname,dish.price);
+												this.addtocart(this.state.restaurantid,dish._id,dish.dishname,dish.price);
 											}}>
               <BiCartAlt/></Button>
           </ListGroup>

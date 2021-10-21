@@ -12,7 +12,7 @@ import RestaurantHome from './HomePage/RestaurantHome';
 import AddRestaurantMenu from './Menu/AddRestaurantMenu';
 import RestDashboard from './Dashboard/RestDashboard';
 import CustomerEditProfile from './Profile/CustomerEditProfile';
-import AllDishMenu from './Menu/AllDishMenu';
+
 import SingleRestDashboard from './Dashboard/SingleRestDashboard';
 import AddToCart from './Dashboard/AddToCart';
 import Favourites from './Dashboard/Favourites';
@@ -41,7 +41,6 @@ class Main extends Component {
                     <Route path="/restdashboard" component={RestDashboard} />
                     <Route path="/restauranteditprofile" component={RestaurantEditProfile} />
                     <Route path="/customereditprofile" component={CustomerEditProfile} />
-                    <Route path="/alldishmenu" component={AllDishMenu} />
                     <Route path="/singlerestdashboard" component={SingleRestDashboard} />
                     <Route path="/addtocart" component={AddToCart} />
                     <Route path="/favourites" component={Favourites} />

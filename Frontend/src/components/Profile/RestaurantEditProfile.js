@@ -172,10 +172,12 @@ class RestaurantEditProfile extends Component {
             days:this.state.restaurantDetails.days,
             country:this.state.restaurantDetails.country,
             address:this.state.restaurantDetails.address,
+            state:this.state.restaurantDetails.state,
             
           }     
         console.log(restuarantData)
         this.sendRestAPI(restuarantData);
+        localStorage.setItem("restaurantname",this.state.restaurantDetails.restaurantname)
         this.setState({
           show : true 
         });

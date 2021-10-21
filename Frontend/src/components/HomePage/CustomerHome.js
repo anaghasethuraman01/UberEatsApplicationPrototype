@@ -158,14 +158,14 @@ class CustomerHome extends Component {
                     src={`${backendServer}/${restaurant.profilepic}`}
                   />
                   <Card.Body>
-                    <Card.Title className = "detailsincard">{restaurant.username}   ({restaurant.city})</Card.Title>
+                    <Card.Title className = "detailsincard">{restaurant.restaurantname}   ({restaurant.city})</Card.Title>
                     <ListGroup className="list-group-flush">
                       <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
                       <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
                       <div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant._id,restaurant.username);
+												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname);
 											}}
 										>
 										<IoIosRestaurant/>
@@ -205,14 +205,14 @@ class CustomerHome extends Component {
                       src={`${backendServer}/${restaurant.profilepic}`}
                     />
                     <Card.Body>
-                    <Card.Title className = "detailsincard">{restaurant.username} ({restaurant.city})</Card.Title>
+                    <Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
                     <ListGroup className="list-group-flush">
                        <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
                       <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
                       <div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant._id,restaurant.username);
+												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname);
 											}}
 										>
 										<IoIosRestaurant/>

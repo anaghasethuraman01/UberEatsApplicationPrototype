@@ -153,7 +153,9 @@ class CustomerEditProfile extends Component {
           }
           
         console.log(customerData)
+        localStorage.setItem("username",this.state.customerDetails.username);
         this.sendRestAPI(customerData);
+        
         this.setState({
           show : true 
         });
