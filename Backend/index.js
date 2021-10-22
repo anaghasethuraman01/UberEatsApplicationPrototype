@@ -55,6 +55,7 @@ const getrestaurantwithid = require("./routes/getrestaurantwithid")
 const editrestaurantdishes = require("./routes/editrestaurantdishes")
 const getcustomerprofile = require("./routes/getcustomerprofile")
 const getrestaurantprofile = require("./routes/getrestaurantprofile")
+const updatedishquantity = require("./routes/updatedishquantity");
 
 app.use("/restlogin", restlogin);
 app.use("/custlogin", custlogin);
@@ -69,7 +70,7 @@ app.use("/restaurantdish", restaurantdish);
 app.use("/editcustomer", editcustomer);
 app.use("/custimageupload", custimageupload);
 app.use("/dishimageupload", dishimageupload);
-
+app.use("/updatedishquantity", updatedishquantity);
 app.use("/getrestaurantdetails", getrestaurantdetails);  
 app.use("/restimageupload",restimageupload);
 app.use("/restsearchonsubmit",restsearchonsubmit);

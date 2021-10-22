@@ -9,8 +9,12 @@
   text-align: center;
   margin-bottom: 10;
 }
-
+.carttable{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: x-large;
+}
 .btn-offcanvas{
+ 
   width: 8rem;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -133,7 +137,6 @@ input[type=radio] {
 
 .cartleft {
   color: black;
- 
   position: absolute;
   right: 125px;
   top: 4px;
@@ -167,9 +170,15 @@ input[type=radio] {
 .login-form .form-group {
   margin-bottom:10px;
 }
+
+.form-group2{
+  width: 87%;
+  margin-bottom:20px;
+  height: 30px;
+}
 .form-group1{
   margin-left:1px;
-  width: 7%;
+  width: 87%;
 }
 .logout{
   color: white;
