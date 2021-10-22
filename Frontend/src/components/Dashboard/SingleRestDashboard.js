@@ -16,11 +16,11 @@ class SingleRestDashboard extends Component {
   
         this.state = {
           show: true,
-          restname:localStorage.getItem("restaurantname"),
+          restaurantname:localStorage.getItem("restaurantname"),
           restaurantid : localStorage.getItem("restaurantid"),
-          restaurantname:null,
+          //restaurantname:null,
           description:null,
-          restaurantname:null,
+          //restaurantname:null,
           query : null,
           dish:null,
           status:"notdone",
@@ -106,15 +106,20 @@ class SingleRestDashboard extends Component {
       
        const cartvalue = {
          customerid : localStorage.getItem("userid"),
-        //  restaurantname :localStorage.getItem("restname"),
+         //restaurantname :localStorage.getItem("restaurantname"),
          restaurantid : restid,
          dishid:dishid,
          dishname:dishname,
          dishprice:dishprice,
          quantity:this.state.quantity,
          quantityprice :(dishprice * this.state.quantity) 
-       }
-       console.log(cartvalue)
+        }
+          localStorage.setItem("dishid",dishid);
+          localStorage.setItem("dishname",dishname);
+          localStorage.setItem("dishprice",dishprice);
+          localStorage.setItem("quantity",cartvalue.quantity);
+          localStorage.setItem("quantityprice",cartvalue.quantityprice);
+
        this.addToCart(cartvalue);
       //  this.setState({
       //   show : true 
@@ -124,13 +129,6 @@ class SingleRestDashboard extends Component {
         this.setState({show:!this.state.show}) 
          }
     addToCart = (data) => {
-      //  localStorage.setItem("oldrest",data.restaurantname)
-      //  localStorage.setItem("newrestid",data.restaurantid);
-      //  localStorage.setItem("customerid",data.customerid);
-      //  localStorage.setItem("dishid",data.dishid);
-      //  localStorage.setItem("dishname",data.dishname);
-      //  localStorage.setItem("dishprice",data.dishprice);
-      //  localStorage.setItem("quantity",data.quantity);
       axios.defaults.withCredentials = true;
       axios.post(`${backendServer}/addtocarttable`, data).then((res) => {
         console.log("res.data")
@@ -152,13 +150,16 @@ class SingleRestDashboard extends Component {
 	};
   handleNewOrder = () => {
     const data = {
-       customerid : localStorage.getItem("customerid"),
-         restaurantid : localStorage.getItem("newrestid"),
+        customerid : localStorage.getItem("userid"),
+         restaurantid : localStorage.getItem("restaurantid"),
          dishid:localStorage.getItem("dishid"),
          dishname:localStorage.getItem("dishname"),
-         dishprice:localStorage.getItem("dishprice"),   
+         dishprice:localStorage.getItem("dishprice"), 
+         quantity:localStorage.getItem("quantity"),
+         quantityprice:localStorage.getItem("quantityprice")
     }
-    localStorage.setItem("restname",this.state.restaurantname);
+    console.log(data)
+    //localStorage.setItem("restname",this.state.restaurantname);
       axios.defaults.withCredentials = true;
       axios.post(`${backendServer}/handleneworder`, data).then((res) => {
         

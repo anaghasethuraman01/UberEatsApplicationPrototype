@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
 // import cookie from 'react-cookies';
-import { Button } from 'reactstrap';
 import axios from "axios";
-import { Modal,Card, ListGroup, ListGroupItem, Offcanvas} from "react-bootstrap";
-
+import {Button, Modal,Card, ListGroup, ListGroupItem, Offcanvas} from "react-bootstrap";
+import {CgProfile} from 'react-icons/cg';
+import {BiDish} from 'react-icons/bi';
+import {BiFoodMenu} from 'react-icons/bi';
+import {AiOutlineHome} from 'react-icons/ai';
 
 
 class LaunchRestaurant extends Component {
@@ -58,13 +60,13 @@ class LaunchRestaurant extends Component {
         <Offcanvas.Body>
         <div className='form-buttons-offcanvas'>
           
-          <Button className="btn-offcanvas" onClick={restaurantprofile}>Profile</Button>
+          <Button className="btn-offcanvas" variant="light" onClick={restaurantprofile}><CgProfile/><br/>Profile</Button>
 
-          <Button className="btn-offcanvas" onClick={addnewdish}>New Dish</Button>
+          <Button className="btn-offcanvas" variant="light" onClick={addnewdish}><BiDish/><br/>New Dish</Button>
 
-          <Button className="btn-offcanvas" onClick={restaurantorders}>Orders</Button>
+          <Button className="btn-offcanvas"  variant="light" onClick={restaurantorders}><BiFoodMenu/><br/>Orders</Button>
 
-          <Button className="btn-offcanvas" onClick={restauranthome}>Home Page</Button>
+          <Button className="btn-offcanvas" variant="light" onClick={restauranthome}><AiOutlineHome/><br/>Home Page</Button>
           </div> 
         </Offcanvas.Body>
       </Offcanvas>

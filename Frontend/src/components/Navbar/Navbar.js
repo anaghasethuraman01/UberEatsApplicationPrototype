@@ -65,12 +65,12 @@ viewCart = (e) => {
   }
   logout = e => {
         e.preventDefault();
-        localStorage.setItem("userid","");
+        //localStorage.setItem("userid","");
         window.localStorage.clear();
         //this.props.login.message = null;
         this.props.userLogout();
         const {history} = this.props;
-        history.push('/register'); 
+        history.push('/login'); 
       }
       profile = e => {
         e.preventDefault();
@@ -141,7 +141,8 @@ viewCart = (e) => {
         <div className = "cartitems  ">
            <Button className="cartleft " variant="light" onClick={this.viewCart}><FaShoppingCart/>Cart</Button>
            <Button className="btn-logout " variant="light" onClick={this.logout}>Logout</Button>
-            <Button className="btn-offcanvas-show"  variant="light" onClick={this.viewCustomerLaunch} >
+            <Button className="btn-offcanvas-show"  variant="light"
+            onClick={this.viewCustomerLaunch} >
             <MdViewDay/>
             </Button>
         </div>

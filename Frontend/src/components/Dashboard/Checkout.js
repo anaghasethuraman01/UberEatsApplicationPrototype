@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 // import cookie from 'react-cookies';
 import { Button,Input} from 'reactstrap';
-import {Modal, Form} from 'react-bootstrap';
+import {Modal, Form,Row,Col} from 'react-bootstrap';
 import backendServer from "../../webConfig";
 import axios from 'axios';
 import { CountryDropdown } from 'react-country-region-selector';
@@ -16,8 +16,8 @@ class CheckOut extends Component {
           addressstatus:null,
           dishes:[],
           customerid:localStorage.getItem("userid"),
-          restaurantid:localStorage.getItem("restid"),
-          restaurantname : localStorage.getItem("restname"),
+          restaurantid:localStorage.getItem("restaurantid"),
+          restaurantname : localStorage.getItem("restaurantname"),
           customername:localStorage.getItem("username"),
           dishid:null,
           deliveryaddress: [],
@@ -30,7 +30,7 @@ class CheckOut extends Component {
           dateandtime:Date().toLocaleString(),
           selectedAddr: null,
           errorMsg: null,
-          ordertype: localStorage.getItem("DeliveryType"),
+          ordertype: localStorage.getItem("deliverytype"),
           totalorderquantity:null,
           totalorderprice:null,
           show: false,
@@ -47,7 +47,7 @@ class CheckOut extends Component {
                 .then((response) => { 
                   console.log(response.data);
 
-                 if(response.data.length > 0){
+                 if(response.data){
                    this.setState({ addressstatus : "datapresent"});
                  }
                  else {
@@ -117,31 +117,44 @@ class CheckOut extends Component {
       placeOrder = (e) => {
         e.preventDefault();
         let street; let city ; let state; let country; 
-        if (this.state.selectedAddr === null || this.state.selectedAddr === undefined) {
-          alert( 'Please select a delivery address option!')
-        }else{
+        if(localStorage.getItem("deliverytype") !== "Pick Up"){
+          
+          if ((this.state.selectedAddr === null || this.state.selectedAddr === undefined)  ) {
+            alert( 'Please select a delivery address option!')
+          }else{
         
         //console.log(this.state.selectedAddr)
-        if(this.state.selectedAddr !== "new"){
-          const addrObj = JSON.parse(this.state.selectedAddr);
-          street = addrObj.address;
-          city = addrObj.city;
-          state =addrObj.state;
-          country = addrObj.country;
-        }else{
-          street = this.state.street;
-          city = this.state.city;
-          state =this.state.state;
-          country = this.state.country;
-          if(city === null || state === null || country === null || street === null){
-            alert("Address fields cannot be empty");
-            return;
-          }
+          if(this.state.selectedAddr !== "new"){
+            const addrObj = JSON.parse(this.state.selectedAddr);
+            street = addrObj.address;
+            city = addrObj.city;
+            state =addrObj.state;
+            country = addrObj.country;
+          }else{
+            street = this.state.street;
+            city = this.state.city;
+            state =this.state.state;
+            country = this.state.country;
+            
+            if(city === null || state === null || country === null || street === null){
+              alert("Address fields cannot be empty");
+              return;
+            }
 
+          }
         }
+      }
+      else{
+        city = null;
+        state= null;
+        country = null;
+        street = null;
+      }
+        
+      console.log("here")
         const orderDetails = []; 
         this.state.dishes.forEach((element) => {
-          orderDetails.push({ dishid: element.dishid, quantity: element.quantity,price : element.dishprice,dishname:element.dishname });  
+          orderDetails.push({ dishid: element.dishid, quantity: element.quantity,dishprice : element.dishprice,dishname:element.dishname });  
         });
         
        
@@ -169,7 +182,7 @@ class CheckOut extends Component {
           show : true 
         });
        
-      }
+      
       }
        handleModalClose(){
       this.setState({show:!this.state.show}) 
@@ -195,14 +208,17 @@ class CheckOut extends Component {
       this.setState({ country: val });
     }
       render(){
+       
         var addresses = null;
         var addnewaddress = null;
         var cartitems = null;
        
-
+      if(localStorage.getItem("deliverytype") !== "Pick Up") { 
+        
        if(this.state.showDiv){
          addnewaddress = (
            <div>
+            
              <div className="form-group">
               Apt and Street No: <Input type="text" className="form-control-add" name="street" defaultValue={this.state.street} onChange={this.handleChange} ></Input>
               </div>
@@ -224,20 +240,39 @@ class CheckOut extends Component {
          )
        }
         if(this.state.addressstatus === "datapresent"){
-
+         
           addresses = (
             <div>
+               <h4>Select a delivery address</h4>
               {this.state.deliveryaddress.map(deliveryadd=>
               <div>
-              <Form.Group  >
-              <Form.Check inline value={JSON.stringify(deliveryadd)} label={`${deliveryadd.address},${deliveryadd.city},${deliveryadd.state},${deliveryadd.country}`}  name="address" type="radio" id={deliveryadd} onChange={this.handleChangeAddress} />
-              </Form.Group>
-
+                {deliveryadd.address ?
+                (
+                  <Form.Group  >
+                  <Form.Check inline value={JSON.stringify(deliveryadd)} label={`${deliveryadd.address},${deliveryadd.city},${deliveryadd.state},${deliveryadd.country}`}  name="address" type="radio" id={deliveryadd} onChange={this.handleChangeAddress} />
+                  </Form.Group>
+                ) 
+                :<div/>}
+ 
               </div>
               )}
+              <Form.Group  >
+            <Form.Check inline value="new" label="Add new delivery address"  name="address" type="radio" id="new" onChange={this.handleChangeAddress} />
+          </Form.Group>
             </div>
+            
           )
         }
+
+      }
+      if(localStorage.getItem("deliverytype") === "Pick Up"){
+        
+        addresses = (
+          <div><h1>Pick Up from Restaurant</h1></div>
+        )
+       
+        
+      }
      
     return (
       
@@ -245,27 +280,46 @@ class CheckOut extends Component {
       <div className="container">
       <h4>Your items</h4>
          <div>
-              {this.state.dishes.map(dish=>
-              <div className="cartitems">
-              <div >{dish.dishname}</div>
-                <div className="cartitem">${dish.dishprice}</div>
-                <div className="cartitem">Qty :{dish.quantity}</div>
-              </div>
-              )}
+         <Form>
+            <Row>
+            <Col className="carttable">
+            Item 
+            </Col>
+            <Col className="carttable">
+              Price(per Item)
+            </Col>
+            <Col className="carttable">
+              Qty
+            </Col>
+            </Row>
+          </Form>
+          {this.state.dishes.map(dish=>
+            <Form>
+              <Row>
+              <Col>
+              {dish.dishname}
+              </Col>
+              <Col>
+              ${dish.dishprice}
+              </Col>
+              <Col>
+              {dish.quantity}
+              </Col>
+              </Row>
+            </Form>
+          )}
               
           </div>
        
         <br/>
         <h2>Total : ${this.state.totalorderprice}</h2>
-        Total No of Items : {this.state.totalorderquantity}
+        <h4>Total No of Items : {this.state.totalorderquantity}</h4>
         <br/>
         <br/>
-        <h4>Select a delivery address</h4>
+       
        {addresses}
-       <Form.Group  >
-          <Form.Check inline value="new" label="Add new delivery address"  name="address" type="radio" id="new" onChange={this.handleChangeAddress} />
-        </Form.Group>
-
+     
+      
       {addnewaddress}
        
        <br/>

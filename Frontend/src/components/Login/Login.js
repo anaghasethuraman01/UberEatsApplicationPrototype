@@ -85,7 +85,7 @@ class Login extends Component {
                 this.props.login.message = null;
                 message = null;
             }
-            if(this.props.login.message === "Invalid credentials" ||this.props.login.message === "Invalid user" ){
+            if(this.props.login.message === "Invalid credentials" ||this.props.login.message === "Invalid User" ){
                 message = this.props.login.message;
             }
         }

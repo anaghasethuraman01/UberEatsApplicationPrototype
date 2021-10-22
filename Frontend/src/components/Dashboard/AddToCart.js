@@ -1,7 +1,7 @@
 
 import Button from '@restart/ui/esm/Button';
 import React, {Component} from 'react'
-import {Modal} from 'react-bootstrap';
+import {Modal,Form,Row,Col} from 'react-bootstrap';
 import axios from 'axios';
 import backendServer from "../../webConfig";
 
@@ -34,6 +34,7 @@ class AddToCart extends Component {
           };
           console.log("***")
           console.log(data)
+          console.log("***")
           axios.post(`${backendServer}/getcartitem`,data)
                   .then((response) => { 
                     console.log(response.data);
@@ -49,35 +50,108 @@ class AddToCart extends Component {
                   });
                   
   }
+
+  handleChange = (e, dishid,dishprice) => {
+    e.preventDefault();
+    const { dishes } = this.state;
+    const index = dishes.findIndex((dish) => dish._id === dishid);
+    const orders = [...dishes];
+    orders[index].quantity = e.target.value;
+    orders[index].quantityprice = (dishprice * (e.target.value)).toFixed(2) ;
+    this.setState({ dishes : orders });
+  }
+
+  updatestatusfn = (e,dishid,quantity,dishprice) =>{
+    e.preventDefault();
+    const quantitydata = {
+      _id : dishid,
+      quantity : quantity,
+      quantityprice : (quantity * dishprice).toFixed(2)
+    }
+  
+   this.updateDishQuantity(quantitydata);
+    
+  }
+
+  updateDishQuantity = (quantitydata)=>{
+
+    console.log(quantitydata)
+     axios.post(`${backendServer}/updatedishquantity`, quantitydata)
+             .then(res => {
+                 console.log("Order type updated")
+             })
+             
+  }
   render(){
     const { viewCart, closeModal, handleSubmit } = this.props;
     var aftercart = null;
     var beforecart = null;
+    let updateitems = null;
     if(this.state.status === "datapresent"){
+     
        aftercart = ( 
         <div>
-          <table className="table">
-                          <thead>
-                              <tr>
-                                  <th>Dish Name</th>
-                                  <th>Price</th>
-                                  <th>Qty</th>
-                              </tr>
-                          </thead>
-                      </table>
+
+                <Form>
+                  <Row>
+                   
+                    <Col className="carttable">
+                    Item 
+                    </Col>
+                    <Col className="carttable">
+                    Price
+                    </Col>
+                    <Col className="carttable">
+                    Qty
+                    </Col>
+                  </Row>
+                </Form>
             {this.state.dishes.map((dish) => (
               <div>
+
+                <Form>
+                  <Row>
+                    <Col>
+                    {dish.dishname}
+                    </Col>
+                    <Col>
+                    ${dish.quantityprice}
+                    </Col>
+                    <Col>
+                    <select  name="quantity"  value={dish.quantity} onChange={(e) => { this.handleChange(e, dish._id,dish.dishprice)}} >
+                        <option value="0" >0</option>
+                        <option value="1">1</option>
+                        <option value="2" >2</option>
+                        <option value="3" >3</option>
+                        <option value="4" >4</option>
+                        <option value="5" >5</option>
+                        <option value="6" >6</option>
+                        <option value="7" >7</option>
+                        <option value="8" >8</option>
+                        <option value="9" >9</option>
+                        <option value="10" >10</option>
+                    </select>
+                    <Button 
+                      type="submit" 
+                      onClick={(e) => {
+                        this.updatestatusfn(e,dish._id,dish.quantity,dish.dishprice);
+                      }}>
+                      +/-
+                    </Button>
+                    </Col>
+                  </Row>
+                </Form>
                 {/* <p></p>
                  <p className="cartitem"></p>
                   <p ></p> */}
-                  <table >
+                  {/* <table >
                               <tr >
                                   <th>{dish.dishname}</th>
                                   <th className="cartitem" >${dish.dishprice}</th>
                                   <th className="cartitem">{dish.quantity}</th>
                               </tr>
                           
-                      </table>
+                      </table> */}
               </div>
             )
             )}

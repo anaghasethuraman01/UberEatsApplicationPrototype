@@ -2,7 +2,7 @@ import { Button } from "reactstrap";
 import axios from "axios";
 import React, { Component } from "react";
 
-import {Modal, Card, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Modal, Card, ListGroup, ListGroupItem,Form,Col,Row,InputGroup,FormControl} from "react-bootstrap";
 //import { Link } from 'react-router-dom';
 
 import {MdFavoriteBorder} from 'react-icons/md';
@@ -26,7 +26,8 @@ class RestDashboard extends Component {
 			deliverytype: null,
 			restaurants: [],
 			restaurants1: [],
-			show:false
+			show:false,
+			message:''
 			//favourites : []
 		};
 		this.handleChange = this.handleChange.bind(this);
@@ -49,9 +50,10 @@ class RestDashboard extends Component {
 		// const {history} = this.props;
 	    // history.push('/customerhome'); 
 	}
-	navigatetorestaurant = (id,name) => {
-		localStorage.setItem("restid", id);
-		localStorage.setItem("restname",name);
+	navigatetorestaurant = (restaurantid,restaurantname,deliverytype) => {
+		localStorage.setItem("restaurantid", restaurantid);
+		localStorage.setItem("restaurantname",restaurantname);
+		localStorage.setItem("deliverytype",deliverytype);
 		const { history } = this.props;
 		console.log(history);
 		history.push("/singlerestdashboard");
@@ -121,7 +123,7 @@ class RestDashboard extends Component {
 		const customerid = localStorage.getItem("userid");	
 		const favourites = {
 			customerid : customerid,
-			restid:restid	
+			restaurantid:restid	
 			};
 		this.addToFavouritesTable(favourites);	
 	}
@@ -129,12 +131,9 @@ class RestDashboard extends Component {
 
 		axios.defaults.withCredentials = true;
 		axios.post(`${backendServer}/addtofavourites`, data).then((res) => {
-			console.log("Status Code : ", res.status);
-			if (res.status === 200) {
-				this.setState({ authFlag: true });
-			} else {
-				this.setState({ authFlag: false });
-			}
+			this.setState({
+				message:res.data.message
+			  })
 		});
 	};
 	render() {
@@ -142,6 +141,17 @@ class RestDashboard extends Component {
 		console.log(this.state.favourites)
 		var beforeSearch = null;
 		var afterSearch = null;
+		var fav=null;
+
+		if(this.state.message){
+			fav =(
+			  <p>Already added as Favourite !</p>
+			)
+		  }else{
+			fav =(
+			  <p>Added to Favourites !</p>
+			)
+		  }
 
 		if (this.state.status === "done") {
 			afterSearch = (
@@ -164,7 +174,7 @@ class RestDashboard extends Component {
 									<div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant.restaurantid,restaurant.username);
+												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
 											}}
 										>
 										<IoIosRestaurant/>
@@ -173,7 +183,7 @@ class RestDashboard extends Component {
 										
                       					<Button className="cardbtn" data-tip="Add To Favourites"
 										  onClick={() => {
-												this.addToFavourites(restaurant.restaurantid,restaurant.username);
+												this.addToFavourites(restaurant._id);
 											}}
 											>
 											<MdFavoriteBorder/></Button>
@@ -207,7 +217,7 @@ class RestDashboard extends Component {
 										<div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant.restaurantid,restaurant.username);
+												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
 											}}
 										>
 										<IoIosRestaurant/>
@@ -216,7 +226,7 @@ class RestDashboard extends Component {
 										
                       					<Button className="cardbtn" data-tip="Add To Favourites"
 										  onClick={() => {
-												this.addToFavourites(restaurant.restaurantid);
+												this.addToFavourites(restaurant._id);
 											}}
 											>
 											<MdFavoriteBorder/></Button>
@@ -232,67 +242,57 @@ class RestDashboard extends Component {
 		return (
 			<div >
 				{/* <AddToCart/> */}
-				<h1 className="container">List of All Restaurants</h1>
-				<div className="cartitems">
-					<form >
+				<h4 className="container">What are you craving ? </h4>
+				<br/>
+				
+				<div className="container">
+				<Form>
+					<Row className="align-items-center">
+						<Col xs="auto">
 						City:
-						<input className="form-group"
+						<input className="form-group2"
 							type="text"
 							name="city"
 							value={this.state.city}
 							onChange={this.handleChange}
 							required
 						></input>
-						
-					</form>
-					<br/>
-					<form >
+						</Col>
+						<Col xs="auto">
 						Dish Name:
-						<input className="form-group"
+						<input className="form-group2"
 							type="text"
 							name="dish"
 							value={this.state.dish}
 							onChange={this.handleChange}
 							required
 						></input>
-						{/* <Button onClick={this.handleDishSubmit} type="submit">
-							Search
-						</Button> */}
-					</form>
-				
-					<br/>
-					</div>
-			<div className="cartitems">	
-			
-
-              Food Type :
-            	<select className="form-group1" name="foodtype" name="foodtype"  value={this.state.foodtype} onChange={this.handleChange} >
-              	<option value="">All</option> 
-              	<option value="Veg" >Veg</option>
-              	<option value="Non-veg"  >Non-veg</option>
-              	<option value="Vegan" >Vegan</option>
-            	</select>
-         	
-             Mode of Delivery :
-            <select className="form-group1" name="deliverytype" value={this.state.deliverytype} onChange={this.handleChange}>
-              <option value="">All</option> 
-              <option value="Pick Up">Pick Up</option>
-              <option value="Delivery">Delivery</option>
-            </select>
-         	
-			  </div>
-				<div>
-					<form>
+						</Col>
+						<Col xs="auto">
+						Food Type :
+						<select className="form-group1" name="foodtype" name="foodtype"  value={this.state.foodtype} onChange={this.handleChange} >
+							<option value="">All</option> 
+							<option value="Veg" >Veg</option>
+							<option value="Non-veg"  >Non-veg</option>
+							<option value="Vegan" >Vegan</option>
+						</select>
+						</Col>
+						<Col xs="auto">
+						Mode of Delivery :
+						<select className="form-group1" name="deliverytype" value={this.state.deliverytype} onChange={this.handleChange}>
+							<option value="">All</option> 
+							<option value="Pick Up">Pick Up</option>
+							<option value="Delivery">Delivery</option>
+						</select>
+						</Col>
+						<Col xs="auto">
 						<Button onClick={this.fullSearchSubmit} type="submit">
 							Search
 						</Button>
-					</form>
-					<br />
-					<form>
-						<Button onClick={this.goback}>Go To Home Page</Button>
-					</form>
-				</div>
-				<div className="container">
+						</Col>
+					</Row>
+				</Form>
+				
 				{beforeSearch}
 				{afterSearch}
 				</div>
@@ -304,7 +304,7 @@ class RestDashboard extends Component {
 				show={this.state.show} onHide={()=>this.handleModalClose()}>
 					<Modal.Header closeButton></Modal.Header>
 					<Modal.Body>
-					<p>Added to Favourites!</p>
+					{fav}
 					</Modal.Body>
 					
 				</Modal>

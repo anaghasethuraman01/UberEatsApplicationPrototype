@@ -5,7 +5,6 @@ import { Button } from 'reactstrap';
 import axios from "axios";
 import { Modal,Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import backendServer from "../../webConfig";
-import {BiCartAlt} from 'react-icons/bi';
 import {IoIosRestaurant} from 'react-icons/io';
 import {MdFavoriteBorder} from 'react-icons/md';
 import {RiPhoneFill} from 'react-icons/ri';
@@ -43,6 +42,7 @@ class CustomerHome extends Component {
       }
     componentDidMount() {
     const city = this.state.city;
+    
     if(city!== "null" && city !== "Add" ){
       const data = {
 			city: city,
@@ -62,8 +62,8 @@ class CustomerHome extends Component {
       
       axios.get(`${backendServer}/getrestaurant`).then((response) => {
 			//this.setState({ status: "notdone" });
-      console.log("all det")
-			console.log(response.data);
+      // console.log("all det")
+			// console.log(response.data);
 			//update the state with the response data
 			this.setState({
 				restaurants1: this.state.restaurants1.concat(response.data),
@@ -115,12 +115,12 @@ class CustomerHome extends Component {
 	}
      
      
-      navigatetorestaurant = (val1,val2) => {
-        console.log(val1);
-        console.log(val2);
+      navigatetorestaurant = (restaurantid,restaurantname,deliverytype) => {
+       
         //  window.location.href='/SingleRestDashboard';
-        localStorage.setItem("restaurantid", val1);
-        localStorage.setItem("restaurantname", val2);
+        localStorage.setItem("restaurantid", restaurantid);
+        localStorage.setItem("restaurantname", restaurantname);
+        localStorage.setItem("deliverytype", deliverytype);
         const { history } = this.props;
         console.log(history);
         history.push("/singlerestdashboard");
@@ -165,7 +165,7 @@ class CustomerHome extends Component {
                       <div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname);
+												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
 											}}
 										>
 										<IoIosRestaurant/>
@@ -212,7 +212,7 @@ class CustomerHome extends Component {
                       <div className="btngrp">
 										<Button data-tip="Explore" className="cardbtn"
 											onClick={() => {
-												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname);
+												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
 											}}
 										>
 										<IoIosRestaurant/>

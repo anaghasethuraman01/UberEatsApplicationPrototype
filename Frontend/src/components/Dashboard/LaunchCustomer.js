@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import ReactTooltip from 'react-tooltip';
 // import cookie from 'react-cookies';
-import { Button } from 'reactstrap';
+
 import axios from "axios";
-import { Modal,Card, ListGroup, ListGroupItem, Offcanvas} from "react-bootstrap";
-
-
+import { Button,Modal,Card, ListGroup, ListGroupItem, Offcanvas} from "react-bootstrap";
+import {CgProfile} from 'react-icons/cg';
+import {MdFavoriteBorder} from 'react-icons/md';
+import {MdOutlineFoodBank} from 'react-icons/md';
+import {BiFoodMenu} from 'react-icons/bi';
+import {AiOutlineHome} from 'react-icons/ai';
 
 class LaunchCustomer extends Component {
     
@@ -53,15 +56,15 @@ class LaunchCustomer extends Component {
         <Offcanvas.Body>
         <div className='form-buttons-offcanvas'>
           
-          <Button className="btn-offcanvas" onClick={profile}>Profile</Button>
+          <Button className="btn-offcanvas" variant="light" onClick={profile}><CgProfile/><br/>Profile</Button>
 
-          <Button className="btn-offcanvas" onClick={findfood}>Find Food</Button>
+          <Button className="btn-offcanvas" variant="light" onClick={findfood}><MdOutlineFoodBank/><br/>Find Food</Button>
 
-          <Button className="btn-offcanvas" onClick={orders}>Orders</Button>
+          <Button className="btn-offcanvas"  variant="light" onClick={orders}><BiFoodMenu/><br/>Orders</Button>
 
-          <Button className="btn-offcanvas" onClick={showfavourites}>Favourites</Button>
+          <Button className="btn-offcanvas"variant="light"  onClick={showfavourites}><MdFavoriteBorder/><br/>Favourites</Button>
 
-          <Button className="btn-offcanvas" onClick={home}>Home Page</Button>
+          <Button className="btn-offcanvas" variant="light" onClick={home}><AiOutlineHome/><br/>Home Page</Button>
           </div> 
         </Offcanvas.Body>
       </Offcanvas>

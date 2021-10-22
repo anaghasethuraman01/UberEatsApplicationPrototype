@@ -39,38 +39,38 @@ class Favourites extends Component {
 	}
 
 	componentDidMount() {
+		// this.setState({
+		// 	favrestaurants: []
+		// });
+		
             const customerid = {
                 customerid:localStorage.getItem("userid")
             }
+			
+			console.log(customerid);
+			console.log("******")
 			this.props.customerFavourite(customerid);
-            // axios.post(`${backendServer}/getfavouriterestaurant`,customerid).then((response) => {
-			// 	console.log(response.data)
-            //     if(response.data.length > 0){
-            //         this.setState({ favourites: "found" });
-            //     }
-            //     //update the state with the response data
-            //     this.setState({
-            //     favrestaurants: this.state.favrestaurants.concat(response.data),
-            //     });
-            // });
    
 	}
+	
 	componentWillReceiveProps(nextProps) {
         if (nextProps.favourite) {
             var { favourite } = nextProps;
 		}
+	
 		this.setState({
 			favrestaurants: this.state.favrestaurants.concat(favourite)
 		});
 		// console.log(typeof(favourite))
-	
 
 	}
 
-	navigatetorestaurant = (val) => {
-		console.log(val);
+	navigatetorestaurant = (restaurantid,restaurantname,delivery) => {	
+		console.log(restaurantid)
 		//  window.location.href='/SingleRestDashboard';
-		localStorage.setItem("restid", val);
+		localStorage.setItem("restaurantid", restaurantid);
+		localStorage.setItem("restaurantname", restaurantname);
+		localStorage.setItem("deliverytype", delivery);
 		const { history } = this.props;
 		console.log(history);
 		history.push("/singlerestdashboard");
@@ -79,6 +79,7 @@ class Favourites extends Component {
 
 	goback = (e) => {
 		e.preventDefault();
+
 		const { history } = this.props;
 		history.push("/customerhome");
 	};
@@ -120,7 +121,7 @@ class Favourites extends Component {
                            <ReactTooltip />
                             <Button  className="cardbtn1" data-tip="Explore"
                                 onClick={() => {
-                                this.navigatetorestaurant(restaurant._id);
+                                this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
                                 }}
                             > 
                             <IoIosRestaurant/>
