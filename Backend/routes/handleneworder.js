@@ -1,58 +1,78 @@
-//register page for customer and restuarant
-const express = require("express");
-const router = express.Router();
-var mysql = require("mysql");
-const connection = require('../connection.js');
+//adding new order by deleting existing order
 
-router.post("/", (req, res) => {
-	customerid = req.body.customerid;
-    restaurantid = req.body.restaurantid;
-    dishid = req.body.dishid;
-    dishname = req.body.dishname;
-    dishprice =req.body.dishprice;
-    let cartvalues = {
-        customerid: customerid,
-        restaurantid:restaurantid,
-        dishid:dishid,
-        dishname:dishname,
-        dishprice:dishprice,
-        quantityprice :dishprice
-    };
-    console.log(customerid)
-    
-    let sql = "DELETE FROM placeorder where customerid = "+mysql.escape(customerid);
-   connection.query(sql,(error, result) => {
-       if(error){
-            console.log(error.message);    
-       }
-       else{
-           console.log("Deleting old order");
-           sql1 = "INSERT INTO placeorder  SET ?";
-             connection.query(sql1,cartvalues,(error, result) => {
-                 console.log("Values added to Cart");
-             });
-       }
-   });
-	//  let sql = "SELECT * FROM placeorder WHERE restaurantid != " +mysql.escape(restaurantid);
-	//  connection.query(sql,(error, result) => {
-    //      if(result.length > 0 ){
-    //          //console.log("Cant place order");
-    //          res.send("Delete previous order")
-    //      }else{
-    //          sql1 = "INSERT INTO placeorder  SET ?";
-    //          connection.query(sql1,cartvalues,(error, result) => {
-    //              console.log("Values added to Cart");
-    //          });
-    //      }
-    //  });
+//edit customer profile
+
+const express = require("express");
+const router = express();
+const app = require('../app');
+
+const Carts = require('../Models/CartModel');
+
+app.post('/handleneworder', (req, res) => {
+	//console.log(req.body)
+    newdish = {
+        userid:req.body.customerid,
+        restaurantid:req.body.restaurantid,
+        dishid:req.body.dishid,
+        dishname:req.body.dishname,
+        dishprice : req.body.dishprice,
+		quantity:req.body.quantity,
+		quantityprice:req.body.quantityprice,
+    }
+    Carts.deleteMany({userid: req.body.customerid },(error, neworder) => {
+        if (error) {
+                res.writeHead(500, {
+                	'Content-Type': 'text/plain'
+                })
+                console.log(error.message)
+            }
+            if (neworder) {
+                Carts.create(newdish, (error, dishresult) => {
+	   
+                    if (error) {
+                        // res.writeHead(500, {
+                        // 	'Content-Type': 'text/plain'
+                        // })
+                        console.log(error.message)
+                    }
+                    if (dishresult) {
+                        res.send({message: "New Dish Added"});
+                    }	
+                });
+            }	
+    });
+	// var updateuser = {
+    //     userid:req.body.userid,
+	// 	username : req.body.username,
+    //     nickname:req.body.nickname,
+	// 	email:req.body.email,
+	// 	phone:req.body.phone,
+	// 	about:req.body.about,
+	// 	dob:req.body.dob,
+	// 	address:req.body.address,
+    //     city:req.body.city,
+    //     state:req.body.state,
+    //     country:req.body.country,
+		
+    // };
+    // console.log(updateuser)
+    // Users.findOneAndUpdate({_id: req.body.userid },updateuser,(error, editcustomer) => {
+	   
 	// 	if (error) {
-	// 		console.log("already added as favourites");
-	// 	} 
-    //     else {
-            
-    //         console.log("Favourites added");
+	// 		// res.writeHead(500, {
+	// 		// 	'Content-Type': 'text/plain'
+	// 		// })
+	// 		console.log(error.message)
 	// 	}
-	// });	
+	// 	if (editcustomer) {
+	// 		console.log("User Profile Edited.");
+	// 	}	
+    // });
 	
-});
+  });
 module.exports = router;
+
+
+
+
+

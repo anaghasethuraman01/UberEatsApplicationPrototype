@@ -7,7 +7,7 @@ const app = require('../app');
 const Restaurants = require('../Models/RestaurantModel');
 
 app.post('/getrestaurantwithcity', (req, res) => {
-	// console.log(req.body.city)
+	//console.log(req.body.city)
 	Restaurants.find({city : req.body.city}, (error, rest_results) => {
 	   
 		if (error) {

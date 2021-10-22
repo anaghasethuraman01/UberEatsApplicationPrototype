@@ -1,16 +1,17 @@
 // //register page for customer and restuarant
 const express = require("express");
 const router = express();
- const app = require('../app');
+const bcrypt = require("bcryptjs");
+const app = require('../app');
 
 const Users = require('../Models/UserModel');
 
 app.post('/customerRegister', (req, res) => {
-	
+	const password = bcrypt.hashSync(req.body.password, 10);
 	var newuser = new Users({
 		username : req.body.name,
 		email:req.body.email,
-		password:req.body.password,
+		password:password,
 		owner:req.body.owner,
 	});
 	// console.log("newuser")

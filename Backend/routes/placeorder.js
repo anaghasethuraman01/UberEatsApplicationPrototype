@@ -1,88 +1,79 @@
-//register page for customer and restuarant
+//inserting dishes into restaurant
 const express = require("express");
-const router = express.Router();
-var mysql = require("mysql");
-const connection = require('../connection.js');
+const router = express();
+const app = require('../app');
+const Orders = require('../Models/OrderModel');
+const Carts = require('../Models/CartModel');
 
-router.post("/", (req, res) => {
-    console.log(req.body);
-    const customerid = req.body.customerid;
+app.post('/placeorder', (req, res) => {
+	//console.log(req.body)
+
+    const userid = req.body.customerid;
     const restaurantid = req.body.restaurantid;
-    const restaurantname = req.body.restaurantname;
-    const customername = req.body.customername;
-    const datetime = req.body.datetime;
-    const address = req.body.street;
-    const city = req.body.city;
-    const state = req.body.state;
-    const country = req.body.country;
     const orderDetails = req.body.orderDetails;
-    const ordertype = req.body.ordertype;
-    const totalorderprice = req.body.totalorderprice;
-    const totalorderquantity = req.body.totalorderquantity;
 
-    let post = {
-        customerid:customerid,
+    var neworder = {
+        userid : userid,
         restaurantid:restaurantid,
-        restaurantname:restaurantname,
-        customername:customername,
-        datetime:datetime,
-        address:address,
-        city:city,
-        state:state,
-        country:country,
-        orderstatus: "Order Received",
-        ordertype:ordertype,
+        restaurantname:req.body.restaurantname,
+        customername:req.body.customername,
+        address:req.body.street,
+        city:req.body.city,
+        state:req.body.state,
+        country:req.body.country,
+        ordertype:req.body.ordertype,
+        totalorderquantity:req.body.totalorderquantity,
+        datetime:req.body.datetime,
+        orderstatus:"Order Received",
         ordermodetype:"New Order",
-        totalorderprice:totalorderprice,
-        totalorderquantity:totalorderquantity
+        totalorderprice:req.body.totalorderprice
     }
-    let sql = "INSERT INTO orders SET ?";
-     connection.query(sql, post, (error, result) => {
-     if (error) {
-        console.log(error.message);
+    //console.log(neworder);
 
-      } else {
-         
-          let sqlDet = 'INSERT INTO orderdetails(orderid,dishid,quantity,price,dishname) VALUES ?';
-          let orderid = result.insertId;
-          
-          let records =[];
-          orderDetails.forEach((element, index) => {
-            records.push([orderid, element.dishid, element.quantity,element.price,element.dishname]);
-          });
-        //   console.log("****")
-        // console.log(records);
-            connection.query(sqlDet, [records], (error, resultdetails) => {
-                if(error){
-                    console.log(error.message)
-                }
-                else{
-                    console.log("Details table updated");
-                    sqldeletecart = "DELETE FROM placeorder WHERE customerid = "+ mysql.escape(customerid);
-                    connection.query(sqldeletecart,(error, resultdelete)=>{
-                        if(error){
-                            console.log("unable to delete")
-                        }else{
-                            console.log("Deleted");
+    // console.log(typeof(orderDetails[0].dishprice));
+
+    Orders.create(neworder, (error, dishresult) => {
+		if (error) {
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
+			console.log(error.message)
+		}
+		if (dishresult) {
+            //console.log(dishresult._id)
+
+            Orders.findOneAndUpdate({_id :dishresult._id },
+            {
+                    $push : {
+                        orderdetails :
+                        {
+                            $each : orderDetails
+                            
                         }
-                    } ) 
-                }
-            })
+                        
+                    }
+                },(error, editdishquantity) => {
+                    if(error){
+                        console.log(error.message)
+                    }else{
+                        console.log(editdishquantity.userid)
+                        Carts.deleteMany({userid:editdishquantity.userid},(error,updatecart)=>{
+                            if(error){
+                                console.log(error.message)
+                            }else{
+                                console.log("Cart updated after checkout")
+                            }
+                        })
+                    }
 
-       }
-    });
-    // let sql = "SELECT city,state,country FROM userdetails where userid = "+mysql.escape(customerid);
-    // console.log(sql);
-    // connection.query(sql,(error, result) => {
-    //      console.log(result)
-    //      if(result.length == 0 ){
-    //          console.log("No address");
-    //      }else{
-    //         //  const address = result['city'];
-    //         //  console.log(address)
-    //         res.end(JSON.stringify(result));
-    //     }
-    // });
- 
-});
+            })
+			//console.log("Order placed")
+		}	
+	});	
+  });
 module.exports = router;
+
+
+
+
+

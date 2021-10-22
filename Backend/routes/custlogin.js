@@ -1,12 +1,14 @@
-// // //register page for customer and restuarant
+//login api for customer
 const express = require("express");
 const router = express();
- const app = require('../app');
+const bcrypt = require("bcryptjs");
+const app = require('../app');
 
 const Users = require('../Models/UserModel');
 
 app.post('/custlogin', (req, res) => {
-	Users.findOne({ email: req.body.email, password:req.body.password }, (error, custlogin) => {
+	//console.log(req.body.email)
+	Users.find({ email: req.body.email}, (error, custlogin) => {
 	   
 		if (error) {
 			res.writeHead(500, {
@@ -14,18 +16,30 @@ app.post('/custlogin', (req, res) => {
 			})
 			res.send();
 		}
-		if (custlogin) {
-            var obj = {
-                message : "Customer Found",
-                result : custlogin,
-            }                
-            res.send(obj);
+		if (custlogin.length > 0) {
+
+			var password_hash = custlogin[0].password;
+			const verified = bcrypt.compareSync(req.body.password, password_hash);
+
+			if(verified){
+				var obj = {
+					message : "Customer Found",
+					result : custlogin[0],
+				}                
+				res.send(obj);
+			}else{
+				var obj = {
+					message : "Invalid credentials",
+					
+				}   
+				res.send(obj);
+
+			}
 			
 		}
-		else {
-             var obj = {
-                message : "Invalid credentials",
-                
+		else if(custlogin.length == 0) {
+            var obj = {
+                message : "Invalid User",   
             }   
             res.send(obj);
 				

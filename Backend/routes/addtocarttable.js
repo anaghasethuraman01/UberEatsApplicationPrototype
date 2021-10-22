@@ -47,9 +47,9 @@ app.post('/addtocarttable', (req, res) => {
                      AddToCart.create(newaddtocart, (error, cartresult) => {
 	   
                         if (error) {
-                            // res.writeHead(500, {
-                            // 	'Content-Type': 'text/plain'
-                            // })
+                            res.writeHead(500, {
+                            	'Content-Type': 'text/plain'
+                            })
                             console.log(error.message)
                         }
                         if (cartresult) {

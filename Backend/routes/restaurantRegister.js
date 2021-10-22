@@ -1,22 +1,20 @@
-// //register page for customer and restuarant
+//register users for restuarant
 const express = require("express");
 const router = express();
- const app = require('../app');
+const bcrypt = require("bcryptjs");
+const app = require('../app');
 
 const Restaurants = require('../Models/RestaurantModel');
 
 app.post('/restaurantRegister', (req, res) => {
-	
+	const password = bcrypt.hashSync(req.body.password, 10);
 	var newuser = new Restaurants({
 		restaurantname : req.body.name,
 		email:req.body.email,
-		password:req.body.password,
+		password:password,
 		owner:req.body.owner,
 		city:req.body.city
 	});
-	// console.log("newuser")
- 	// console.log(newuser)
-	//  console.log("****")
 	Restaurants.findOne({ email: req.body.email }, (error, register) => {
 	   
 		if (error) {
