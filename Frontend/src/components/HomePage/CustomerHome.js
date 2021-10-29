@@ -58,12 +58,12 @@ class CustomerHome extends Component {
         });
        
       });
-    } if(city === "null" || city === "Add" || this.state.restaurants.length === 0) {
-      
+    } if(city === "null" || city === "Add" || city === undefined || this.state.restaurants.length === 0) {
+      console.log("here")
       axios.get(`${backendServer}/getrestaurant`).then((response) => {
 			//this.setState({ status: "notdone" });
-      // console.log("all det")
-			// console.log(response.data);
+        console.log("all det")
+			  console.log(response.data);
 			//update the state with the response data
 			this.setState({
 				restaurants1: this.state.restaurants1.concat(response.data),

@@ -95,15 +95,17 @@ class Register extends Component {
         var accountType = "Owner";
         let message = "";
         if(this.props.user){
+            console.log(this.props.user.message)
             if(this.props.user.message === "User Registration successful"){
                 redirectHome = <Redirect to="/Login" />
                 this.props.user.message = null;
                 message = null;
             }
             else{
+                message = this.props.user.message;
                 redirectHome = <Redirect to="/Register" />
                 this.props.user.message = null;   
-               
+      
             }
         }else{
             message = "";

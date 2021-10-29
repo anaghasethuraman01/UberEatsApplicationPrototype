@@ -12,6 +12,7 @@ import ReactTooltip from 'react-tooltip';
 import {RiPhoneFill} from 'react-icons/ri';
 import {IoMail} from 'react-icons/io5';
 
+
 class RestDashboard extends Component {
 	constructor(props) {
 		super(props);
@@ -37,11 +38,12 @@ class RestDashboard extends Component {
 	componentDidMount() {
 		axios.get(`${backendServer}/getrestaurant`).then((response) => {
 			this.setState({ status: "notdone" });
-			
-			console.log("componentDidMount");
 			//update the state with the response data
 			this.setState({
 				restaurants: this.state.restaurants.concat(response.data),
+			});
+			this.setState({
+				restaurants1: this.state.restaurants1.concat(response.data),
 			});
 		});
 	}
@@ -55,56 +57,52 @@ class RestDashboard extends Component {
 		localStorage.setItem("restaurantname",restaurantname);
 		localStorage.setItem("deliverytype",deliverytype);
 		const { history } = this.props;
-		console.log(history);
 		history.push("/singlerestdashboard");
 	};
 
 	searchRestaurantOnSubmit = (data) => {
-		console.log("here")
-		this.setState({
-			restaurants: [],
-		});
-		//this.setState({ status: "done" });
 		axios.defaults.withCredentials = true;
 		axios.post(`${backendServer}/restsearchonsubmit`, data).then((res) => {
-			console.log("in rest search");
-			console.log(res.data)
+			//console.log(res.data);
+			if(res.data !== 'No Dishes found'){
 				this.setState({
-						restaurants: res.data,
+					restaurants: res.data,
 				});
-				// if (res.data.message) {
-				// 	this.setState({ message: res.data.message });
-				// } else {
-				// 	this.setState({
-				// 		restaurants: res.data,
-				// 	});
-				// }
-			
-
-			console.log("Status Code : ", res.status);
-			if (res.status === 200) {
-				this.setState({ authFlag: true });
-			} else {
-				this.setState({ authFlag: false });
+			}else{
+				this.setState({
+					status:'notdone'
+				});
 			}
+				
 		});
 	};
 
 	fullSearchSubmit = (e) => {
 		e.preventDefault();
+		
 		const city = this.state.city;
-		const foodtype = this.state.foodtype;
+		// const foodtype = this.state.foodtype;
 		const deliverytype =this.state.deliverytype;
 		const dish = this.state.dish;
-		console.log(foodtype)
-		if (city != null || foodtype != null || deliverytype != null ||dish != null ) {
+		// console.log("dish")
+		// console.log(dish)
+		if((city === null || city === '') && (dish===null || dish === '') &&(deliverytype === null ||deliverytype === "All") ){
+			this.setState({ status: "notdone" });
+			
+		}
+		else if(city !== null || deliverytype !== null || dish !==null || city !== '' || deliverytype !== '' ||dish !=='' ){
+		
+		this.setState({ city:city });
+		this.setState({ deliverytype:deliverytype });
+		this.setState({ status: "done" });
+		
+		 if (dish != null && dish != '' ) {
+			 console.log("here1")
 			const values = {
-				city: city,
-				foodtype:foodtype,
-				deliverytype:deliverytype,
 				dish:dish
 			};
 			this.searchRestaurantOnSubmit(values);
+		 }
 		}
 	};
 	goback = (e) => {
@@ -138,7 +136,20 @@ class RestDashboard extends Component {
 	};
 	render() {
 		
-		console.log(this.state.favourites)
+		const {status,city,deliverytype} = this.state;
+		let{restaurants,restaurants1} = this.state;
+		console.log(deliverytype)
+		if(status === 'done'){
+			console.log("Done")	
+			if (city !== null && city !== '') {
+				restaurants = restaurants.filter((restaurant) => restaurant.city === city);
+			}
+			if (deliverytype !== null && deliverytype !== '') {
+				restaurants = restaurants.filter((restaurant) => restaurant.deliverytype === deliverytype);
+			}
+		}else if(status === 'notdone'){
+			 restaurants = restaurants1;
+		}
 		var beforeSearch = null;
 		var afterSearch = null;
 		var fav=null;
@@ -154,9 +165,11 @@ class RestDashboard extends Component {
 		  }
 
 		if (this.state.status === "done") {
+			
+	
 			afterSearch = (
 				<div className="card-list">
-					{this.state.restaurants1.map((restaurant) => (
+					{restaurants.map((restaurant) => (
 						<div>
 							<Card style={{ width: "18rem" }}>
 							<Card.Img 
@@ -165,7 +178,7 @@ class RestDashboard extends Component {
 									src={`${backendServer}/${restaurant.profilepic}`}
 								/>
 								<Card.Body>
-									<Card.Title className = "detailsincard">{restaurant.username} ({restaurant.city})</Card.Title>
+									<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
 									<ListGroup className="list-group-flush">
 										  <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
                       					  <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
@@ -199,7 +212,7 @@ class RestDashboard extends Component {
 			beforeSearch = (
 				
 				<div className="card-list">
-					{this.state.restaurants.map((restaurant) => (
+					{this.state.restaurants1.map((restaurant) => (
 						<div >
 							
 							<Card  style={{ width: "18rem" }}>
@@ -210,7 +223,7 @@ class RestDashboard extends Component {
 									src={`${backendServer}/${restaurant.profilepic}`}
 								/>
 								<Card.Body>
-									<Card.Title className = "detailsincard">{restaurant.username} ({restaurant.city})</Card.Title>
+									<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
 									<ListGroup className="list-group-flush">
 									  <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
                       				  <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
 // import cookie from 'react-cookies';
-import { Button,Input} from 'reactstrap';
-import {Modal, Form,Row,Col} from 'react-bootstrap';
+import { Input} from 'reactstrap';
+import {Button,Modal, Form,Row,Col} from 'react-bootstrap';
 import backendServer from "../../webConfig";
 import axios from 'axios';
 import { CountryDropdown } from 'react-country-region-selector';
@@ -40,9 +40,10 @@ class CheckOut extends Component {
       }
       componentDidMount(){
         const data = {
-          customerid:this.state.customerid,
+          customerid:localStorage.getItem("userid"),
           //restaurantid: this.state.restaurantid
         };
+        
         axios.post(`${backendServer}/getorderaddress`,data)
                 .then((response) => { 
                   console.log(response.data);
@@ -109,80 +110,114 @@ class CheckOut extends Component {
                 }
             );
     }
-      goback = (e) =>{
-        e.preventDefault();
-        const {history} = this.props;
-        history.push('/customerhome'); 
-      }
+     
       placeOrder = (e) => {
         e.preventDefault();
-        let street; let city ; let state; let country; 
-        if(localStorage.getItem("deliverytype") !== "Pick Up"){
-          
+        let street; let city ; let state; let country;
+        if(localStorage.getItem("deliverytype") === "Delivery"){
+          console.log(this.state.selectedAddr);
           if ((this.state.selectedAddr === null || this.state.selectedAddr === undefined)  ) {
             alert( 'Please select a delivery address option!')
-          }else{
-        
-        //console.log(this.state.selectedAddr)
-          if(this.state.selectedAddr !== "new"){
-            const addrObj = JSON.parse(this.state.selectedAddr);
-            street = addrObj.address;
-            city = addrObj.city;
-            state =addrObj.state;
-            country = addrObj.country;
-          }else{
-            street = this.state.street;
-            city = this.state.city;
-            state =this.state.state;
-            country = this.state.country;
-            
-            if(city === null || state === null || country === null || street === null){
-              alert("Address fields cannot be empty");
-              return;
-            }
-
+            return;
           }
+          else{
+            if(this.state.selectedAddr !== "new"){
+                const addrObj = JSON.parse(this.state.selectedAddr);
+                street = addrObj.address;
+                city = addrObj.city;
+                state =addrObj.state;
+                country = addrObj.country;
+
+                const orderDetails = []; 
+                  this.state.dishes.forEach((element) => {
+                    orderDetails.push({ dishid: element.dishid, quantity: element.quantity,dishprice : element.dishprice,dishname:element.dishname });  
+                  });
+                  const orderData = {
+                      customerid:this.state.customerid,
+                      restaurantid:this.state.restaurantid,
+                      restaurantname:this.state.restaurantname,
+                      customername:this.state.customername,
+                      street:street,
+                      city:city,
+                      state:state,
+                      country:country,
+                      ordertype:this.state.ordertype,
+                      totalorderquantity:this.state.totalorderquantity,
+                      totalorderprice:this.state.totalorderprice,
+                      datetime:this.state.dateandtime.substring(0,24),
+                      orderDetails
+                  }
+                  this.addToOrders(orderData); 
+                    this.setState({
+                      show : true 
+                  });
+              }
+            else if(this.state.selectedAddr === "new"){
+              street = this.state.street;
+              city = this.state.city;
+              state =this.state.state;
+              country = this.state.country;
+              console.log(street,city,state,country)
+              if(city === null || state === null || country === null || street === null || country === "" ){
+                  alert("Address fields cannot be empty");
+                  return;
+              }else{
+                  const orderDetails = []; 
+                  this.state.dishes.forEach((element) => {
+                    orderDetails.push({ dishid: element.dishid, quantity: element.quantity,dishprice : element.dishprice,dishname:element.dishname });  
+                  });
+                  const orderData = {
+                    customerid:this.state.customerid,
+                    restaurantid:this.state.restaurantid,
+                    restaurantname:this.state.restaurantname,
+                    customername:this.state.customername,
+                    street:street,
+                    city:city,
+                    state:state,
+                    country:country,
+                    ordertype:this.state.ordertype,
+                    totalorderquantity:this.state.totalorderquantity,
+                    totalorderprice:this.state.totalorderprice,
+                    datetime:this.state.dateandtime.substring(0,24),
+                    orderDetails
+                  }
+                  this.addToOrders(orderData); 
+                    this.setState({
+                      show : true 
+                    });
+              }
+            }
+          }
+        }else if(localStorage.getItem("deliverytype") === "Pick Up"){
+              city = "";
+              state= "";
+              country = "";
+              street = "";
+              const orderDetails = []; 
+                  this.state.dishes.forEach((element) => {
+                  orderDetails.push({ dishid: element.dishid, quantity: element.quantity,dishprice : element.dishprice,dishname:element.dishname });  
+              });
+                  const orderData = {
+                    customerid:this.state.customerid,
+                    restaurantid:this.state.restaurantid,
+                    restaurantname:this.state.restaurantname,
+                    customername:this.state.customername,
+                    street:street,
+                    city:city,
+                    state:state,
+                    country:country,
+                    ordertype:this.state.ordertype,
+                    totalorderquantity:this.state.totalorderquantity,
+                    totalorderprice:this.state.totalorderprice,
+                    datetime:this.state.dateandtime.substring(0,24),
+                    orderDetails
+                  }
+                  this.addToOrders(orderData); 
+                    this.setState({
+                      show : true 
+                    });
+
         }
-      }
-      else{
-        city = null;
-        state= null;
-        country = null;
-        street = null;
-      }
-        
-      console.log("here")
-        const orderDetails = []; 
-        this.state.dishes.forEach((element) => {
-          orderDetails.push({ dishid: element.dishid, quantity: element.quantity,dishprice : element.dishprice,dishname:element.dishname });  
-        });
-        
-       
-        // console.log(this.state.totalorderquantity);
-        // console.log(this.state.totalorderprice);
-        const orderData = {
-          customerid:this.state.customerid,
-          restaurantid:this.state.restaurantid,
-          restaurantname:this.state.restaurantname,
-          customername:this.state.customername,
-          street:street,
-          city:city,
-          state:state,
-          country:country,
-          ordertype:this.state.ordertype,
-          totalorderquantity:this.state.totalorderquantity,
-          totalorderprice:this.state.totalorderprice,
-          datetime:this.state.dateandtime.substring(0,24),
-          orderDetails
-        }
-        console.log("****");
-        console.log(orderData);
-        this.addToOrders(orderData); 
-        this.setState({
-          show : true 
-        });
-       
-      
       }
        handleModalClose(){
       this.setState({show:!this.state.show}) 
@@ -278,6 +313,7 @@ class CheckOut extends Component {
       
 
       <div className="container">
+         
       <h4>Your items</h4>
          <div>
          <Form>
@@ -323,10 +359,9 @@ class CheckOut extends Component {
       {addnewaddress}
        
        <br/>
-       <Button onClick={this.placeOrder}>Place Order</Button>
+       <Button variant="success" onClick={this.placeOrder}>Place Order</Button>
        <br/>
        <br/>
-       <Button onClick={this.goback}>Home Page</Button>
      
       <div>
          <Modal size="md-down"
@@ -335,7 +370,7 @@ class CheckOut extends Component {
            show={this.state.show} onHide={()=>this.handleModalClose()}>
              <Modal.Header closeButton></Modal.Header>
              <Modal.Body>
-              <h1>Order Successfully Placed ! Thank you</h1>
+              <h5>Order Successfully Placed ! Thank you {this.state.customername}</h5>
              </Modal.Body>
             
            </Modal>
