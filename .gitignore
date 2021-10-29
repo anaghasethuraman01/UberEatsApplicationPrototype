@@ -1,0 +1,6 @@
+Backend/node_modules
+Frontend/node_modules
+.DS_Store
+Backend/package-lock.json
+Frontend/package-lock.json
+kafka-backend/node_modules/
