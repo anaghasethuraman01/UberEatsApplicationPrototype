@@ -34,7 +34,7 @@ app.post('/updatedishquantity', (req, res) => {
                 console.log(error.message)
             }
             if (dishresult) {
-                console.log({message: "New Dish Added"});
+                console.log( "New Dish Added");
             }	
         });
     }

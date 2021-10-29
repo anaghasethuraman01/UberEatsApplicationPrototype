@@ -56,7 +56,7 @@ app.post('/placeorder', (req, res) => {
                     if(error){
                         console.log(error.message)
                     }else{
-                        console.log(editdishquantity.userid)
+                        //console.log(editdishquantity.userid)
                         Carts.deleteMany({userid:editdishquantity.userid},(error,updatecart)=>{
                             if(error){
                                 console.log(error.message)

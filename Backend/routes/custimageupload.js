@@ -20,29 +20,29 @@ var upload = multer({
 });
 
 
-router.post("/", upload.single('file'), (req, res) => {
-    console.log("image")
-	const img = req.file.filename;
-	const userid = req.body.userid;
-	console.log(img);
-    if (!req.file) {
-        console.log("No file upload");
-    } else {
-        const img = req.file.filename;
-		let sql = "UPDATE userdetails SET profilepic = "+mysql.escape(img) +
-               "  WHERE USERID = "+mysql.escape(userid);
-			   connection.query(sql, (error, result) => {
-				if(error){
-					console.log(error.message);
-				}else{
-					//localStorage.setItem("profile",mysql.escape(img))
-					//console.log(req.file.filename);
-					res.send(req.file.filename);
+router.post("/", upload.single('file'), (req, res) => {})
+//     console.log("image")
+// 	const img = req.file.filename;
+// 	const userid = req.body.userid;
+// 	console.log(img);
+//     if (!req.file) {
+//         console.log("No file upload");
+//     } else {
+//         const img = req.file.filename;
+// 		let sql = "UPDATE userdetails SET profilepic = "+mysql.escape(img) +
+//                "  WHERE USERID = "+mysql.escape(userid);
+// 			   connection.query(sql, (error, result) => {
+// 				if(error){
+// 					console.log(error.message);
+// 				}else{
+// 					//localStorage.setItem("profile",mysql.escape(img))
+// 					//console.log(req.file.filename);
+// 					res.send(req.file.filename);
 
-				}
-            });
+// 				}
+//             });
 
-    }
-});
+//     }
+// });
 
 module.exports = router;

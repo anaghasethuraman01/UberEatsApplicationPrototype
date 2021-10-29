@@ -1,51 +1,28 @@
-//register users for restuarant
-const express = require("express");
-const router = express();
-const bcrypt = require("bcryptjs");
-const app = require('../app');
+// //register page for restuarant
 
-const Restaurants = require('../Models/RestaurantModel');
+const express = require('express');
+const kafka = require('../kafka/client');
+const router = express.Router();
+router.post('/', (req, res) => {
 
-app.post('/restaurantRegister', (req, res) => {
-	const password = bcrypt.hashSync(req.body.password, 10);
-	var newuser = new Restaurants({
-		restaurantname : req.body.name,
-		email:req.body.email,
-		password:password,
-		owner:req.body.owner,
-		city:req.body.city
-	});
-	Restaurants.findOne({ email: req.body.email }, (error, register) => {
-	   
-		if (error) {
-			// res.writeHead(500, {
-			// 	'Content-Type': 'text/plain'
-			// })
-			res.send();
-		}
-		if (register) {
-			
-			 console.log("Email already exists");
-			 res.send({ message: "User email already registered" });
-			
-		}
-		else {
-		  newuser.save((error, data) => {
-				if (error) {
-					// res.writeHead(500, {
-					// 	'Content-Type': 'text/plain'
-					// })
-					res.send();
-				}
-				else {
-					console.log("added");
-					// res.writeHead(200, {
-					// 	'Content-Type': 'text/plain'
-					// })
-					res.send({message: "User Registration successful"});
-				}
-			});
+	console.log("Inside Restaurant Register");
+ 
+	kafka.make_request('restaurant_register', req.body, (err, data) => {
+    
+		if (err) {
+		  res.writeHead(400, {
+			"content-type": "text/plain",
+		  });
+		  res.end("Invalid Credentials");
+		}else{
+
+			res.send(JSON.stringify(data))
+			console.log("Register success");
 		}
 	});
-  });
-module.exports = router;
+	
+});
+
+ module.exports = router;
+
+			
