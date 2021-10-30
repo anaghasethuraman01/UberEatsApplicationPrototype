@@ -1,14 +1,6 @@
 //fetching restaurant profile details
 
 
-
-
-
-
-
-//getting customer profile details
-//inserting dishes into restaurant
-
 const express = require('express');
 const kafka = require('../kafka/client');
 const router = express.Router();

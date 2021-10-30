@@ -1,45 +1,35 @@
 //edit restaurant profile
-const express = require("express");
-const router = express();
-const app = require('../app');
+const express = require('express');
+const kafka = require('../kafka/client');
+const router = express.Router();
+const { checkAuth } = require("../utils/passport");
+router.post('/',checkAuth, (req, res) => {
 
-const Restaurants = require('../Models/RestaurantModel');
+	console.log("Inside Edit Rest Profile");
+ 
+	kafka.make_request('editrestaurantprofile', req.body, (err, data) => {
+    
+		if (err) {
+		  res.writeHead(400, {
+			"content-type": "text/plain",
+		  });
+		 // res.end("Invalid Credentials");
+		}else{
 
-app.post('/editrestaurant', (req, res) => {
-	
-	var updaterestaurant = {
-        restaurantid:req.body.restaurantid,
-		restaurantname : req.body.restaurantname,
-		email:req.body.email,
-		phone:req.body.phone,
-		zipcode:req.body.zipcode,
-		timing:req.body.timing,
-        days:req.body.days,
-		address:req.body.address,
-        city:req.body.city,
-        state:req.body.state,
-        country:req.body.country,
-        description:req.body.description, 
-		deliverytype:req.body.deliverytype,
-		foodtype:req.body.foodtype
-    };
-	console.log(updaterestaurant)
-
-    Restaurants.findOneAndUpdate({_id: req.body.restaurantid},updaterestaurant,(error, editrestaurant) => {
-	   
-		if (error) {
-			// res.writeHead(500, {
-			// 	'Content-Type': 'text/plain'
-			// })
-			console.log(error.message)
+			//res.send(JSON.stringify(data))
+			console.log("Edit success");
 		}
-		if (editrestaurant) {
-			console.log("User Profile Edited.");
-		}	
-    });
+	});
 	
-  });
-module.exports = router;
+});
+
+ module.exports = router;
+
+
+
+
+
+
 
 
 

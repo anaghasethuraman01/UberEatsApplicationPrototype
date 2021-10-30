@@ -4,9 +4,8 @@
 const express = require('express');
 const kafka = require('../kafka/client');
 const router = express.Router();
-router.post('/', (req, res) => {
-
-	console.log("Inside Restaurant Login");
+const { checkAuth } = require("../utils/passport");
+router.post('/',checkAuth, (req, res) => {
  
 	kafka.make_request('dishes_list', req.body, (err, data) => {
     

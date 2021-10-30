@@ -3,7 +3,8 @@
 const express = require('express');
 const kafka = require('../kafka/client');
 const router = express.Router();
-router.get('/', (req, res) => {
+const { checkAuth } = require("../utils/passport");
+router.get('/',checkAuth, (req, res) => {
   
 	kafka.make_request('restaurant_list',req.body, (err, data) => {
    

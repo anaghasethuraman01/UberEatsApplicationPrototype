@@ -11,7 +11,7 @@ router.post('/', (req, res) => {
 	console.log("Inside Restaurant Login");
  
 	kafka.make_request('restaurant_login', req.body, (err, data) => {
-    	console.log("*****rest(**")
+    	
      console.log(data.message)
 		if (err) {
 		  res.writeHead(400, {

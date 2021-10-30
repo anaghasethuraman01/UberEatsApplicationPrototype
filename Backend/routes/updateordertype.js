@@ -3,8 +3,8 @@ const express = require("express");
 const router = express.Router();
 var mysql = require("mysql");
 const connection = require('../connection.js');
-
-router.post('/', function(req,res){
+const { checkAuth } = require("../utils/passport");
+router.post('/',checkAuth, function(req,res){
     
     const orderid = req.body.orderid;  
     const ordertype = req.body.ordertype;
