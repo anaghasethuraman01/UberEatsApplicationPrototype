@@ -25,6 +25,9 @@ export const userProfile = (userData) => dispatch => {
 
 
  export const restaurantProfile = (userData) => dispatch => {
+    axios.defaults.headers.common["authorization"] = localStorage.getItem(
+        "token"
+    );
     axios.defaults.withCredentials = true;
     axios.post(`${backendServer}/getrestaurantprofile`, userData)
         .then(response => dispatch({

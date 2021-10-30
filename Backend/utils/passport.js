@@ -18,7 +18,7 @@ function auth() {
             
             console.log("I am here **********")
             console.log(user_id)
-            console.log(loginType)
+           
             if(loginType === "customer"){
                 Users.findById(user_id, (err, results) => {
                     console.log("Cust profile **********")
@@ -32,7 +32,7 @@ function auth() {
                         callback(null, false);
                     }
                 });
-            }else if(loginType === restaurant){
+            }else if(loginType === "restaurant"){
                 Restaurants.findById(user_id, (err, results) => {
                     console.log("Rest profile **********")
                     if (err) {
