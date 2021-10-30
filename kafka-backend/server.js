@@ -9,6 +9,15 @@ var getrestaurant = require('./services/getrestaurant.js');
 var getcustomerprofile = require('./services/getcustomerprofile.js');
 var getrestaurantprofile = require('./services/getrestaurantprofile.js');
 var getrestaurantwithcity = require('./services/getrestaurantwithcity.js');
+var editcustomer = require('./services/editcustomer.js');
+var editrestaurant = require('./services/editrestaurant.js');
+var editrestaurantdishes = require('./services/editrestaurantdishes.js');
+var addtocarttable = require('./services/addtocarttable.js');
+var getcartitem = require('./services/getcartitem.js');
+var updatedishquantity = require('./services/updatedishquantity.js');
+var handleneworder = require('./services/handleneworder.js');
+
+
 
 const { mongoDB } = require('./config');
 const mongoose = require('mongoose');
@@ -74,3 +83,10 @@ handleTopicRequest("restaurant_list", getrestaurant)
 handleTopicRequest("customer_profile", getcustomerprofile)
 handleTopicRequest("restaurant_profile", getrestaurantprofile)
 handleTopicRequest("restaurantcitylist", getrestaurantwithcity)
+handleTopicRequest("editcustomerprofile", editcustomer)
+handleTopicRequest("editrestaurantprofile", editrestaurant)
+handleTopicRequest("editrestaurantdish", editrestaurantdishes)
+handleTopicRequest("addtocart", addtocarttable)
+handleTopicRequest("showcartitem", getcartitem)
+handleTopicRequest("updatedishquantity", updatedishquantity)
+handleTopicRequest("handleneworder", handleneworder)

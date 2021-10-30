@@ -6,7 +6,7 @@ const Users = require('../Models/UserModel');
 function handle_request(req, callback){
  
   Users.findOne({ _id: req.userid }, (error, getcustomerprofile) => {
-	   console.log("I am here")
+	   //console.log("I am here")
     if (error) {
         res.writeHead(500, {
         	'Content-Type': 'text/plain'
