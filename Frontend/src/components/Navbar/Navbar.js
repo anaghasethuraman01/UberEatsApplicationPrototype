@@ -70,7 +70,7 @@ viewCart = (e) => {
         //this.props.login.message = null;
         this.props.userLogout();
         const {history} = this.props;
-        history.push('/register'); 
+        history.push('/login'); 
       }
       profile = e => {
         e.preventDefault();

@@ -15,7 +15,7 @@ class SingleRestDashboard extends Component {
         super(props);
   
         this.state = {
-          show: true,
+          
           restaurantname:localStorage.getItem("restaurantname"),
           restaurantid : localStorage.getItem("restaurantid"),
           //restaurantname:null,
@@ -133,10 +133,10 @@ class SingleRestDashboard extends Component {
       axios.post(`${backendServer}/addtocarttable`, data).then((res) => {
         console.log("res.data")
         console.log(res.data)
-          if(res.data == "Delete previous order"){
+          if(res.data === "Delete previous order"){
             this.setState({show:"true"})
           }
-          if(res.data == "Quantity updated"){
+          if(res.data === "Quantity updated"){
             this.setState({showfav:"true"})
           }
         

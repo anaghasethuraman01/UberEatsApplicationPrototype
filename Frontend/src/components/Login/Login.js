@@ -9,6 +9,7 @@ import backendServer from "../../webConfig";
 import validator from 'validator';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import jwt_decode from "jwt-decode";
 import { userLogin,restaurantLogin} from "../../actions/loginActions";
 class Login extends Component {
  
@@ -25,6 +26,18 @@ class Login extends Component {
     componentWillMount() {
     
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.login) {
+          var { login } = nextProps;
+    
+          var loginData = {
+            token: login.token || this.state.token,
+          };
+    
+          this.setState(loginData);
+        }
+        console.log(loginData);
+      }
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
@@ -67,9 +80,18 @@ class Login extends Component {
         if (cookie.load('cookie')) { 
             redirectHome = <Redirect to="/" />
            
-
         }
-        if(this.props.login){
+    
+
+       
+    
+        if(this.props.login && this.props.login.token){
+             if (this.props.login.token.length > 0) {
+                localStorage.setItem("token", this.props.login.token);
+                console.log("token", localStorage.getItem("token"));
+                var decoded = jwt_decode(this.state.token.split(" ")[1]);
+                console.log("decoded", decoded);
+            }
             
             if(this.props.login.message === "Customer Found"){
                 redirectHome = <Redirect to="/CustomerHome" />
@@ -85,6 +107,10 @@ class Login extends Component {
                 this.props.login.message = null;
                 message = null;
             }
+            // if(this.props.login.message === "Invalid credentials" ||this.props.login.message === "Invalid User" ){
+            //     message = this.props.login.message;
+            // }
+        }else if(this.props.login){
             if(this.props.login.message === "Invalid credentials" ||this.props.login.message === "Invalid User" ){
                 message = this.props.login.message;
             }
