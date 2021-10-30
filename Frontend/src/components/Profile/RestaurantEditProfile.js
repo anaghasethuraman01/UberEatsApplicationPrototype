@@ -27,7 +27,7 @@ class RestaurantEditProfile extends Component {
         // this.handleChange = this.handleChange.bind(this);
       }
       sendRestAPI = (data) => {
-        
+        axios.defaults.headers.common.authorization = localStorage.getItem('token');
         axios.post(`${backendServer}/editrestaurant`, data)
             .then(res => {
                console.log("edit details");

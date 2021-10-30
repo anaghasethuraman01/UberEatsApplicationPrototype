@@ -76,6 +76,8 @@ class AddToCart extends Component {
   updateDishQuantity = (quantitydata)=>{
 
     console.log(quantitydata)
+    axios.defaults.headers.common["authorization"] = localStorage.getItem(
+      "token");
      axios.post(`${backendServer}/updatedishquantity`, quantitydata)
              .then(res => {
                  console.log("Order type updated")

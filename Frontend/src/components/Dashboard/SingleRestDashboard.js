@@ -56,6 +56,7 @@ class SingleRestDashboard extends Component {
         const restaurantid = {
           restaurantid: localStorage.getItem("restaurantid")
       };
+      axios.defaults.headers.common.authorization = localStorage.getItem('token');
         axios.post(`${backendServer}/getrestaurantwithid`,restaurantid)
                 .then((response) => { 
                   console.log(response.data)
@@ -129,6 +130,8 @@ class SingleRestDashboard extends Component {
         this.setState({show:!this.state.show}) 
          }
     addToCart = (data) => {
+      axios.defaults.headers.common["authorization"] = localStorage.getItem(
+        "token");
       axios.defaults.withCredentials = true;
       axios.post(`${backendServer}/addtocarttable`, data).then((res) => {
         console.log("res.data")
@@ -140,12 +143,12 @@ class SingleRestDashboard extends Component {
             this.setState({showfav:"true"})
           }
         
-          console.log("Status Code : ", res.status);
-          if (res.status === 200) {
-            this.setState({ authFlag: true });
-          } else {
-            this.setState({ authFlag: false });
-          }
+          // console.log("Status Code : ", res.status);
+          // if (res.status === 200) {
+          //   this.setState({ authFlag: true });
+          // } else {
+          //   this.setState({ authFlag: false });
+          // }
       });
 	};
   handleNewOrder = () => {
@@ -160,14 +163,16 @@ class SingleRestDashboard extends Component {
     }
     console.log(data)
     //localStorage.setItem("restname",this.state.restaurantname);
+    axios.defaults.headers.common["authorization"] = localStorage.getItem(
+      "token");
       axios.defaults.withCredentials = true;
       axios.post(`${backendServer}/handleneworder`, data).then((res) => {
         
-          if (res.status === 200) {
-            this.setState({ authFlag: true });
-          } else {
-            this.setState({ authFlag: false });
-          }
+          // if (res.status === 200) {
+          //   this.setState({ authFlag: true });
+          // } else {
+          //   this.setState({ authFlag: false });
+          // }
       });
       this.setState({show:!this.state.show}) 
 	};

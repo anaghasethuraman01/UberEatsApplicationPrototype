@@ -49,6 +49,7 @@ class CustomerHome extends Component {
 		  };
       console.log("city")
       console.log(data)
+      axios.defaults.headers.common.authorization = localStorage.getItem('token');
       axios.post(`${backendServer}/getrestaurantwithcity`,data).then((response) => {
         //this.setState({ status: "notdone" });
         //console.log(response.data);
@@ -59,7 +60,10 @@ class CustomerHome extends Component {
        
       });
     } if(city === "null" || city === "Add" || city === undefined || this.state.restaurants.length === 0) {
-      console.log("here")
+      //console.log("here")
+      axios.defaults.headers.common["authorization"] = localStorage.getItem(
+        "token"
+    );
       axios.get(`${backendServer}/getrestaurant`).then((response) => {
 			//this.setState({ status: "notdone" });
         console.log("all det")

@@ -35,7 +35,7 @@ class RestaurantHome extends Component {
         const data = {
           restaurantid : this.state.restaurantid
         }
-       
+          axios.defaults.headers.common.authorization = localStorage.getItem('token');
          axios.post(`${backendServer}/getrestaurantwithid`,data).then((response) => {
           //  console.log(response.data.length)
            if(response.data.length > 0){

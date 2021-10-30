@@ -33,6 +33,7 @@ class EditDishPage extends Component {
         }
     sendDishAPI = (data) => {
         console.log(data);
+        axios.defaults.headers.common.authorization = localStorage.getItem('token');
           axios.post(`${backendServer}/editrestaurantdishes`, data)
               .then(res => {
                   if(res.data.message){

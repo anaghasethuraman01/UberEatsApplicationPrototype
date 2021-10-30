@@ -25,6 +25,7 @@ class AddRestaurantMenu extends Component {
 
       sendDishAPI = (data) => {
         localStorage.setItem("dishname",data.dishname);
+        axios.defaults.headers.common.authorization = localStorage.getItem('token');
           axios.post(`${backendServer}/restaurantdish`, data)
               .then(res => {
               //     if(res.data.message){

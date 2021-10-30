@@ -27,6 +27,7 @@ class CustomerEditProfile extends Component {
       }
       sendRestAPI = (data) => {
         console.log("here")
+        axios.defaults.headers.common.authorization = localStorage.getItem('token');
         axios.post(`${backendServer}/editcustomer`, data)
             .then(res => {
                console.log("edit details");
