@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var kafka = require('./kafka/client');
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(bodyParser.json());
@@ -22,46 +21,24 @@ app.use(function(req, res, next) {
 // app.use(express.static('uploads'));
 
 
-// const { mongoDB } = require('./utils/config');
-// const mongoose = require('mongoose');
-// mongoose.set('useFindAndModify', false);
-// var options = {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   poolSize: 500,
-//   bufferMaxEntries: 0
-// };
+const config = require('./utils/config');
+const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
+var options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  poolSize: 500,
+  bufferMaxEntries: 0
+};
 
-// mongoose.connect(mongoDB, options, (err, res) => {
-//   if (err) {
-//       console.log(err);
-//       console.log(`MongoDB Connection Failed`);
-//   } else {
-//       console.log(`MongoDB Connected`);
-//   }
-// });
-
-
-// app.post('/custlogin', (req, res) => {
-
-// 	console.log("Inside Login");
- 
-// 	kafka.make_request('customer_login', req.body, (err, data) => {
-    
-// 		if (err) {
-// 		  res.writeHead(400, {
-// 			"content-type": "text/plain",
-// 		  });
-// 		  res.end("Invalid Credentials");
-// 		}else{
-
-// 			res.send(JSON.stringify(data))
-// 			console.log("Login success");
-// 		}
-// 		});
-// 	//console.log(req.body.email)
-	
-//   });
+mongoose.connect(config.mongoURI, options, (err, res) => {
+  if (err) {
+      console.log(err);
+      console.log(`MongoDB Connection Failed`);
+  } else {
+      console.log(`MongoDB Connected`);
+  }
+});
 
 const restlogin = require("./routes/restlogin");
 const custlogin = require("./routes/custlogin");
@@ -93,7 +70,7 @@ const restaurantdish = require("./routes/restaurantdish");
 const getrestaurantwithid = require("./routes/getrestaurantwithid")
 // const editrestaurantdishes = require("./routes/editrestaurantdishes")
 const getcustomerprofile = require("./routes/getcustomerprofile")
-// const getrestaurantprofile = require("./routes/getrestaurantprofile")
+const getrestaurantprofile = require("./routes/getrestaurantprofile")
 // const updatedishquantity = require("./routes/updatedishquantity");
 
 app.use("/restlogin", restlogin);
@@ -127,7 +104,7 @@ app.use("/restaurantdish", restaurantdish);
 app.use("/getrestaurantwithid",getrestaurantwithid);
 // app.use("/editrestaurantdishes",editrestaurantdishes);
 app.use("/getcustomerprofile",getcustomerprofile);
-// app.use("/getrestaurantprofile",getrestaurantprofile);
+app.use("/getrestaurantprofile",getrestaurantprofile);
 
 const port = process.env.PORT || 5000;
 var server = app.listen(port, () => {
