@@ -7,13 +7,19 @@ var restaurantDish = require('./services/restaurantdish.js');
 var getrestaurantwithid = require('./services/getrestaurantwithid.js');
 var getrestaurant = require('./services/getrestaurant.js');
 var getcustomerprofile = require('./services/getcustomerprofile.js');
+var getrestaurantprofile = require('./services/getrestaurantprofile.js');
+var getrestaurantwithcity = require('./services/getrestaurantwithcity.js');
+
 const { mongoDB } = require('./config');
 const mongoose = require('mongoose');
  const { Console } = require('console');
 
 var options = {
+    keepAlive: true,
+    useFindAndModify: false,
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
     poolSize: 500,
     bufferMaxEntries: 0
 };
@@ -66,3 +72,5 @@ handleTopicRequest("restaurant_dish", restaurantDish)
 handleTopicRequest("dishes_list", getrestaurantwithid)
 handleTopicRequest("restaurant_list", getrestaurant)
 handleTopicRequest("customer_profile", getcustomerprofile)
+handleTopicRequest("restaurant_profile", getrestaurantprofile)
+handleTopicRequest("restaurantcitylist", getrestaurantwithcity)
