@@ -16,7 +16,8 @@ var addtocarttable = require('./services/addtocarttable.js');
 var getcartitem = require('./services/getcartitem.js');
 var updatedishquantity = require('./services/updatedishquantity.js');
 var handleneworder = require('./services/handleneworder.js');
-
+var addtofavourites = require('./services/addtofavourites.js');
+var getfavouriterestaurant = require('./services/getfavouriterestaurant.js');
 
 
 const { mongoDB } = require('./config');
@@ -90,3 +91,5 @@ handleTopicRequest("addtocart", addtocarttable)
 handleTopicRequest("showcartitem", getcartitem)
 handleTopicRequest("updatedishquantity", updatedishquantity)
 handleTopicRequest("handleneworder", handleneworder)
+handleTopicRequest("favourites",addtofavourites)
+handleTopicRequest("getfavourites",getfavouriterestaurant)

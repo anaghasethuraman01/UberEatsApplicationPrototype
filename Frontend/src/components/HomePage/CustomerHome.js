@@ -104,10 +104,13 @@ class CustomerHome extends Component {
     
 	}
   	addToFavouritesTable = (data) => {
+      axios.defaults.headers.common["authorization"] = localStorage.getItem(
+        "token");
 		axios.defaults.withCredentials = true;
 		axios.post(`${backendServer}/addtofavourites`, data).then((res) => {
+     
        this.setState({
-         message:res.data.message
+         message:res.data
        })
 			// console.log("Status Code : ", res.status);
 			// if (res.status === 200) {
@@ -134,17 +137,17 @@ class CustomerHome extends Component {
     render(){
       var beforeSearch = null;
       var afterSearch = null;
-      var fav=null;
+      // var fav=null;
 
-      if(this.state.message){
-        fav =(
-          <p>Already added as Favourite !</p>
-        )
-      }else{
-        fav =(
-          <p>Added to Favourites !</p>
-        )
-      }
+      // if(this.state.message === "Already added as Favourites"){
+      //   fav =(
+      //     <p>Already added as Favourite !</p>
+      //   )
+      // }else{
+      //   fav =(
+      //     <p>Added to Favourites !</p>
+      //   )
+      // }
       //console.log("city",this.state.city)
       if(this.state.city === "null" || this.state.city === "Add" || this.state.restaurants.length === 0){
           beforeSearch = ( 
@@ -296,7 +299,7 @@ class CustomerHome extends Component {
               show={this.state.show} onHide={()=>this.handleModalClose()}>
                 <Modal.Header closeButton></Modal.Header>
                 <Modal.Body>
-                {fav}
+                {this.state.message}
                 </Modal.Body>
                 
               </Modal>

@@ -126,7 +126,8 @@ class RestDashboard extends Component {
 		this.addToFavouritesTable(favourites);	
 	}
 	addToFavouritesTable = (data) => {
-
+		axios.defaults.headers.common["authorization"] = localStorage.getItem(
+			"token");
 		axios.defaults.withCredentials = true;
 		axios.post(`${backendServer}/addtofavourites`, data).then((res) => {
 			this.setState({
