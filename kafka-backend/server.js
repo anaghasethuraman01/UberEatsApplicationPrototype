@@ -18,7 +18,8 @@ var updatedishquantity = require('./services/updatedishquantity.js');
 var handleneworder = require('./services/handleneworder.js');
 var addtofavourites = require('./services/addtofavourites.js');
 var getfavouriterestaurant = require('./services/getfavouriterestaurant.js');
-
+var getorderaddress = require('./services/getorderaddress.js');
+var placeorder = require('./services/placeorder.js');
 
 const { mongoDB } = require('./config');
 const mongoose = require('mongoose');
@@ -93,3 +94,5 @@ handleTopicRequest("updatedishquantity", updatedishquantity)
 handleTopicRequest("handleneworder", handleneworder)
 handleTopicRequest("favourites",addtofavourites)
 handleTopicRequest("getfavourites",getfavouriterestaurant)
+handleTopicRequest("orderaddress",getorderaddress)
+handleTopicRequest("placeorder",placeorder)

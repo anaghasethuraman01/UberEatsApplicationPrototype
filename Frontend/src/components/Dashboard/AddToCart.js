@@ -32,12 +32,12 @@ class AddToCart extends Component {
             customerid:this.state.customerid,
             //restaurantid: this.state.restaurantid
           };
-          console.log("***")
-          console.log(data)
-          console.log("***")
+          // console.log("***")
+          // console.log(data)
+          // console.log("***")
           axios.post(`${backendServer}/getcartitem`,data)
                   .then((response) => { 
-                    console.log(response.data);
+                    //console.log(response.data);
                    if(response.data.length > 0){
                      this.setState({ status : "datapresent"});
                    }

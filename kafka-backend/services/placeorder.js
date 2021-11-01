@@ -1,37 +1,78 @@
-//placing order
+//customer register kafka service
+"use strict";
 
-const express = require('express');
-const kafka = require('../kafka/client');
-const router = express.Router();
-//const { checkAuth } = require("../utils/passport");
-router.post('/', (req, res) => {
+const Orders = require('../Models/OrderModel');
+const Carts = require('../Models/CartModel');
 
-	console.log("placeorder");
+function handle_request(req, callback){
+    const userid = req.customerid;
+    const restaurantid = req.restaurantid;
+    const orderDetails = req.orderDetails;
+	var neworder = {
+        userid : userid,
+        restaurantid:restaurantid,
+        restaurantname:req.restaurantname,
+        customername:req.customername,
+        address:req.street,
+        city:req.city,
+        state:req.state,
+        country:req.country,
+        ordertype:req.ordertype,
+        totalorderquantity:req.totalorderquantity,
+        datetime:req.datetime,
+        orderstatus:"Order Received",
+        ordermodetype:"New Order",
+        totalorderprice:req.totalorderprice
+    }
  
-	kafka.make_request('placeorder', req.body, (err, data) => {
-    
-		if (err) {
-		  res.writeHead(400, {
-			"content-type": "text/plain",
-		  });
-		 // res.end("Invalid Credentials");
-		}else{
-
-			//res.send(JSON.stringify(data))
-            console.log("Order Placed");
-            console.log(data);
-			console.log("Order Placed");
+	Orders.create(neworder, (error, dishresult) => {
+		if (error) {
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
+			console.log(error.message)
 		}
+		if (dishresult) {
+            //console.log(dishresult._id)
+
+            Orders.findOneAndUpdate({_id :dishresult._id },
+            {
+                    $push : {
+                        orderdetails :
+                        {
+                            $each : orderDetails
+                            
+                        }
+                        
+                    }
+                },(error, editdishquantity) => {
+                    if(error){
+                        console.log(error.message)
+                    }else{
+                        //console.log(editdishquantity.userid)
+                        Carts.deleteMany({userid:editdishquantity.userid},(error,updatecart)=>{
+                            if(error){
+                                console.log(error.message)
+                            }else{
+								callback(null, updatecart);
+                                console.log("Cart updated after checkout")
+                            }
+                        })
+                    }
+
+            })
+			//console.log("Order placed")
+		}	
 	});
+
+   
 	
-});
+};
 
- module.exports = router;
-
-
+module.exports.handle_request = handle_request;
 
 
-
+// //inserting dishes into restaurant
 // const express = require("express");
 // const router = express();
 // const app = require('../app');
@@ -105,6 +146,10 @@ router.post('/', (req, res) => {
 // 	});	
 //   });
 // module.exports = router;
+
+
+
+
 
 
 

@@ -43,7 +43,8 @@ class CheckOut extends Component {
           customerid:localStorage.getItem("userid"),
           //restaurantid: this.state.restaurantid
         };
-        
+        // axios.defaults.headers.common["authorization"] = localStorage.getItem(
+        //   "token");
         axios.post(`${backendServer}/getorderaddress`,data)
                 .then((response) => { 
                   console.log(response.data);
@@ -115,6 +116,7 @@ class CheckOut extends Component {
         e.preventDefault();
         let street; let city ; let state; let country;
         if(localStorage.getItem("deliverytype") === "Delivery"){
+          console.log("*****Delivery******");
           console.log(this.state.selectedAddr);
           if ((this.state.selectedAddr === null || this.state.selectedAddr === undefined)  ) {
             alert( 'Please select a delivery address option!')
@@ -189,6 +191,7 @@ class CheckOut extends Component {
             }
           }
         }else if(localStorage.getItem("deliverytype") === "Pick Up"){
+          console.log("*****Pick Up******");
               city = "";
               state= "";
               country = "";
@@ -248,8 +251,8 @@ class CheckOut extends Component {
         var addnewaddress = null;
         var cartitems = null;
        
-      if(localStorage.getItem("deliverytype") !== "Pick Up") { 
-        
+      if(localStorage.getItem("deliverytype") === "Delivery") { 
+        console.log("***DEli***")
        if(this.state.showDiv){
          addnewaddress = (
            <div>
