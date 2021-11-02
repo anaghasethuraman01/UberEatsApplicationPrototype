@@ -8,15 +8,15 @@ const router = express.Router();
 router.post('/',(req, res) => {
   
 	kafka.make_request('orderaddress', req.body, (err, data) => {
-    
+		console.log(data)
 		if (err) {
 		  res.writeHead(400, {
 			"content-type": "text/plain",
 		  });
 		  //res.end("Invalid Credentials");
 		}else{
-			res.send(data)
-			console.log("restaurant profile");
+			res.end(JSON.stringify(data))
+			console.log("Address");
 		}
 	});
 	
