@@ -49,14 +49,14 @@ class CheckOut extends Component {
                 .then((response) => { 
                   console.log(response.data);
 
-                 if(response.data){
+                 if(response.data.status === 200){
                    this.setState({ addressstatus : "datapresent"});
                  }
                  else {
                    this.setState({ addressstatus : "nodata"});
                  }
                 this.setState({
-                  deliveryaddress : this.state.deliveryaddress.concat(response.data) 
+                  deliveryaddress : this.state.deliveryaddress.concat(response.data.address) 
                 });
             });
          axios.post(`${backendServer}/getcartitem`,data)

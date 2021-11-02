@@ -8,7 +8,8 @@ var cartTableSchema = new Schema({
     dishprice:{type: Number, required: true},
     dishname:{type:String,required:true},
     quantity:{type:Number,required:true},
-    quantityprice:{type:Number,required:false}
+    quantityprice:{type:Number,required:false},
+    deliverytype:{type:String,required:true}
 },
 {
     versionKey: false

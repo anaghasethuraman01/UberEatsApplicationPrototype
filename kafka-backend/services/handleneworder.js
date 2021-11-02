@@ -16,18 +16,18 @@ function handle_request(req, callback){
 	
 	Carts.deleteMany({userid: req.customerid },(error, neworder) => {
         if (error) {
-                res.writeHead(500, {
-                	'Content-Type': 'text/plain'
-                })
+                // res.writeHead(500, {
+                // 	'Content-Type': 'text/plain'
+                //})
                 console.log(error.message)
             }
             if (neworder) {
                 Carts.create(newdish, (error, dishresult) => {
 	   
                     if (error) {
-                        res.writeHead(500, {
-                        	'Content-Type': 'text/plain'
-                        })
+                        // res.writeHead(500, {
+                        // 	'Content-Type': 'text/plain'
+                        // })
                         console.log(error.message)
                     }
                     if (dishresult) {

@@ -107,7 +107,7 @@ class SingleRestDashboard extends Component {
       
        const cartvalue = {
          customerid : localStorage.getItem("userid"),
-         //restaurantname :localStorage.getItem("restaurantname"),
+         deliverytype :localStorage.getItem("deliverytype"),
          restaurantid : restid,
          dishid:dishid,
          dishname:dishname,
@@ -115,12 +115,13 @@ class SingleRestDashboard extends Component {
          quantity:this.state.quantity,
          quantityprice :(dishprice * this.state.quantity) 
         }
+        
           localStorage.setItem("dishid",dishid);
           localStorage.setItem("dishname",dishname);
           localStorage.setItem("dishprice",dishprice);
           localStorage.setItem("quantity",cartvalue.quantity);
           localStorage.setItem("quantityprice",cartvalue.quantityprice);
-
+      
        this.addToCart(cartvalue);
       //  this.setState({
       //   show : true 
@@ -130,6 +131,8 @@ class SingleRestDashboard extends Component {
         this.setState({show:!this.state.show}) 
          }
     addToCart = (data) => {
+      console.log("add to cart")
+      
       axios.defaults.headers.common["authorization"] = localStorage.getItem(
         "token");
       axios.defaults.withCredentials = true;

@@ -16,7 +16,9 @@ router.post('/',checkAuth,(req, res) => {
 		}else{
 
 			res.send(data)
+			
 			console.log("cart items");
+			console.log(data)
 		}
 	});
 	
