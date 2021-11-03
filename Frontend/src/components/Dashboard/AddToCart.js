@@ -52,6 +52,7 @@ class AddToCart extends Component {
                   
   }
 
+  
   handleChange = (e, dishid,dishprice) => {
     e.preventDefault();
     const { dishes } = this.state;
@@ -73,7 +74,47 @@ class AddToCart extends Component {
    this.updateDishQuantity(quantitydata);
     
   }
-
+  addquantityfn = (e,dishid) =>{
+    e.preventDefault();
+    const { dishes } = this.state;
+    const index = dishes.findIndex((dish) => dish._id === dishid);
+    const orders = [...dishes];
+    const {quantity} = orders[index]
+    const {dishprice} = orders[index]
+    const amount = parseFloat(dishprice, 10);
+    orders[index].quantity = quantity + 1;
+    orders[index].quantityprice = (amount * (quantity+1)).toFixed(2) ;
+    this.setState({ dishes : orders });
+    const quantitydata = {
+      _id : dishid,
+      quantity : orders[index].quantity,
+      quantityprice : orders[index].quantityprice
+    }
+  
+   this.updateDishQuantity(quantitydata);
+  }
+  subquantityfn = (e,dishid) =>{
+    e.preventDefault();
+    const { dishes } = this.state;
+    const index = dishes.findIndex((dish) => dish._id === dishid);
+    const orders = [...dishes];
+    const {quantity} = orders[index]
+    
+    const {dishprice} = orders[index]
+    const amount = parseFloat(dishprice, 10);
+    if(orders[index].quantity > 1) {
+      orders[index].quantity = quantity - 1;
+      orders[index].quantityprice = (amount * (quantity-1)).toFixed(2) ;
+    }
+    this.setState({ dishes : orders });
+    const quantitydata = {
+      _id : dishid,
+      quantity : orders[index].quantity,
+      quantityprice : orders[index].quantityprice
+    }
+  
+   this.updateDishQuantity(quantitydata);
+  }
   updateDishQuantity = (quantitydata)=>{
 
     console.log(quantitydata)
@@ -121,8 +162,18 @@ class AddToCart extends Component {
                     ${dish.quantityprice}
                     </Col>
                     <Col>
-                   
-                     <select  name="quantity"  value={dish.quantity} onChange={(e) => { this.handleChange(e, dish._id,dish.dishprice)}} >
+                    <Button 
+                      type="submit" 
+                      onClick={(e) => {
+                        this.addquantityfn(e,dish._id);
+                      }}>
+                      +
+                    </Button> 
+                    &nbsp; &nbsp;
+                    {dish.quantity}
+                    
+                     {/* <select  name="quantity"  value={dish.quantity} onChange={(e) => { this.handleChange(e, dish._id,dish.dishprice)}} >
+                        
                         <option value="0" >0</option>
                         <option value="1">1</option>
                         <option value="2" >2</option>
@@ -134,13 +185,14 @@ class AddToCart extends Component {
                         <option value="8" >8</option>
                         <option value="9" >9</option>
                         <option value="10" >10</option>
-                    </select> 
+                    </select>  */}
+                     &nbsp; &nbsp;
                      <Button 
                       type="submit" 
                       onClick={(e) => {
-                        this.updatestatusfn(e,dish._id,dish.quantity,dish.dishprice);
+                        this.subquantityfn(e,dish._id);
                       }}>
-                      +/-
+                      -
                     </Button> 
                     </Col>
                   </Row>

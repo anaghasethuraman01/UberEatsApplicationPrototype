@@ -7,10 +7,8 @@ const kafka = require('../kafka/client');
 const router = express.Router();
 const { checkAuth } = require("../utils/passport");
 router.post('/',checkAuth, (req, res) => {
-
- 
 	kafka.make_request('updatedishquantity', req.body, (err, data) => {
-    
+    console.log(req);  
 		if (err) {
 		  res.writeHead(400, {
 			"content-type": "text/plain",
