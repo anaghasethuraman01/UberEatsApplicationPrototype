@@ -9,7 +9,7 @@ router.post('/',checkAuth,(req, res) => {
  
 	kafka.make_request('addtocart', req.body, (err, data) => {
     console.log(req.body)
-		if (err) {
+		if (err) { 
 		  res.writeHead(400, {
 			"content-type": "text/plain",
 		  });

@@ -50,6 +50,10 @@ class OrdersPage extends Component {
         const customerid = {
           userid: CustId
         };
+        console.log(customerid)
+        axios.defaults.headers.common["authorization"] = localStorage.getItem(
+          "token"
+      );
         axios.post(`${backendServer}/getcustomerprofile`,customerid).then((response) => {
           console.log(response.data);
           
@@ -86,7 +90,7 @@ class OrdersPage extends Component {
                 restaurantid:restaurantid
             }
 
-           
+            axios.defaults.headers.common.authorization = localStorage.getItem('token');
           axios.post(`${backendServer}/getrestaurantorders`,val).then((response) => {
               
                 if(response.data.length > 0){
@@ -193,7 +197,7 @@ searchOrder = (ordersearch) => {
                         <thead>
                         <tr className="form-control-order">
                           <th>Customer Name : {customerorder.customername}   <Button onClick={() => {
-                                this.viewcustomerprofile(customerorder.customerid);
+                                this.viewcustomerprofile(customerorder.userid);
                                 }}>View Profile</Button> </th>
         
                           <th>Date : {customerorder.datetime} . <br/> Total Items : {customerorder.totalorderquantity} item(s).<br/> Total Price : ${customerorder.totalorderprice}</th>
@@ -207,6 +211,7 @@ searchOrder = (ordersearch) => {
                                   <option value="Preparing">Preparing</option>
                                   <option value="Pick up Ready" >Pick up Ready</option>
                                   <option value="Picked up" >Picked up</option>
+                                  <option value="Cancel Order" >Cancel Order</option>
                                 </select>
                               <Button 
                                type="submit" 
@@ -227,7 +232,7 @@ searchOrder = (ordersearch) => {
                                   <option value="Preparing"  >Preparing</option>
                                   <option value="On the way" >On the way</option>
                                   <option value="Delivered" >Delivered</option>
-                                 
+                                  <option value="Cancel Order" >Cancel Order</option>
                                 </select>
                                  <Button 
                                type="submit" 
@@ -250,6 +255,7 @@ searchOrder = (ordersearch) => {
                                   <option value="Delivered" >Delivered</option>
                                   <option value="Pick up Ready" >Pick up Ready</option>
                                   <option value="Picked up" >Picked up</option>
+                                  <option value="Cancel Order" >Cancel Order</option>
                                 </select>
                                  <Button 
                                type="submit" 
@@ -290,7 +296,7 @@ searchOrder = (ordersearch) => {
                         <thead>
                         <tr className="form-control-order">
                           <th>Customer Name : {customerorder.customername} <Button onClick={() => {
-                                this.viewcustomerprofile(customerorder.customerid);
+                                this.viewcustomerprofile(customerorder.userid);
                                 }}>View Profile</Button> </th>
         
                           <th>Date : {customerorder.datetime} . <br/> Total Items : {customerorder.totalorderquantity} item(s).<br/> Total Price : ${customerorder.totalorderprice}</th>
@@ -304,6 +310,7 @@ searchOrder = (ordersearch) => {
                                   <option value="Preparing">Preparing</option>
                                   <option value="Pick up Ready" >Pick up Ready</option>
                                   <option value="Picked up" >Picked up</option>
+                                  <option value="Cancel Order" >Cancel Order</option>
                                 </select>
                               <Button 
                                type="submit" 
@@ -324,6 +331,7 @@ searchOrder = (ordersearch) => {
                                   <option value="Preparing"  >Preparing</option>
                                   <option value="On the way" >On the way</option>
                                   <option value="Delivered" >Delivered</option>
+                                  <option value="Cancel Order" >Cancel Order</option>
                                 </select>
                                  <Button 
                                type="submit" 
@@ -346,6 +354,7 @@ searchOrder = (ordersearch) => {
                                   <option value="Delivered" >Delivered</option>
                                   <option value="Pick up Ready" >Pick up Ready</option>
                                   <option value="Picked up" >Picked up</option>
+                                  <option value="Cancel Order" >Cancel Order</option>
                                 </select>
                                  <Button 
                                type="submit" 

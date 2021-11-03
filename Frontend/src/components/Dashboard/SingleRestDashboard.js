@@ -162,7 +162,8 @@ class SingleRestDashboard extends Component {
          dishname:localStorage.getItem("dishname"),
          dishprice:localStorage.getItem("dishprice"), 
          quantity:localStorage.getItem("quantity"),
-         quantityprice:localStorage.getItem("quantityprice")
+         quantityprice:localStorage.getItem("quantityprice"),
+         deliverytype :localStorage.getItem("deliverytype")
     }
     console.log(data)
     //localStorage.setItem("restname",this.state.restaurantname);

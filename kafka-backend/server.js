@@ -20,6 +20,10 @@ var addtofavourites = require('./services/addtofavourites.js');
 var getfavouriterestaurant = require('./services/getfavouriterestaurant.js');
 var getorderaddress = require('./services/getorderaddress.js');
 var placeorder = require('./services/placeorder.js');
+var getitemsfromorders = require('./services/getitemsfromorders.js');
+var getorderreceipt = require('./services/getorderreceipt.js');
+var getrestaurantorders = require('./services/getrestaurantorders.js');
+
 
 const { mongoDB } = require('./config');
 const mongoose = require('mongoose');
@@ -96,3 +100,6 @@ handleTopicRequest("favourites",addtofavourites)
 handleTopicRequest("getfavourites",getfavouriterestaurant)
 handleTopicRequest("orderaddress",getorderaddress)
 handleTopicRequest("placeorder",placeorder)
+handleTopicRequest("customerorders",getitemsfromorders)
+handleTopicRequest("orderreceipt",getorderreceipt)
+handleTopicRequest("restaurantorders",getrestaurantorders)

@@ -43,8 +43,8 @@ class CheckOut extends Component {
           customerid:localStorage.getItem("userid"),
           //restaurantid: this.state.restaurantid
         };
-        // axios.defaults.headers.common["authorization"] = localStorage.getItem(
-        //   "token");
+        axios.defaults.headers.common["authorization"] = localStorage.getItem(
+          "token");
         axios.post(`${backendServer}/getorderaddress`,data)
                 .then((response) => { 
                   console.log(response.data);
@@ -100,8 +100,8 @@ class CheckOut extends Component {
         history.push('/restauranthome'); 
       }
 
-
    addToOrders = (data) => {
+    axios.defaults.headers.common.authorization = localStorage.getItem('token');
         axios.post(`${backendServer}/placeorder`, data)
             .then(res => {
                 

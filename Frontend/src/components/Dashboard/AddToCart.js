@@ -121,8 +121,8 @@ class AddToCart extends Component {
                     ${dish.quantityprice}
                     </Col>
                     <Col>
-                    {dish.quantity}
-                    {/* <select  name="quantity"  value={dish.quantity} onChange={(e) => { this.handleChange(e, dish._id,dish.dishprice)}} >
+                   
+                     <select  name="quantity"  value={dish.quantity} onChange={(e) => { this.handleChange(e, dish._id,dish.dishprice)}} >
                         <option value="0" >0</option>
                         <option value="1">1</option>
                         <option value="2" >2</option>
@@ -134,14 +134,14 @@ class AddToCart extends Component {
                         <option value="8" >8</option>
                         <option value="9" >9</option>
                         <option value="10" >10</option>
-                    </select> */}
-                    {/* <Button 
+                    </select> 
+                     <Button 
                       type="submit" 
                       onClick={(e) => {
                         this.updatestatusfn(e,dish._id,dish.quantity,dish.dishprice);
                       }}>
                       +/-
-                    </Button> */}
+                    </Button> 
                     </Col>
                   </Row>
                 </Form>

@@ -12,6 +12,7 @@ function handle_request(req, callback){
         dishprice : req.dishprice,
 		quantity:req.quantity,
 		quantityprice:req.quantityprice,
+        deliverytype:req.deliverytype
     }
 	
 	Carts.deleteMany({userid: req.customerid },(error, neworder) => {

@@ -2,12 +2,11 @@
    
 //get order address
 
-//fetching restaurant profile details
 const express = require('express');
 const kafka = require('../kafka/client');
 const router = express.Router();
-//const { checkAuth } = require("../utils/passport");
-router.post('/',(req, res) => {
+const { checkAuth } = require("../utils/passport");
+router.post('/',checkAuth,(req, res) => {
   
 	kafka.make_request('orderaddress', req.body, (err, data) => {
 		console.log(data)

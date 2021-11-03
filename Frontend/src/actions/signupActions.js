@@ -3,6 +3,7 @@ import backendServer from "../webConfig"
 import axios from "axios";
 
 export const userSignup = (userData) => dispatch => {
+    axios.defaults.headers.common.authorization = localStorage.getItem('token');
     axios.defaults.withCredentials = true;
     axios.post(`${backendServer}/customerRegister`, userData)
         .then(response => dispatch({

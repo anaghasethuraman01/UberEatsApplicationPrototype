@@ -46,9 +46,13 @@ class CustomerOrder extends Component {
       const receiptval = {
                 orderid:val
             }
+            
+            axios.defaults.headers.common.authorization = localStorage.getItem('token');
        axios.post(`${backendServer}/getorderreceipt`,receiptval).then((response) => {
+        console.log("response")
+        console.log(response.data[0].orderdetails[0])
          this.setState({
-            receiptdetails : this.state.receiptdetails.concat(response.data) 
+            receiptdetails : this.state.receiptdetails.concat(response.data[0].orderdetails[0]) 
           });
        });
 
@@ -61,7 +65,7 @@ class CustomerOrder extends Component {
             const val = {
                 customerid:customerid
             }
-           
+            axios.defaults.headers.common.authorization = localStorage.getItem('token');
           axios.post(`${backendServer}/getitemsfromorders`,val).then((response) => {
               
                 if(response.data.length > 0){
@@ -133,7 +137,7 @@ handleChange = (e) => {
                           <th>{customerorder.totalorderquantity} items for ${customerorder.totalorderprice} . {customerorder.datetime}.</th>
                           <th><Button 
                            onClick={() => {
-                                this.viewreceipt(customerorder.orderid);
+                                this.viewreceipt(customerorder._id);
                                 }}>View Receipt</Button></th>   
                         </tr>
                       </thead>
@@ -220,7 +224,7 @@ handleChange = (e) => {
               {this.state.receiptdetails.map(receiptdetail=>
               <div >
                 <th className="receipt"> {receiptdetail.dishname}</th>
-                <th className="receipt"> ${receiptdetail.price}</th>
+                <th className="receipt"> ${receiptdetail.dishprice}</th>
                 <th className="receipt"> Qty :{receiptdetail.quantity}</th>
                 
               </div>)}
