@@ -22,6 +22,7 @@ function handle_request(req, callback){
         datetime:req.datetime,
         orderstatus:"Order Received",
         ordermodetype:"New Order",
+        note:req.note,
         totalorderprice:req.totalorderprice
     }
  

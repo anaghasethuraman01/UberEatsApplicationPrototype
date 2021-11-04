@@ -1,7 +1,7 @@
 
 import Button from '@restart/ui/esm/Button';
 import React, {Component} from 'react'
-import {Modal,Table} from 'react-bootstrap';
+import {Modal,Table,Row,Col,Pagination} from 'react-bootstrap';
 import axios from 'axios';
 import backendServer from "../../webConfig";
 
@@ -25,7 +25,10 @@ class CustomerOrder extends Component {
       orderstatusmsg:null,
       receiptdetails:[],
       orderstatus:null,
-      ordermsg:null
+      ordermsg:null,
+      note:null,
+      totalamount:null,
+      totalquantity:null
   
     }
      //this.handleCheckout = this.handleCheckout.bind(this);
@@ -50,10 +53,19 @@ class CustomerOrder extends Component {
             axios.defaults.headers.common.authorization = localStorage.getItem('token');
        axios.post(`${backendServer}/getorderreceipt`,receiptval).then((response) => {
         console.log("response")
-        console.log(response.data[0].orderdetails[0])
+        console.log(response.data[0])
          this.setState({
-            receiptdetails : this.state.receiptdetails.concat(response.data[0].orderdetails[0]) 
+            receiptdetails : this.state.receiptdetails.concat(response.data[0].orderdetails) 
           });
+          this.setState({
+            note:response.data[0].note
+          })
+          this.setState({
+            totalamount:response.data[0].totalorderprice
+          })
+          this.setState({
+            totalquantity:response.data[0].totalorderquantity
+          })
        });
 
     }
@@ -67,7 +79,7 @@ class CustomerOrder extends Component {
             }
             axios.defaults.headers.common.authorization = localStorage.getItem('token');
           axios.post(`${backendServer}/getitemsfromorders`,val).then((response) => {
-              
+               console.log(response.data)
                 if(response.data.length > 0){
                     this.setState({ orderstatusmsg: "found" });
                
@@ -126,7 +138,23 @@ handleChange = (e) => {
                 <div>
                     <h1> Your Orders </h1>
                 <div>
-                
+                {/* <Pagination>
+  <Pagination.First />
+  <Pagination.Prev />
+  <Pagination.Item>{1}</Pagination.Item>
+  <Pagination.Ellipsis />
+
+  <Pagination.Item>{10}</Pagination.Item>
+  <Pagination.Item>{11}</Pagination.Item>
+  <Pagination.Item active>{12}</Pagination.Item>
+  <Pagination.Item>{13}</Pagination.Item>
+  <Pagination.Item disabled>{14}</Pagination.Item>
+
+  <Pagination.Ellipsis />
+  <Pagination.Item>{20}</Pagination.Item>
+  <Pagination.Next />
+  <Pagination.Last />
+</Pagination> */}
                     {this.state.customerorders.map((customerorder) => (
                     <div>
                       <Table>
@@ -135,6 +163,7 @@ handleChange = (e) => {
                           <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4>  </th>
         
                           <th>{customerorder.totalorderquantity} items for ${customerorder.totalorderprice} . {customerorder.datetime}.</th>
+                          <th>{customerorder.note}</th>
                           <th><Button 
                            onClick={() => {
                                 this.viewreceipt(customerorder._id);
@@ -154,7 +183,7 @@ handleChange = (e) => {
                 <div>
                     <h1> Your Orders </h1>
                 <div>
-                
+      
                     {this.state.customerorders.map((customerorder1) => (
                     <div>
                       <Table>
@@ -212,28 +241,40 @@ handleChange = (e) => {
           <br/><br/><br/>
           <div> {orderlist} </div> 
          
-          <Button onClick={this.goback}>Home Page</Button>
-                       <div>
+          {/* <Button onClick={this.goback}>Home Page</Button> */}
+         <div>
          <Modal size="md-down"
           aria-labelledby="contained-modal-title-vcenter"
           centered
            show={this.state.show} onHide={()=>this.handleModalClose()}>
-             <Modal.Header closeButton><h4> Receipt</h4></Modal.Header>
+             <Modal.Header closeButton><h4> Receipt</h4>
+             
+             </Modal.Header>
+             <Row>
+                  <Col sm><h6>Total Amount : ${this.state.totalamount}</h6></Col>
+                  <Col sm><h6>Total Qty : {this.state.totalquantity}</h6></Col>
+                  
+              </Row>
+             
              <Modal.Body>
+             
                <div>
               {this.state.receiptdetails.map(receiptdetail=>
               <div >
-                <th className="receipt"> {receiptdetail.dishname}</th>
-                <th className="receipt"> ${receiptdetail.dishprice}</th>
-                <th className="receipt"> Qty :{receiptdetail.quantity}</th>
-                
+                <Row>
+                  <Col sm={1}>{receiptdetail.quantity} </Col>
+                  <Col sm={6}>{receiptdetail.dishname}</Col>
+                  <Col sm={1}>${receiptdetail.dishprice}</Col>
+                </Row>
+            
               </div>)}
-              </div>
-
-             </Modal.Body>
-
-             <Modal.Footer>
               
+              </div>
+             
+             </Modal.Body>
+              <h6>Added Note : {this.state.note}</h6>
+             <Modal.Footer>
+             
              </Modal.Footer>
            </Modal>
           </div>

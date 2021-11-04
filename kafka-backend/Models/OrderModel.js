@@ -15,12 +15,13 @@ var orderTableSchema = new Schema({
     totalorderprice: {type:Number,required:true},
     datetime: {type:String,required:true},
     orderstatus:{type:String,required:true},
+    note:{type: String, required: false },
     orderdetails: [
         {
           dishid: { type: String, required: true },
           quantity: { type:Number,required: true},
           dishprice: { type:Number,required: true},
-          dishname: {type: String, required: true }
+          dishname: {type: String, required: true },
         },
       ],
 },

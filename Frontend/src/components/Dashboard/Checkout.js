@@ -34,11 +34,13 @@ class CheckOut extends Component {
           totalorderquantity:null,
           totalorderprice:null,
           show: false,
+          note:null
           
         }
 
       }
       componentDidMount(){
+        
         const data = {
           customerid:localStorage.getItem("userid"),
           //restaurantid: this.state.restaurantid
@@ -114,6 +116,7 @@ class CheckOut extends Component {
      
       placeOrder = (e) => {
         e.preventDefault();
+        localStorage.setItem("checkout","NoCheckout");
         let street; let city ; let state; let country;
         if(localStorage.getItem("deliverytype") === "Delivery"){
           console.log("*****Delivery******");
@@ -147,12 +150,15 @@ class CheckOut extends Component {
                       totalorderquantity:this.state.totalorderquantity,
                       totalorderprice:this.state.totalorderprice,
                       datetime:this.state.dateandtime.substring(0,24),
+                      note:this.state.note,
                       orderDetails
                   }
+                  
                   this.addToOrders(orderData); 
                     this.setState({
                       show : true 
                   });
+                  
               }
             else if(this.state.selectedAddr === "new"){
               street = this.state.street;
@@ -166,7 +172,7 @@ class CheckOut extends Component {
               }else{
                   const orderDetails = []; 
                   this.state.dishes.forEach((element) => {
-                    orderDetails.push({ dishid: element.dishid, quantity: element.quantity,dishprice : element.dishprice,dishname:element.dishname });  
+                    orderDetails.push({ dishid: element.dishid, quantity: element.quantity,dishprice : element.dishprice,dishname:element.dishname,note:this.state.note  });  
                   });
                   const orderData = {
                     customerid:this.state.customerid,
@@ -181,6 +187,7 @@ class CheckOut extends Component {
                     totalorderquantity:this.state.totalorderquantity,
                     totalorderprice:this.state.totalorderprice,
                     datetime:this.state.dateandtime.substring(0,24),
+                    note:this.state.note,
                     orderDetails
                   }
                   this.addToOrders(orderData); 
@@ -213,6 +220,7 @@ class CheckOut extends Component {
                     totalorderquantity:this.state.totalorderquantity,
                     totalorderprice:this.state.totalorderprice,
                     datetime:this.state.dateandtime.substring(0,24),
+                    note:this.state.note,
                     orderDetails
                   }
                   this.addToOrders(orderData); 
@@ -242,9 +250,9 @@ class CheckOut extends Component {
   handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
         }
-        selectCountry (val) {
+  selectCountry (val) {
       this.setState({ country: val });
-    }
+  }
       render(){
        
         var addresses = null;
@@ -354,6 +362,10 @@ class CheckOut extends Component {
         <h2>Total : ${this.state.totalorderprice}</h2>
         <h4>Total No of Items : {this.state.totalorderquantity}</h4>
         <br/>
+        <br/>
+        Add a note
+        <textarea type="text" className="form-control" name="note" value={this.state.note}
+        onChange={this.handleChange} />
         <br/>
        
        {addresses}

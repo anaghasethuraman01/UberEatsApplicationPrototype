@@ -4,7 +4,8 @@ import React, {Component} from 'react'
 import {Modal,Form,Row,Col} from 'react-bootstrap';
 import axios from 'axios';
 import backendServer from "../../webConfig";
-
+import {TiDelete} from 'react-icons/ti';
+import ReactTooltip from 'react-tooltip';
 class AddToCart extends Component {
   
   constructor(props) {
@@ -99,7 +100,6 @@ class AddToCart extends Component {
     const index = dishes.findIndex((dish) => dish._id === dishid);
     const orders = [...dishes];
     const {quantity} = orders[index]
-    
     const {dishprice} = orders[index]
     const amount = parseFloat(dishprice, 10);
     if(orders[index].quantity > 1) {
@@ -111,6 +111,26 @@ class AddToCart extends Component {
       _id : dishid,
       quantity : orders[index].quantity,
       quantityprice : orders[index].quantityprice
+    }
+  
+   this.updateDishQuantity(quantitydata);
+  }
+  deletequantityfn = (e,dishid) =>{
+    e.preventDefault();
+    const { dishes } = this.state;
+    const index = dishes.findIndex((dish) => dish._id === dishid);
+    const orders = [...dishes];
+    console.log(orders.splice(index,1))
+    if(orders.length === 0){
+      this.setState({ status : "empty"});
+    }
+    // 
+    this.setState({ dishes : orders });
+    
+    const quantitydata = {
+      _id : dishid,
+      quantity : 0,
+      quantityprice : 0
     }
   
    this.updateDishQuantity(quantitydata);
@@ -152,6 +172,7 @@ class AddToCart extends Component {
                 </Form>
             {this.state.dishes.map((dish) => (
               <div>
+                <ReactTooltip />
 
                 <Form>
                   <Row>
@@ -171,21 +192,6 @@ class AddToCart extends Component {
                     </Button> 
                     &nbsp; &nbsp;
                     {dish.quantity}
-                    
-                     {/* <select  name="quantity"  value={dish.quantity} onChange={(e) => { this.handleChange(e, dish._id,dish.dishprice)}} >
-                        
-                        <option value="0" >0</option>
-                        <option value="1">1</option>
-                        <option value="2" >2</option>
-                        <option value="3" >3</option>
-                        <option value="4" >4</option>
-                        <option value="5" >5</option>
-                        <option value="6" >6</option>
-                        <option value="7" >7</option>
-                        <option value="8" >8</option>
-                        <option value="9" >9</option>
-                        <option value="10" >10</option>
-                    </select>  */}
                      &nbsp; &nbsp;
                      <Button 
                       type="submit" 
@@ -194,27 +200,25 @@ class AddToCart extends Component {
                       }}>
                       -
                     </Button> 
+                    &nbsp; &nbsp;
+                     <Button 
+                      type="submit" data-tip="Remove"
+                      onClick={(e) => {
+                        this.deletequantityfn(e,dish._id);
+                      }}>
+                      <TiDelete/>
+                    </Button> 
                     </Col>
                   </Row>
                 </Form>
-                {/* <p></p>
-                 <p className="cartitem"></p>
-                  <p ></p> */}
-                  {/* <table >
-                              <tr >
-                                  <th>{dish.dishname}</th>
-                                  <th className="cartitem" >${dish.dishprice}</th>
-                                  <th className="cartitem">{dish.quantity}</th>
-                              </tr>
-                          
-                      </table> */}
+                
               </div>
             )
             )}
         <Button className="container1"  onClick={handleSubmit}>CheckOut</Button>
         </div>
       );
-    }else{
+    }else if(this.state.status !== "datapresent" || this.state.status === "empty"){
       beforecart = (
         <div>
          <p>Your Cart is Empty.Add items!</p>

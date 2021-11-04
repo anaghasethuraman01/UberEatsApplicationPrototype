@@ -40,6 +40,7 @@ viewCart = (e) => {
     this.setState({ openRestaurantCanvas: false });
   }
   viewCustomerLaunch = () =>{ 
+    
     this.setState({ openCanvas: true });
   }
   viewRestaurantLaunch = () =>{
@@ -47,6 +48,7 @@ viewCart = (e) => {
   }
  
   checkOut = () => {
+    localStorage.setItem("checkout","Checkout");
     this.setState({ openModal: false });
     const { history } = this.props;
     history.push('/checkout');
@@ -74,6 +76,8 @@ viewCart = (e) => {
       }
       profile = e => {
         e.preventDefault();
+        localStorage.setItem("checkout","NoCheckout");
+       
         const {history} = this.props;
         history.push('/customerprofile'); 
         this.setState({ openCanvas: false });
@@ -86,18 +90,21 @@ viewCart = (e) => {
       }
       showfavourites = e => {
         e.preventDefault();
+        localStorage.setItem("checkout","NoCheckout");
         const {history} = this.props;
         history.push('/favourites'); 
         this.setState({ openCanvas: false });
       }
       findfood = e => {
         e.preventDefault();
+        localStorage.setItem("checkout","NoCheckout");
         const {history} = this.props;
         history.push('/restdashboard'); 
         this.setState({ openCanvas: false });
       }
       orders = e => {
         e.preventDefault();
+        localStorage.setItem("checkout","NoCheckout");
         const {history} = this.props;
         history.push('/customerorder'); 
         this.setState({ openCanvas: false });
@@ -110,6 +117,7 @@ viewCart = (e) => {
       }
       home = e => {
         e.preventDefault();
+        localStorage.setItem("checkout","NoCheckout");
         const {history} = this.props;
         history.push('/customerhome'); 
         this.setState({ openCanvas: false });
@@ -135,18 +143,32 @@ viewCart = (e) => {
     
     const userNameSessionVal = localStorage.getItem('userid');
     const restaurantNameSessionVal = localStorage.getItem('restaurantid');
+    const checkout = localStorage.getItem('checkout');
     let sessionAvail = null;
-    if (userNameSessionVal != null && userNameSessionVal !== undefined && userNameSessionVal !== "") {
-      sessionAvail = (
-        <div className = "cartitems  ">
-           <Button className="cartleft " variant="light" onClick={this.viewCart}><FaShoppingCart/>Cart</Button>
-           <Button className="btn-logout " variant="light" onClick={this.logout}>Logout</Button>
-            <Button className="btn-offcanvas-show"  variant="light"
-            onClick={this.viewCustomerLaunch} >
-            <MdViewDay/>
-            </Button>
-        </div>
-      );
+    if (userNameSessionVal != null && userNameSessionVal !== undefined && userNameSessionVal !== "" ) {
+      if(checkout === "Checkout"){
+        sessionAvail = (
+          <div className = "cartitems  ">
+             <Button className="btn-logout " variant="light" onClick={this.logout}>Logout</Button>
+              <Button className="btn-offcanvas-show"  variant="light"
+              onClick={this.viewCustomerLaunch} >
+              <MdViewDay/>
+              </Button>
+          </div>
+        );
+      }else {
+        sessionAvail = (
+          <div className = "cartitems  ">
+             <Button className="cartleft " variant="light" onClick={this.viewCart}><FaShoppingCart/>Cart</Button>
+             <Button className="btn-logout " variant="light" onClick={this.logout}>Logout</Button>
+              <Button className="btn-offcanvas-show"  variant="light"
+              onClick={this.viewCustomerLaunch} >
+              <MdViewDay/>
+              </Button>
+          </div>
+        );
+      }
+      
     } if (restaurantNameSessionVal != null && restaurantNameSessionVal !== undefined && restaurantNameSessionVal !== "" && (userNameSessionVal === ""|| userNameSessionVal ===null ||  userNameSessionVal ===undefined)) {
       sessionAvail = (
         <div className = "cartitems  ">
