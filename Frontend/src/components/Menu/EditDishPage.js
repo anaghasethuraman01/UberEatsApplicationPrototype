@@ -16,7 +16,8 @@ class EditDishPage extends Component {
         this.state = {
            selectedDish:JSON.parse(localStorage.getItem("SelectedDish")) ,
            dishid:null ,
-           show:false 
+           show:false ,
+           dishshow:false
         }
       }
     //   logout = e => {
@@ -28,6 +29,10 @@ class EditDishPage extends Component {
        
       handleModalClose(){
             this.setState({show:!this.state.show}) 
+            
+        }
+        handleDishClose(){
+            this.setState({dishshow:!this.state.dishshow}) 
             const {history} = this.props;
             history.push('/restauranthome'); 
         }
@@ -87,7 +92,51 @@ class EditDishPage extends Component {
     nullOrEmpty(str) {
         return str === null || str === "" 
     }
-
+    saveFile = (e) => {
+        e.preventDefault();
+        this.setState({file:e.target.files[0]});
+        this.setState({fileName:e.target.files[0].name});
+      };
+      uploadFile = (e) => {
+        e.preventDefault();
+        console.log("*****")
+        console.log(this.state.file)
+        console.log("*****")
+        const formData = new FormData();
+        // formData.append("file", this.state.file,this.state.fileName);
+        // formData.append("userid", this.state.customerDetails.userid);
+        if(this.state.file !== undefined && this.state.fileName !== undefined){
+          formData.append("file", this.state.file,this.state.fileName);
+          formData.append("dishid",this.state.selectedDish._id);
+          
+        }
+        
+        else{
+          alert("No Image inserted");
+          return;
+        }
+       
+       this.sendImageAPI(formData);   
+       this.setState({
+        dishshow : true 
+      });     
+      }
+      sendImageAPI = (data) => {
+        axios.post( `${backendServer}/images`, data)
+            .then(response => {
+              if(response.status === 200){
+                var data1 = {
+                  userid : this.state.selectedDish._id,
+                  profileImg : response.data.imagePath,
+                  usertype:"Dish"
+                }
+                axios.post( `${backendServer}/uploadProfilePic`, data1)
+                .then(response1 =>{
+                  console.log(response1.data)
+                })
+              }
+            })
+          }
     validateDish = () => {
         
         let isValid = true;
@@ -177,7 +226,10 @@ class EditDishPage extends Component {
                 <div className="form-group">
                     <Button onClick={this.handleEditSubmit}>Edit Dish</Button>
                 </div>
-                    <Button onClick = {this.goback}>Back</Button>
+                Dish Image:
+                    <input className="filefolder" type="file" onChange={this.saveFile} />
+                    <button onClick={this.uploadFile}>Upload</button>  
+                    <Button onClick = {this.goback}>Go Back</Button>
                 <div>
                     <Modal size="md-down"
                     aria-labelledby="contained-modal-title-vcenter"
@@ -186,6 +238,17 @@ class EditDishPage extends Component {
                         <Modal.Header closeButton></Modal.Header>
                         <Modal.Body>
                             <h1>Dish Updated Successfully!</h1>
+                        </Modal.Body>
+                    </Modal>
+                </div>
+                <div>
+                    <Modal size="md-down"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    show={this.state.dishshow} onHide={()=>this.handleDishClose()}>
+                        <Modal.Header closeButton></Modal.Header>
+                        <Modal.Body>
+                            <h1>Dish Image Updated Successfully!</h1>
                         </Modal.Body>
                     </Modal>
                 </div>

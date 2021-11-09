@@ -19,7 +19,8 @@ class AddRestaurantMenu extends Component {
           category:null,
           foodtype:null,
           show:false,
-          showdish:false
+          showdish:false,
+          dishid:''
         }
       }
 
@@ -28,6 +29,8 @@ class AddRestaurantMenu extends Component {
         axios.defaults.headers.common.authorization = localStorage.getItem('token');
           axios.post(`${backendServer}/restaurantdish`, data)
               .then(res => {
+                console.log(res.data)
+                this.setState({dishid : res.data._id})
               //     if(res.data.message){
               //         this.setState({message:res.data.message})
               //     }
@@ -115,16 +118,32 @@ class AddRestaurantMenu extends Component {
         showdish : true 
       });     
       }
-
       sendImageAPI = (data) => {
-        axios.post( `${backendServer}/dishimageupload`, data)
-            .then(res => {
-            console.log(res.data);
-              //  this.setState({profilepic:res.data});
-              // localStorage.setItem("profilepic",res.data);
-             // console.log(this.state.profilepic);
+        axios.post( `${backendServer}/images`, data)
+            .then(response => {
+              if(response.status === 200){
+                var data1 = {
+                  userid : this.state.dishid,
+                  profileImg : response.data.imagePath,
+                  usertype:"Dish"
+                }
+                axios.post( `${backendServer}/uploadProfilePic`, data1)
+                .then(response1 =>{
+                  console.log(response1.data)
+                })
+              }
             })
           }
+   
+      // sendImageAPI = (data) => {
+      //   axios.post( `${backendServer}/dishimageupload`, data)
+      //       .then(res => {
+      //       console.log(res.data);
+      //         //  this.setState({profilepic:res.data});
+      //         // localStorage.setItem("profilepic",res.data);
+      //        // console.log(this.state.profilepic);
+      //       })
+      //     }
 
           handleModalClose(){
             this.setState({show:!this.state.show}) 

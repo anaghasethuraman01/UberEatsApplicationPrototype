@@ -180,10 +180,8 @@ class CustomerEditProfile extends Component {
         }
         saveFile = (e) => {
           e.preventDefault();
-         
           this.setState({file:e.target.files[0]});
           this.setState({fileName:e.target.files[0].name});
-          
         };
         handleModalClose(){
           this.setState({show:!this.state.show}) 
@@ -192,20 +190,22 @@ class CustomerEditProfile extends Component {
       }
         uploadFile = (e) => {
           e.preventDefault();
+          console.log("*****")
           console.log(this.state.file)
+          console.log("*****")
           const formData = new FormData();
-          formData.append("file", this.state.file,this.state.fileName);
-          formData.append("userid", this.state.customerDetails.userid);
-          // if(this.state.file !== undefined && this.state.fileName !== undefined){
-          //   formData.append("file", this.state.file,this.state.fileName);
-          //   formData.append("userid", this.state.customerDetails.userid);
+          // formData.append("file", this.state.file,this.state.fileName);
+          // formData.append("userid", this.state.customerDetails.userid);
+          if(this.state.file !== undefined && this.state.fileName !== undefined){
+            formData.append("file", this.state.file,this.state.fileName);
+            formData.append("userid", this.state.customerDetails.userid);
             
-          // }
+          }
           
-          // else{
-          //   alert("No Image inserted");
-          //   return;
-          // }
+          else{
+            alert("No Image inserted");
+            return;
+          }
          
          this.sendImageAPI(formData);        
         }
@@ -223,12 +223,6 @@ class CustomerEditProfile extends Component {
                     console.log(response1.data)
                   })
                 }
-                // console.log("*****")
-                // console.log(res.data.imagePath);
-                // console.log("*****")
-                // this.setState({profilepic:res.data});
-                // localStorage.setItem("profilepic",res.data);
-                // console.log(this.state.profilepic);
               })
             }
      
@@ -250,7 +244,7 @@ class CustomerEditProfile extends Component {
               <input className="filefolder" type="file" onChange={this.saveFile} />
               <button onClick={this.uploadFile}>Upload</button>  
               <Button onClick = {this.goback}>Go Back</Button>
-              <img src= "http://localhost:5000/images/228e675b7c9262e473f4af6a80a8a005"></img>
+             
               </div>
               <div className="form-group">
 

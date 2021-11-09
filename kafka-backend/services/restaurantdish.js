@@ -22,11 +22,11 @@ function handle_request(req, callback){
 			console.log(error.message)
 		}
 		if (dishresult) {
-			var obj = {
-                message : "New Dish Added",
+			// var obj = {
+            //     message : "New Dish Added",
                 
-            }    
-            callback(null, obj); 
+            // }    
+            callback(null, dishresult); 
 		}	
 	});
 		

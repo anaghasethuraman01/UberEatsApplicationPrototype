@@ -23,7 +23,7 @@ function handle_request(req, callback){
                 console.log(error.message)
                 }
                 if (dishresult) {
-                    //callback(null, dishresult);
+                    callback(null, dishresult);
                     console.log({message: "Order updated"});
                 }
      })

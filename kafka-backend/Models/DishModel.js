@@ -8,7 +8,8 @@ var dishSchema = new Schema({
     description:{type: String, required: true},
     category:{type:String,required:true},
     foodtype:{type:String,required:true},
-    restaurantid:{type:String,required:false}
+    restaurantid:{type:String,required:false},
+    profilepic:{type:String,required:false}
 },
 {
     versionKey: false

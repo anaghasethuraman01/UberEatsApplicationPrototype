@@ -55,12 +55,14 @@ class CustomerProfile extends Component {
                 state:profile.state|| this.state.state,
                 country:profile.country|| this.state.country,
                 nickname:profile.nickname|| this.state.nickname,
-                dob:profile.dob||this.state.dob
+                dob:profile.dob||this.state.dob,
+                profilepic:profile.profilepic||this.state.profilepic
 
             };
 
             this.setState({customerdetails:userData});
             localStorage.setItem("city",profile.city)
+            localStorage.setItem("profilepic",profile.profilepic)
         }
     }
     
@@ -143,7 +145,8 @@ class CustomerProfile extends Component {
     render(){
      let username = "";
      let customerdetails = []
-      const imgLink = `${backendServer}/${localStorage.getItem("profilepic")}`;
+      const imgLink = `${backendServer}${localStorage.getItem("profilepic")}`;
+      console.log(imgLink)
       username = this.props.profile.username;
     return (
 

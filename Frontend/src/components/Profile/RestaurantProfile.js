@@ -13,28 +13,6 @@ class RestaurantProfile extends Component {
           restaurantdetails:[]
         };
     }
-        // {
-        //   restaurantid:localStorage.getItem("restaurantid"),
-        //   username: localStorage.getItem("restaurantname"),
-        //   foodtype:null,
-        //   zipcode:localStorage.getItem("zipcode"),
-        //   description:localStorage.getItem("description"),
-        //   email:localStorage.getItem("email"),
-        //   phone: localStorage.getItem("phone"),
-        //   timing:localStorage.getItem("timing"),
-        //   city:localStorage.getItem("city"),
-        //   deliverytype: localStorage.getItem("deliverytype"),
-        //   foodtype:localStorage.getItem("foodtype"),
-        //   days:localStorage.getItem("days"),
-        //   restprofilepic:localStorage.getItem("restprofilepic"),
-        //   loading: false,
-        //   output: null,
-        //   file:null,
-        //   fileName:null,
-        //   restaurantdetails:[]
-        // }
-      
-    
       componentDidMount() {
         const restaurantid = {
           userid: localStorage.getItem("restaurantid")
@@ -59,10 +37,12 @@ class RestaurantProfile extends Component {
                 timing:profile.timing||this.state.timing,
                 deliverytype:profile.deliverytype||this.state.deliverytype,
                 zipcode:profile.zipcode||this.state.zipcode,
-                foodtype:profile.foodtype|| this.state.foodtype
+                foodtype:profile.foodtype|| this.state.foodtype,
+                profilepic:profile.profilepic||this.state.profilepic
             };
             
             this.setState({restaurantdetails:restaurantData});
+            localStorage.setItem("profilepic",profile.profilepic)
         }
     }
     goback = (e) =>{
@@ -70,62 +50,14 @@ class RestaurantProfile extends Component {
       const {history} = this.props;
       history.push('/restauranthome'); 
     }
-      // componentDidMount() {
-      //   const restaurantid = {
-      //     restaurantid: this.state.restaurantid
-      //   };
-      //   axios.post(`${backendServer}/getrestaurantprofile`,restaurantid).then((response) => {
-      //     console.log(response.data);
-      //     //update the state with the response data
-      //     this.setState({
-      //       restaurantdetails: this.state.restaurantdetails.concat(response.data),
-      //     });
-      //     //console.log(this.restaurantdetails)
-      //     this.setState({
-      //       username: this.state.restaurantdetails[0]['username'],
-      //     });
-      //     this.setState({
-      //       foodtype: this.state.restaurantdetails[0]['foodtype'],
-      //     });
-      //     this.setState({
-      //       city: this.state.restaurantdetails[0]['city'],
-      //     });
-      //     this.setState({
-      //       phone: this.state.restaurantdetails[0]['phone'],
-      //     });
-      //     this.setState({
-      //       email: this.state.restaurantdetails[0]['email'],
-      //     });
-      //     this.setState({
-      //       days: this.state.restaurantdetails[0]['days'],
-      //     });
-      //     this.setState({
-      //       deliverytype: this.state.restaurantdetails[0]['deliverytype'],
-      //     });
-      //     this.setState({
-      //       description: this.state.restaurantdetails[0]['description'],
-      //     });
-      //     this.setState({
-      //       timing: this.state.restaurantdetails[0]['timing'],
-      //     });
-      //     this.setState({
-      //       zipcode: this.state.restaurantdetails[0]['zipcode'],
-      //     });
-         
-      //   });
-      // }
       handleSubmit = (restaurantObj) => {
         localStorage.setItem("RestaurantDetails",JSON.stringify(restaurantObj));
         const {history} = this.props;
         history.push('/restauranteditprofile'); 
       }
 
-      
-     
       render(){
-      const imgLink = `${backendServer}/${localStorage.getItem("restprofilepic")}`;
-      // console.log("***"); 
-      // console.log(localStorage.getItem("restprofilepic"));
+      const imgLink = `${backendServer}${localStorage.getItem("profilepic")}`;
     return (
       
 

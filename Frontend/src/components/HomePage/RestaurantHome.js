@@ -66,7 +66,7 @@ class RestaurantHome extends Component {
         
           <div >
           <Card style={{ width: "18rem" }}>
-          <Card.Img style={{ width: "18rem",height:"13rem" }} variant="top" src={`${backendServer}/${dish.dishimage}`} />
+          <Card.Img style={{ width: "18rem",height:"13rem" }} variant="top" src={`${backendServer}${dish.profilepic}`} />
           <Card.Body>
           <Card.Title>{dish.dishname}</Card.Title>
           <ListGroup className="list-group-flush">

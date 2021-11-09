@@ -13,7 +13,8 @@ var usersSchema = new Schema({
     city:{type: String, required: false},
     country:{type: String, required: false},
     nickname:{type: String, required: false},
-    phone:{type: Number, required: false}
+    phone:{type: Number, required: false},
+    profilepic:{type:String,required:false}
 
 },
 {

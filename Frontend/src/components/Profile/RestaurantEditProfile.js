@@ -182,11 +182,6 @@ class RestaurantEditProfile extends Component {
           show : true 
         });
         }
-        
-      //}
-      // handleChange = (e) => {
-      //   this.setState({ [e.target.name]: e.target.value });
-      //   }
         goback = (e) =>{
           e.preventDefault();
           const {history} = this.props;
@@ -217,15 +212,32 @@ class RestaurantEditProfile extends Component {
           }
           this.sendImageAPI(formData);        
         }
-     sendImageAPI = (data) => {
-          axios.post( `${backendServer}/restimageupload`, data)
-              .then(res => {
-              console.log(res.data);
-                this.setState({profilepic:res.data});
-                localStorage.setItem("restprofilepic",res.data);
-                console.log(this.state.profilepic);
+        sendImageAPI = (data) => {
+          axios.post( `${backendServer}/images`, data)
+              .then(response => {
+                if(response.status === 200){
+                  var data1 = {
+                    userid : localStorage.getItem("restaurantid"),
+                    profileImg : response.data.imagePath,
+                    usertype:"Restaurant"
+                  }
+                  axios.post( `${backendServer}/uploadProfilePic`, data1)
+                  .then(response1 =>{
+                    console.log(response1.data)
+                  })
+                }
               })
             }
+     
+    //  sendImageAPI = (data) => {
+    //       axios.post( `${backendServer}/restimageupload`, data)
+    //           .then(res => {
+    //           console.log(res.data);
+    //             this.setState({profilepic:res.data});
+    //             localStorage.setItem("restprofilepic",res.data);
+    //             console.log(this.state.profilepic);
+    //           })
+    //         }
     render(){
     
     return (

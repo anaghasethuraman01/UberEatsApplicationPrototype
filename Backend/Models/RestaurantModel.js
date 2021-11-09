@@ -17,7 +17,8 @@ var restaurantSchema = new Schema({
     timing: {type: String, required: false},
     deliverytype: {type: String, required: false},
     zipcode: {type: String, required: false},
-    foodtype:{type:String,required:false}
+    foodtype:{type:String,required:false},
+    profilepic:{type:String,required:false}
 },
 {
     versionKey: false
