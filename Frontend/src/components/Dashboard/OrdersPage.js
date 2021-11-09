@@ -210,7 +210,7 @@ searchOrder = (ordersearch) => {
                             customerorder.ordertype === "Pick Up" && (
                               <form >
                               Status Type :
-                                <select  name="orderstatus"  value={this.state.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                <select  name="orderstatus"  value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
                                   <option value="Order Received" >Order Received</option>
                                   <option value="Preparing">Preparing</option>
                                   <option value="Pick up Ready" >Pick up Ready</option>
@@ -252,7 +252,7 @@ searchOrder = (ordersearch) => {
                             customerorder.ordertype === "Pick Up and Delivery" && (
                               <form >
                               Status Type :
-                                <select  name="orderstatus"   value={this.state.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
                                   <option value="Order Received" >Order Received</option>
                                   <option value="Preparing"  >Preparing</option>
                                   <option value="On the way" >On the way</option>
@@ -309,7 +309,7 @@ searchOrder = (ordersearch) => {
                             customerorder.ordertype === "Pick Up" && (
                               <form >
                               Status Type :
-                                <select  name="orderstatus"  value={this.state.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                <select  name="orderstatus"  value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
                                   <option value="Order Received" >Order Received</option>
                                   <option value="Preparing">Preparing</option>
                                   <option value="Pick up Ready" >Pick up Ready</option>
@@ -400,6 +400,7 @@ searchOrder = (ordersearch) => {
               	<option value="All">All</option> 
               	<option value="New Order" >New Order</option>
               	<option value="Delivered Order"  >Delivered Order</option>
+                <option value="Cancelled Order"  >Cancelled Order</option>
             	</select>
               
 						<Button onClick={this.handleordersearch} type="submit">

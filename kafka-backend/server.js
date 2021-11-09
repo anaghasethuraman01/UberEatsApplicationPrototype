@@ -26,7 +26,7 @@ var getrestaurantorders = require('./services/getrestaurantorders.js');
 var handleordersearch = require('./services/handleordersearch.js');
 var updateorderstatus = require('./services/updateorderstatus.js');
 var uploadprofilepic = require('./services/uploadProfilePic.js');
-
+var handleordermodesearch = require('./services/handleordermodesearch.js');
 
 const { mongoDB } = require('./config');
 const mongoose = require('mongoose');
@@ -109,3 +109,4 @@ handleTopicRequest("restaurantorders",getrestaurantorders)
 handleTopicRequest("handleordersearch",handleordersearch)
 handleTopicRequest("updateorderstatus",updateorderstatus)
 handleTopicRequest("uploadprofilepic",uploadprofilepic)
+handleTopicRequest("handleordermodesearch",handleordermodesearch)

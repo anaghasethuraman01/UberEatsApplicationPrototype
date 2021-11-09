@@ -66,7 +66,7 @@ const getrestaurantorders = require("./routes/getrestaurantorders");
 const getorderreceipt= require("./routes/getorderreceipt"); 
 const updateorderstatus = require("./routes/updateorderstatus");
 const handleordersearch = require("./routes/handleordersearch");
-// const handleordermodesearch = require("./routes/handleordermodesearch");
+const handleordermodesearch = require("./routes/handleordermodesearch");
 const getrestaurantwithid = require("./routes/getrestaurantwithid")
 const editrestaurantdishes = require("./routes/editrestaurantdishes")
 const getcustomerprofile = require("./routes/getcustomerprofile")
@@ -100,7 +100,7 @@ app.use("/getrestaurantorders",getrestaurantorders);
 app.use("/getorderreceipt",getorderreceipt);
 app.use("/updateorderstatus",updateorderstatus);
 app.use("/handleordersearch",handleordersearch); 
-// app.use("/handleordermodesearch",handleordermodesearch);
+app.use("/handleordermodesearch",handleordermodesearch);
 app.use("/getrestaurantwithid",getrestaurantwithid);
 app.use("/editrestaurantdishes",editrestaurantdishes);
 app.use("/getcustomerprofile",getcustomerprofile);
