@@ -142,6 +142,13 @@ input[type=radio] {
   right: 125px;
   width: 50px;
 }
+.restimage{
+  position: relative;
+  right: 70px;
+  width: 800px;
+  height: 250px;
+}
+
 .cartleft {
   color: black;
   position: absolute;
@@ -290,12 +297,10 @@ input {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 2rem;
-
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
 }
-
 
 
 /* Style the front side (fallback if image is missing) */

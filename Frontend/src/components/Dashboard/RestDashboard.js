@@ -84,14 +84,14 @@ class RestDashboard extends Component {
 		// const foodtype = this.state.foodtype;
 		const deliverytype =this.state.deliverytype;
 		const dish = this.state.dish;
-		// console.log("dish")
-		// console.log(dish)
-		if((city === null || city === '') && (dish===null || dish === '') &&(deliverytype === null ||deliverytype === "All") ){
+		const foodtype = this.state.foodtype;
+		
+		if((city === null || city === '') && (dish===null || dish === '') &&(deliverytype === null ||deliverytype === "All") &&(foodtype === null ||foodtype === "All") ){
 			this.setState({ status: "notdone" });
 			
 		}
-		else if(city !== null || deliverytype !== null || dish !==null || city !== '' || deliverytype !== '' ||dish !=='' ){
-		
+		else if(city !== null || deliverytype !== null || dish !==null || city !== '' || deliverytype !== '' ||dish !==''||foodtype !== '' ){
+			
 		this.setState({ city:city });
 		this.setState({ deliverytype:deliverytype });
 		this.setState({ status: "done" });
@@ -99,10 +99,19 @@ class RestDashboard extends Component {
 		 if (dish != null && dish != '' ) {
 			 console.log("here1")
 			const values = {
-				dish:dish
+				dish:dish,
+				search:"dish"
 			};
 			this.searchRestaurantOnSubmit(values);
 		 }
+		 if (foodtype != null && foodtype != '' ) {
+			console.log("foodtype")
+		   const values = {
+			foodtype:foodtype,
+			search:"foodtype"
+		   };
+		   this.searchRestaurantOnSubmit(values);
+		}
 		}
 	};
 	goback = (e) => {
@@ -176,7 +185,7 @@ class RestDashboard extends Component {
 							<Card.Img 
 									style={{ width: "18rem",height: "13rem" }}
 									variant="bottom"
-									src={`${backendServer}/${restaurant.profilepic}`}
+									src={`${backendServer}${restaurant.profilepic}`}
 								/>
 								<Card.Body>
 									<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
@@ -221,7 +230,7 @@ class RestDashboard extends Component {
 								<Card.Img
 									style={{ width: "18rem" ,height:"13rem"}}
 									variant="top"
-									src={`${backendServer}/${restaurant.profilepic}`}
+									src={`${backendServer}${restaurant.profilepic}`}
 								/>
 								<Card.Body>
 									<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>

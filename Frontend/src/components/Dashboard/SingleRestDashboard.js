@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Button } from 'reactstrap';
-import {Card, ListGroup, ListGroupItem} from 'react-bootstrap';
+import {Card, ListGroup, ListGroupItem,Row,Col} from 'react-bootstrap';
 import axios from 'axios';
 import {Modal} from 'react-bootstrap';
 //import { Link } from 'react-router-dom';
@@ -66,10 +66,20 @@ class SingleRestDashboard extends Component {
                 });
                //console.log(this.state.dishes);
             });
-
-            axios.post(`${backendServer}/getrestaurantdetails`,restaurantid)
+            
+            // const userid = localStorage.getItem("restaurantid")
+            // console.log(userid)
+            const restid = {
+              userid: localStorage.getItem("restaurantid")
+            };
+            axios.defaults.headers.common["authorization"] = localStorage.getItem(
+              "token"
+            );
+            axios.post(`${backendServer}/getrestaurantprofile`,restid)
             .then((response) => { 
-          
+              console.log("****")
+              console.log(response)
+              console.log("****")
             this.setState({
               restaurants : this.state.restaurants.concat(response.data) 
             });
@@ -188,9 +198,9 @@ class SingleRestDashboard extends Component {
         searchresults = 
         <div className='card-list'>
         {this.state.dishes.map(dish=>
-         <div >
+         <div>
           <Card style={{ width: '18rem' }}>
-          <Card.Img style={{ width: '18rem',height:'13rem' }} variant="top" src={`${backendServer}/${dish.dishimage}`} />
+          <Card.Img style={{ width: '18rem',height:'13rem' }} variant="top" src={`${backendServer}${dish.profilepic}`} />
           <Card.Body>
           <Card.Title>{dish.dishname}</Card.Title>
           </Card.Body>
@@ -216,7 +226,13 @@ class SingleRestDashboard extends Component {
         restaurantdetails = 
         <div>
         {this.state.restaurants.map(restaurant=>
-        <p>{restaurant.description}</p>
+        <div>
+        
+        <img className="restimage" src={`${backendServer}${restaurant.profilepic}`} ></img>
+        <br/>
+        <br/>
+        <h6>{restaurant.description}</h6>
+        </div>
 
        )
        }
@@ -230,11 +246,15 @@ class SingleRestDashboard extends Component {
             
           {/* {messagebox} */}
             {restaurantdetails}
-            <form>
+            {/* <form>
             <Button onClick = {this.goback}>Search Restaurants</Button>
             <Button onClick = {this.gobackFav}>Favourites</Button>
-            </form>
+            </form> */}
+            <Row></Row>
+            <hr/>
+            <Row>
             {searchresults}
+            </Row>
             <div>
             <Modal size="md-down"
           aria-labelledby="contained-modal-title-vcenter"

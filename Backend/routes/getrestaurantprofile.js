@@ -8,7 +8,8 @@ const { checkAuth } = require("../utils/passport");
 router.post('/',checkAuth,(req, res) => {
 
 	kafka.make_request('restaurant_profile', req.body, (err, data) => {
-    
+     console.log("rest details")
+	 console.log(req.body)
 		if (err) {
 		  res.writeHead(400, {
 			"content-type": "text/plain",

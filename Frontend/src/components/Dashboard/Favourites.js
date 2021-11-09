@@ -89,8 +89,9 @@ class Favourites extends Component {
 	};
 	
 	render() {
-		let favrestaurants = [];
-		console.log(this.state.favrestaurants)
+		let favrestaurants = []; 
+		// console.log("***")
+		// console.log(this.state.favrestaurants)
 		// if(this.props){
 		//   favrestaurants = this.props.customerFavourite;
 		
@@ -110,7 +111,7 @@ class Favourites extends Component {
                         <Card.Img
                             style={{ width: "18rem" }}
                             variant="top"
-                            src={`${backendServer}/${restaurant.profilepic}`}
+                            src={`${backendServer}${restaurant.profilepic}`}
                         />
                         <Card.Body>
                             <Card.Title className = "detailsincard">{restaurant.restaurantname}</Card.Title>

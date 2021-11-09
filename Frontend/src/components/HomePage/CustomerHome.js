@@ -162,7 +162,7 @@ class CustomerHome extends Component {
                   <Card.Img
                     style={{ width: "18rem" ,height:'13rem'}}
                     variant="top"
-                    src={`${backendServer}/${restaurant.profilepic}`}
+                    src={`${backendServer}${restaurant.profilepic}`}
                   />
                   <Card.Body>
                     <Card.Title className = "detailsincard">{restaurant.restaurantname}   ({restaurant.city})</Card.Title>
@@ -209,7 +209,7 @@ class CustomerHome extends Component {
                     <Card.Img
                       style={{ width: "18rem" ,height : "13rem"}}
                       variant="top"
-                      src={`${backendServer}/${restaurant.profilepic}`}
+                      src={`${backendServer}${restaurant.profilepic}`}
                     />
                     <Card.Body>
                     <Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>

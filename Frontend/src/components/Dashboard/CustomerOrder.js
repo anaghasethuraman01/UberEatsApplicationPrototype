@@ -353,12 +353,14 @@ handleChange = (e) => {
 							Search
 						</Button>
 					</form>
-
-          <select className="pageSelect"  value={this.state.pageSize} onChange={this.OnChange}>
+              <div className="pageSelect">
+                Page Size :
+          <select style={{width:'3rem'}} value={this.state.pageSize} onChange={this.OnChange}>
                 <option>2</option>
                 <option>5</option>
                 <option>10</option>
           </select>
+          </div>
           </div>
 
           <br/><br/><br/>

@@ -183,7 +183,7 @@ searchOrder = (ordersearch) => {
 	};
     render(){
       
-        // const imgLink = `${backendServer}/${this.state.custprofilepic}`;
+        const imgLink = `${backendServer}${this.state.custprofilepic}`;
       
        	var orderlist = null;
               if(this.state.orderstatusmsg === "found") {
@@ -330,7 +330,7 @@ searchOrder = (ordersearch) => {
                             customerorder.ordertype === "Delivery" && (
                               <form >
                               Status Type :
-                                <select  name="orderstatus"   value={this.state.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
                                   <option value="Order Received" >Order Received</option>
                                   <option value="Preparing"  >Preparing</option>
                                   <option value="On the way" >On the way</option>
@@ -424,7 +424,7 @@ searchOrder = (ordersearch) => {
              <Table>
                 <thead>
                   <tr className="form-control-order">
-                    {/* <th> <img src={imgLink} alt="No image added. Add Image." style={{ maxHeight: '5rem', maxWidth: '10rem' }} /></th> */}
+                    <th> <img src={imgLink} alt="No image added. Add Image." style={{ maxHeight: '5rem', maxWidth: '10rem' }} /></th>
                     <th> Name : {this.state.customername}</th>
                     <th> Nick Name : {this.state.customernickname}</th>
                     <th> About: {this.state.customerabout}</th>

@@ -93,7 +93,7 @@ class RestaurantHome extends Component {
         <div className="container">
             
             <form>
-            <h1>Welcome {this.state.restaurantname} !</h1>
+            <h1>Hi {this.state.restaurantname} !</h1>
             <div className='form-buttons'>
             </div>
             {disheslist}

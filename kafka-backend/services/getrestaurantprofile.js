@@ -5,6 +5,7 @@ const Restaurants = require('../Models/RestaurantModel');
 
 function handle_request(req, callback){
     console.log("handle req rest profile")
+    console.log(req)
     Restaurants.findOne({ _id: req.userid }, (error, getprofile) => {
 	  // console.log("I am here")
     if (error) {
