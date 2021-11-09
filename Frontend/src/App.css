@@ -136,6 +136,12 @@ input[type=radio] {
    
 }
 
+
+.pageSelect{
+  position: absolute;
+  right: 125px;
+  width: 50px;
+}
 .cartleft {
   color: black;
   position: absolute;

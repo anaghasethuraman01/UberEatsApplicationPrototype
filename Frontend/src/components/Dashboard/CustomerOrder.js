@@ -28,7 +28,9 @@ class CustomerOrder extends Component {
       ordermsg:null,
       note:null,
       totalamount:null,
-      totalquantity:null
+      totalquantity:null,
+      curPage: 1,
+      pageSize: 2,
   
     }
      //this.handleCheckout = this.handleCheckout.bind(this);
@@ -38,6 +40,23 @@ class CustomerOrder extends Component {
         const {history} = this.props;
         history.push('/customerhome'); 
       }
+      onPage = (e) => {
+        console.log("In pagination");
+        console.log(e.target);
+        console.log(e.target.text);
+        this.setState({
+          curPage: e.target.text,
+        });
+      };
+    
+      OnChange = (e) => {
+        console.log("Inside Onchange");
+        console.log(e.target.type);
+        console.log(e.target.value);
+        this.setState({
+          pageSize: parseInt(e.target.value, 10),
+        });
+      };
   handleModalClose(){
       this.setState({show:!this.state.show}) 
         }
@@ -97,6 +116,7 @@ class CustomerOrder extends Component {
 	}
 searchOrder = (ordersearch) => {
     axios.post(`${backendServer}/handleordersearch`,ordersearch).then((response) => {
+      console.log("here")
                     if(response.data.length > 0){
                         this.setState({ ordermsg: "searchdone" });
                         this.setState({ orderstatusmsg: "notfound" });
@@ -109,6 +129,30 @@ searchOrder = (ordersearch) => {
                     
     });
 }
+cancelOrder = (val) => {
+    console.log("Cancel order")
+    console.log(val)
+    const { customerorders } = this.state;
+    const index = customerorders.findIndex((order) => order._id === val);
+    const orders = [...customerorders];
+    orders[index].orderstatus = "Cancel Order";
+    this.setState({ customerorders: orders });
+    const orderStatusData = {
+      orderid : val,
+      orderstatus : "Cancelled"
+    }
+    //console.log(ordertypedata)
+   this.updateOrderStatus(orderStatusData);
+}
+      updateOrderStatus = (orderStatusData)=>{
+        axios.defaults.headers.common["authorization"] = localStorage.getItem(
+          "token");
+        axios.post(`${backendServer}/updateorderstatus`, orderStatusData)
+                .then(res => {
+                    console.log("Order type updated")
+                })
+                
+      }
 handleordersearch = (e) =>{
   e.preventDefault();
    this.setState({
@@ -129,38 +173,135 @@ handleChange = (e) => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
     render(){
-        
+      let paginationItemsTag = [];
+      let items = this.state.customerorders;
+      let pgSize = this.state.pageSize;
+
+      let count = 1;
+      let num = items.length / pgSize;
+      console.log(items.length / pgSize);
+      console.log(Number.isInteger(items.length / pgSize));
+      if (Number.isInteger(num)) {
+        count = num;
+      } else {
+        count = Math.floor(num) + 1;
+      }
+      console.log("count:", count);
+    console.log("items.length:", items.length);
+
+    let active = this.state.curPage;
+
+    for (let number = 1; number <= count; number++) {
+      paginationItemsTag.push(
+        <Pagination.Item key={number} active={number === active}>
+          {number}
+        </Pagination.Item>
+      );
+    }
+        let start = parseInt(pgSize * (this.state.curPage - 1));
+        let end = this.state.pageSize + start;
+        //   console.log("start: ", start, ", end: ", end);
+        let displayitems = [];
+        if (end > items.length) {
+          end = items.length;
+        }
+        for (start; start < end; start++) {
+          displayitems.push(items[start]);
+        }
        	var orderlist = null;
          
          
               if(this.state.orderstatusmsg === "found") {
                 orderlist = ( 
-                <div>
-                    <h1> Your Orders </h1>
-                <div>
-                {/* <Pagination>
-  <Pagination.First />
-  <Pagination.Prev />
-  <Pagination.Item>{1}</Pagination.Item>
-  <Pagination.Ellipsis />
-
-  <Pagination.Item>{10}</Pagination.Item>
-  <Pagination.Item>{11}</Pagination.Item>
-  <Pagination.Item active>{12}</Pagination.Item>
-  <Pagination.Item>{13}</Pagination.Item>
-  <Pagination.Item disabled>{14}</Pagination.Item>
-
-  <Pagination.Ellipsis />
-  <Pagination.Item>{20}</Pagination.Item>
-  <Pagination.Next />
-  <Pagination.Last />
-</Pagination> */}
-                    {this.state.customerorders.map((customerorder) => (
+                  <div>
+                    {displayitems && displayitems.length > 0 ? (
+                      
+                      <div>
+                        {displayitems.map((customerorder) => {
+                          return (
                     <div>
                       <Table>
                         <thead>
                         <tr className="form-control-order">
-                          <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4>  </th>
+                          <th>
+                          <Row>
+                            <Col>
+                           <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4> 
+                           </th>
+                           </Col>
+                           <Col>
+                           <th> {(customerorder.orderstatus === "Order Received")?(<div>
+                             <Button onClick={() => {
+												      this.cancelOrder(customerorder._id);
+											        }}>
+                               Cancel Order 
+                             </Button>
+                           </div>):(<div>
+
+                           </div>)} </th>
+                           </Col>
+                           </Row>
+                           </th>
+                          <th>{customerorder.totalorderquantity} items for ${customerorder.totalorderprice} . {customerorder.datetime}.</th>
+                          <th>Special Instructions : {customerorder.note}</th>
+                          <th><Button 
+                           onClick={() => {
+                                this.viewreceipt(customerorder._id);
+                                }}>View Receipt</Button> 
+                             </th>   
+                        </tr>
+                        </thead>
+                        </Table>
+                        </div>
+                      
+                          )
+                        })}
+                      </div>
+                    ):
+                      <div>
+                  <h4 className="">No Recent Orders </h4>
+                      </div>
+                    }
+                  </div>
+                // <div>
+                //     <h1> Your Orders </h1>
+                // <div>
+                //     {this.state.customerorders.map((customerorder) => (
+                //     <div>
+                //       <Table>
+                //         <thead>
+                //         <tr className="form-control-order">
+                //           <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4>  </th>
+        
+                //           <th>{customerorder.totalorderquantity} items for ${customerorder.totalorderprice} . {customerorder.datetime}.</th>
+                //           <th>{customerorder.note}</th>
+                //           <th><Button 
+                //            onClick={() => {
+                //                 this.viewreceipt(customerorder._id);
+                //                 }}>View Receipt</Button></th>   
+                //         </tr>
+                //       </thead>
+                //       </Table>
+                //     </div>
+                //     ))}
+                // </div>
+                // </div>
+                );
+            }
+            if(this.state.ordermsg === "searchdone" ){
+                orderlist = ( 
+                  <div>
+                    {displayitems && displayitems.length > 0 ? (
+                      
+                      <div>
+                        {displayitems.map((customerorder) => {
+                          return (
+                    <div>
+                      <Table>
+                        <thead>
+                        <tr className="form-control-order">
+                          <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4>
+                          </th>
         
                           <th>{customerorder.totalorderquantity} items for ${customerorder.totalorderprice} . {customerorder.datetime}.</th>
                           <th>{customerorder.note}</th>
@@ -169,49 +310,24 @@ handleChange = (e) => {
                                 this.viewreceipt(customerorder._id);
                                 }}>View Receipt</Button></th>   
                         </tr>
-                      </thead>
-                      </Table>
-                    </div>
-                    ))}
-                </div>
-                </div>
-                );
-            }
-            if(this.state.ordermsg === "searchdone" ){
-              console.log("here")
-                orderlist = ( 
-                <div>
-                    <h1> Your Orders </h1>
-                <div>
-      
-                    {this.state.customerorders.map((customerorder1) => (
-                    <div>
-                      <Table>
-                        <thead>
-                        <tr className="form-control-order">
-                          <th>{customerorder1.restaurantname}  <h4>{customerorder1.orderstatus}</h4>  </th>
-                          <th>{customerorder1.totalorderquantity} items for ${customerorder1.totalorderprice} . {customerorder1.datetime}.</th>
-                          <th><Button 
-                           onClick={() => {
-                                this.viewreceipt(customerorder1.orderid);
-                                }}>View Receipt</Button></th>   
-                        </tr>
-                      </thead>
-                      </Table>
-                       </div>
-                    ))}
-                </div>
-                </div>
+                        </thead>
+                        </Table>
+                        </div>
+                      
+                          )
+                        })}
+                      </div>
+                    ):
+                      <div>
+                  <h4 className="">No Recent Orders </h4>
+                      </div>
+                    }
+                  </div>
+               
+          
                 )
             }
-            // else{
-            //    orderlist = ( 
-            //     <div>
-            //         <h1> No Orders </h1>
-            //     </div>
-            //    )
-
-            // }
+           
      
     return (
         <div className="container" >
@@ -228,6 +344,7 @@ handleChange = (e) => {
                 <option value="Pick up Ready" >Pick up Ready</option>
                 <option value="Picked up" >Picked up</option>
             	</select>
+              
 						<Button 
              onClick={
                   this.handleordersearch
@@ -236,11 +353,21 @@ handleChange = (e) => {
 							Search
 						</Button>
 					</form>
+
+          <select className="pageSelect"  value={this.state.pageSize} onChange={this.OnChange}>
+                <option>2</option>
+                <option>5</option>
+                <option>10</option>
+          </select>
           </div>
 
           <br/><br/><br/>
           <div> {orderlist} </div> 
-         
+          <Pagination
+                    onClick={this.onPage}
+                    style={{ display: "inline-flex" }}>
+                    {paginationItemsTag}
+          </Pagination>
           {/* <Button onClick={this.goback}>Home Page</Button> */}
          <div>
          <Modal size="md-down"

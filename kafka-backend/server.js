@@ -23,6 +23,8 @@ var placeorder = require('./services/placeorder.js');
 var getitemsfromorders = require('./services/getitemsfromorders.js');
 var getorderreceipt = require('./services/getorderreceipt.js');
 var getrestaurantorders = require('./services/getrestaurantorders.js');
+var handleordersearch = require('./services/handleordersearch.js');
+var updateorderstatus = require('./services/updateorderstatus.js');
 
 
 const { mongoDB } = require('./config');
@@ -103,3 +105,5 @@ handleTopicRequest("placeorder",placeorder)
 handleTopicRequest("customerorders",getitemsfromorders)
 handleTopicRequest("orderreceipt",getorderreceipt)
 handleTopicRequest("restaurantorders",getrestaurantorders)
+handleTopicRequest("handleordersearch",handleordersearch)
+handleTopicRequest("updateorderstatus",updateorderstatus)

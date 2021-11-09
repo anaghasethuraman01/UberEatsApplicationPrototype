@@ -1,30 +1,46 @@
 
-// viewing orders based on status
+// searching order based on status
+"use strict";
 
-
-const express = require('express');
-const kafka = require('../kafka/client');
-const router = express.Router();
-//const { checkAuth } = require("../utils/passport");
-router.post('/', (req, res) => {
-   
-	kafka.make_request('handleordersearch',req.body, (err, data) => {	
-		if (err) {
-		  res.writeHead(400, {
-			"content-type": "text/plain",
-		  });
-		  res.end();
-		}else{
-
-			res.send(data)
-			// console.log("Res success");
-            // console.log(data)
+const Orders = require('../Models/OrderModel');
+function handle_request(req, callback){
+	// console.log("search") 
+    // console.log(req)
+	Orders.find({orderstatus : req.orderstatus, userid : req.customerid}, (error, dish_results) => {
+	   
+		if (error) {
+			res.writeHead(500, {
+				'Content-Type': 'text/plain'
+			})
+			//res.send();
+		}
+		if (dish_results) {
+                          
+            //res.send();
+			console.log("Results")
+			console.log(dish_results)
+			callback(null, dish_results);    
+		}
+		else {
+             var obj = {
+                message : "No Dishes",  
+            }   
+            callback(null, obj);    
+				
 		}
 	});
-	
-});
+  
+  };
 
-module.exports = router;
+module.exports.handle_request = handle_request;
+
+
+
+
+
+
+
+
 
 // const express = require("express");
 // const router = express.Router();

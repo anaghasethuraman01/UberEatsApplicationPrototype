@@ -49,7 +49,7 @@ const getrestaurant = require("./routes/getrestaurant");
 const getrestaurantwithcity = require("./routes/getrestaurantwithcity");
 const restaurantdish = require("./routes/restaurantdish");
 const editcustomer = require("./routes/editcustomer");
-// const custimageupload = require("./routes/custimageupload");
+const custimageupload = require("./routes/custimageupload");
 // const restimageupload = require("./routes/restimageupload");
 // const dishimageupload = require("./routes/dishimageupload");
 // const getrestaurantdetails = require("./routes/getrestaurantdetails");
@@ -64,8 +64,8 @@ const placeorder = require("./routes/placeorder");
 const getitemsfromorders = require("./routes/getitemsfromorders");
 const getrestaurantorders = require("./routes/getrestaurantorders");
 const getorderreceipt= require("./routes/getorderreceipt"); 
-// const updateordertype = require("./routes/updateordertype");
-// const handleordersearch = require("./routes/handleordersearch");
+const updateorderstatus = require("./routes/updateorderstatus");
+const handleordersearch = require("./routes/handleordersearch");
 // const handleordermodesearch = require("./routes/handleordermodesearch");
 const getrestaurantwithid = require("./routes/getrestaurantwithid")
 const editrestaurantdishes = require("./routes/editrestaurantdishes")
@@ -82,7 +82,7 @@ app.use("/getrestaurant", getrestaurant);
 app.use("/getrestaurantwithcity", getrestaurantwithcity);
 app.use("/restaurantdish", restaurantdish);
 app.use("/editcustomer", editcustomer);
-// app.use("/custimageupload", custimageupload);
+app.use("/custimageupload", custimageupload);
 // app.use("/dishimageupload", dishimageupload);
 app.use("/updatedishquantity", updatedishquantity);
 // app.use("/getrestaurantdetails", getrestaurantdetails);  
@@ -98,13 +98,49 @@ app.use("/placeorder",placeorder);
 app.use("/getitemsfromorders",getitemsfromorders);
 app.use("/getrestaurantorders",getrestaurantorders);
 app.use("/getorderreceipt",getorderreceipt);
-// app.use("/updateordertype",updateordertype);
-// app.use("/handleordersearch",handleordersearch);
+app.use("/updateorderstatus",updateorderstatus);
+app.use("/handleordersearch",handleordersearch); 
 // app.use("/handleordermodesearch",handleordermodesearch);
 app.use("/getrestaurantwithid",getrestaurantwithid);
 app.use("/editrestaurantdishes",editrestaurantdishes);
 app.use("/getcustomerprofile",getcustomerprofile);
 app.use("/getrestaurantprofile",getrestaurantprofile);
+
+
+
+// customer image upload
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
+const multer = require('multer')
+const upload = multer({ dest: 'uploads/' })
+
+const { uploadFile,getFileStream} = require('./s3')
+
+
+app.get('/images/:key', (req, res) => {
+  console.log(req.params)
+  const key = req.params.key
+  const readStream = getFileStream(key)
+
+  readStream.pipe(res)
+})
+app.post('/images', upload.single('file'), async (req, res) => {
+  // console.log("Customer Images")
+  // console.log(req.file);
+  const result = await uploadFile(req.file)
+  await unlinkFile(req.file.path)
+  console.log(result)
+  res.status(200).send({imagePath : `/images/${result.Key}`})
+})
+
+
+
+
+
+
+
+
 
 // app.listen(5000);
 // console.log("Server Listening on port 5000");

@@ -15,6 +15,7 @@ var orderTableSchema = new Schema({
     totalorderprice: {type:Number,required:true},
     datetime: {type:String,required:true},
     orderstatus:{type:String,required:true},
+    ordermodetype:{type:String,required:true},
     note:{type: String, required: false },
     orderdetails: [
         {

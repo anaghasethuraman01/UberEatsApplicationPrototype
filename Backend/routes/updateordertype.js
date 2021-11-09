@@ -5,7 +5,6 @@ var mysql = require("mysql");
 const connection = require('../connection.js');
 const { checkAuth } = require("../utils/passport");
 router.post('/',checkAuth, function(req,res){
-    
     const orderid = req.body.orderid;  
     const ordertype = req.body.ordertype;
     res.writeHead(200,{
@@ -30,7 +29,5 @@ router.post('/',checkAuth, function(req,res){
         }
 		console.log("Order status updated");
 	});
-   
-    
 });
 module.exports = router;
