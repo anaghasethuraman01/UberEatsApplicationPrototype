@@ -115,6 +115,9 @@ class CustomerOrder extends Component {
        
 	}
 searchOrder = (ordersearch) => {
+  axios.defaults.headers.common["authorization"] = localStorage.getItem(
+    "token"
+);
     axios.post(`${backendServer}/handleordersearch`,ordersearch).then((response) => {
       console.log("here")
                     if(response.data.length > 0){

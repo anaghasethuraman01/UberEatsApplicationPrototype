@@ -4,7 +4,7 @@
 const express = require('express');
 const kafka = require('../kafka/client');
 const router = express.Router();
-//const { checkAuth } = require("../utils/passport");
+const { checkAuth } = require("../utils/passport");
 router.post('/', (req, res) => {
    
 	kafka.make_request('handleordermodesearch',req.body, (err, data) => {	

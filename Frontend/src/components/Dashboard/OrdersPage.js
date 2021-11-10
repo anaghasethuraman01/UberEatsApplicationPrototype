@@ -164,6 +164,9 @@ handleordersearch = (e) => {
 
 searchOrder = (ordersearch) => {
     console.log(ordersearch);
+    axios.defaults.headers.common["authorization"] = localStorage.getItem(
+      "token"
+  );
     axios.post(`${backendServer}/handleordermodesearch`,ordersearch).then((response) => {
                     if(response.data.length > 0){
                         this.setState({ ordermsg: "searchdone" });

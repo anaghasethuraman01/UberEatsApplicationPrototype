@@ -27,6 +27,7 @@ var handleordersearch = require('./services/handleordersearch.js');
 var updateorderstatus = require('./services/updateorderstatus.js');
 var uploadprofilepic = require('./services/uploadProfilePic.js');
 var handleordermodesearch = require('./services/handleordermodesearch.js');
+var restaurantsearch = require('./services/restsearchonsubmit.js');
 
 const { mongoDB } = require('./config');
 const mongoose = require('mongoose');
@@ -110,3 +111,4 @@ handleTopicRequest("handleordersearch",handleordersearch)
 handleTopicRequest("updateorderstatus",updateorderstatus)
 handleTopicRequest("uploadprofilepic",uploadprofilepic)
 handleTopicRequest("handleordermodesearch",handleordermodesearch)
+handleTopicRequest("restaurantsearch",restaurantsearch)

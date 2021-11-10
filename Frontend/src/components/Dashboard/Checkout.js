@@ -74,10 +74,6 @@ class CheckOut extends Component {
                   dishes : this.state.dishes.concat(response.data) 
                 });
                 this.state.dishes.forEach((element) => {
-                  // console.log("**************");
-                  // console.log(element.quantity);
-                  // console.log(element.quantityprice);
-
                   this.setState({
                     totalorderquantity : this.state.totalorderquantity + element.quantity
                   })

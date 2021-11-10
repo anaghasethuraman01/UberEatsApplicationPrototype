@@ -36,6 +36,9 @@ class RestDashboard extends Component {
 	}
 
 	componentDidMount() {
+		axios.defaults.headers.common["authorization"] = localStorage.getItem(
+			"token"
+		);
 		axios.get(`${backendServer}/getrestaurant`).then((response) => {
 			this.setState({ status: "notdone" });
 			//update the state with the response data
@@ -61,6 +64,9 @@ class RestDashboard extends Component {
 	};
 
 	searchRestaurantOnSubmit = (data) => {
+		axios.defaults.headers.common["authorization"] = localStorage.getItem(
+			"token"
+		);
 		axios.defaults.withCredentials = true;
 		axios.post(`${backendServer}/restsearchonsubmit`, data).then((res) => {
 			//console.log(res.data);
@@ -85,33 +91,44 @@ class RestDashboard extends Component {
 		const deliverytype =this.state.deliverytype;
 		const dish = this.state.dish;
 		const foodtype = this.state.foodtype;
-		
-		if((city === null || city === '') && (dish===null || dish === '') &&(deliverytype === null ||deliverytype === "All") &&(foodtype === null ||foodtype === "All") ){
+		console.log("********")
+		console.log(city)
+		console.log(deliverytype)
+		console.log(dish)
+		console.log(foodtype)
+		console.log("********")
+		if((city === null || city === '') && (dish===null || dish === '') &&(deliverytype === '' || deliverytype === null ||deliverytype === "All") &&(foodtype === '' ||foodtype === null ||foodtype === "All") ){
 			this.setState({ status: "notdone" });
 			
 		}
-		else if(city !== null || deliverytype !== null || dish !==null || city !== '' || deliverytype !== '' ||dish !==''||foodtype !== '' ){
+		else if(city !== null || deliverytype !== null || dish !==null || city !== '' || deliverytype !== '' ||dish !==''||foodtype !== ''||foodtype != "All" ){
 			
 		this.setState({ city:city });
 		this.setState({ deliverytype:deliverytype });
 		this.setState({ status: "done" });
 		
-		 if (dish != null && dish != '' ) {
+		 if ((dish != null && dish != '') && ( foodtype === null || foodtype === '' )) {
 			 console.log("here1")
-			const values = {
+			var values = {
 				dish:dish,
 				search:"dish"
 			};
 			this.searchRestaurantOnSubmit(values);
 		 }
-		 if (foodtype != null && foodtype != '' ) {
-			console.log("foodtype")
-		   const values = {
+		 if (foodtype != null && foodtype != '' && foodtype !== "All" && (dish === null || dish === '')) {
+			var values = {
 			foodtype:foodtype,
 			search:"foodtype"
 		   };
 		   this.searchRestaurantOnSubmit(values);
 		}
+		if( dish != null && dish != '' && foodtype != null && foodtype != '' && foodtype !== "All" )
+		 var values = {
+			foodtype:foodtype,
+			dish:dish,
+			search:"dishandtype"
+		   };
+		   this.searchRestaurantOnSubmit(values);
 		}
 	};
 	goback = (e) => {
@@ -148,13 +165,13 @@ class RestDashboard extends Component {
 		
 		const {status,city,deliverytype} = this.state;
 		let{restaurants,restaurants1} = this.state;
-		console.log(deliverytype)
+		
 		if(status === 'done'){
 			console.log("Done")	
 			if (city !== null && city !== '') {
 				restaurants = restaurants.filter((restaurant) => restaurant.city === city);
 			}
-			if (deliverytype !== null && deliverytype !== '') {
+			if (deliverytype !== null && deliverytype !== '' && deliverytype !== "All") {
 				restaurants = restaurants.filter((restaurant) => restaurant.deliverytype === deliverytype);
 			}
 		}else if(status === 'notdone'){
@@ -294,9 +311,9 @@ class RestDashboard extends Component {
 						<Col xs="auto">
 						Food Type :
 						<select className="form-group1" name="foodtype" name="foodtype"  value={this.state.foodtype} onChange={this.handleChange} >
-							<option value="">All</option> 
+							<option value="All">All</option> 
 							<option value="Veg" >Veg</option>
-							<option value="Non-veg"  >Non-veg</option>
+							<option value="Non-veg">Non-veg</option>
 							<option value="Vegan" >Vegan</option>
 						</select>
 						</Col>
