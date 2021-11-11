@@ -7,8 +7,8 @@
 const express = require('express');
 const kafka = require('../kafka/client');
 const router = express.Router();
-const { checkAuth } = require("../utils/passport");
-router.post('/',checkAuth, (req, res) => {
+//const { checkAuth } = require("../utils/passport");
+router.post('/', (req, res) => {
 
 	console.log("Inside Cust Register");
  

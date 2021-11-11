@@ -37,7 +37,7 @@ function handle_request(req, callback){
 				}
 				else {
                     var obj = {
-                        message : "Restaurant Registration successful",
+                        message : "User Registration successful",
                         
                     }    
                     callback(null, obj); 

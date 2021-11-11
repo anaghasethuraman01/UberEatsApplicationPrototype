@@ -21,6 +21,7 @@ class CustomerOrder extends Component {
       dishname:null,
       status :null,
       customerorders : [],
+      customerorders1 : [],
       customerordersearch : [],
       orderstatusmsg:null,
       receiptdetails:[],
@@ -41,18 +42,15 @@ class CustomerOrder extends Component {
         history.push('/customerhome'); 
       }
       onPage = (e) => {
-        console.log("In pagination");
-        console.log(e.target);
-        console.log(e.target.text);
+        // console.log("In pagination");
+        // console.log(e.target);
+        // console.log(e.target.text);
         this.setState({
           curPage: e.target.text,
         });
       };
     
       OnChange = (e) => {
-        console.log("Inside Onchange");
-        console.log(e.target.type);
-        console.log(e.target.value);
         this.setState({
           pageSize: parseInt(e.target.value, 10),
         });
@@ -115,6 +113,8 @@ class CustomerOrder extends Component {
        
 	}
 searchOrder = (ordersearch) => {
+  this.setState({curPage : 1})
+  this.setState ({customerorders1 : [] })
   axios.defaults.headers.common["authorization"] = localStorage.getItem(
     "token"
 );
@@ -126,9 +126,9 @@ searchOrder = (ordersearch) => {
                     }
                     // //update the state with the response data
                      this.setState({
-                      customerorders: this.state.customerorders.concat(response.data),
+                      customerorders1: this.state.customerorders1.concat(response.data),
                       });
-                      console.log(this.state.customerorders)
+                      //console.log(this.state.customerorders)
                     
     });
 }
@@ -146,6 +146,21 @@ cancelOrder = (val) => {
     }
     //console.log(ordertypedata)
    this.updateOrderStatus(orderStatusData);
+}
+cancelOrder1 = (val) => {
+  console.log("Cancel order")
+  console.log(val)
+  const { customerorders1 } = this.state;
+  const index = customerorders1.findIndex((order) => order._id === val);
+  const orders = [...customerorders1];
+  orders[index].orderstatus = "Cancel Order";
+  this.setState({ customerorders1: orders });
+  const orderStatusData = {
+    orderid : val,
+    orderstatus : "Cancelled"
+  }
+  //console.log(ordertypedata)
+ this.updateOrderStatus(orderStatusData);
 }
       updateOrderStatus = (orderStatusData)=>{
         axios.defaults.headers.common["authorization"] = localStorage.getItem(
@@ -166,6 +181,8 @@ handleordersearch = (e) =>{
     orderstatus : this.state.orderstatus,
     customerid : this.state.customerid
   }
+  console.log("ordersearch")
+  console.log(ordersearch)
  
  if(this.state.orderstatus === "All"){
    this.componentDidMount();
@@ -176,10 +193,20 @@ handleChange = (e) => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
     render(){
-      let paginationItemsTag = [];
-      let items = this.state.customerorders;
+      let paginationItemsTag = []; let items = [];
+      if(this.state.orderstatusmsg === "found") {
+        console.log("no")
+       items = this.state.customerorders;
+       console.log(this.state.customerorders)
+       console.log("no")
+      }else if(this.state.ordermsg === "searchdone" ){
+        console.log("done")
+        items = this.state.customerorders1;
+        console.log(this.state.customerorders1)
+        console.log("done")
+      }
       let pgSize = this.state.pageSize;
-
+      
       let count = 1;
       let num = items.length / pgSize;
       console.log(items.length / pgSize);
@@ -189,10 +216,10 @@ handleChange = (e) => {
       } else {
         count = Math.floor(num) + 1;
       }
-      console.log("count:", count);
-    console.log("items.length:", items.length);
+    //   console.log("count:", count);
+    // console.log("items.length:", items.length);
 
-    let active = this.state.curPage;
+    const active = parseInt(this.state.curPage, 10);
 
     for (let number = 1; number <= count; number++) {
       paginationItemsTag.push(
@@ -266,29 +293,6 @@ handleChange = (e) => {
                       </div>
                     }
                   </div>
-                // <div>
-                //     <h1> Your Orders </h1>
-                // <div>
-                //     {this.state.customerorders.map((customerorder) => (
-                //     <div>
-                //       <Table>
-                //         <thead>
-                //         <tr className="form-control-order">
-                //           <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4>  </th>
-        
-                //           <th>{customerorder.totalorderquantity} items for ${customerorder.totalorderprice} . {customerorder.datetime}.</th>
-                //           <th>{customerorder.note}</th>
-                //           <th><Button 
-                //            onClick={() => {
-                //                 this.viewreceipt(customerorder._id);
-                //                 }}>View Receipt</Button></th>   
-                //         </tr>
-                //       </thead>
-                //       </Table>
-                //     </div>
-                //     ))}
-                // </div>
-                // </div>
                 );
             }
             if(this.state.ordermsg === "searchdone" ){
@@ -300,7 +304,39 @@ handleChange = (e) => {
                         {displayitems.map((customerorder) => {
                           return (
                     <div>
-                      <Table>
+                       <Table>
+                        <thead>
+                        <tr className="form-control-order">
+                          <th>
+                          <Row>
+                            <Col>
+                           <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4> 
+                           </th>
+                           </Col>
+                           <Col>
+                           <th> {(customerorder.orderstatus === "Order Received")?(<div>
+                             <Button onClick={() => {
+												      this.cancelOrder1(customerorder._id);
+											        }}>
+                               Cancel Order 
+                             </Button>
+                           </div>):(<div>
+
+                           </div>)} </th>
+                           </Col>
+                           </Row>
+                           </th>
+                          <th>{customerorder.totalorderquantity} items for ${customerorder.totalorderprice} . {customerorder.datetime}.</th>
+                          <th>Special Instructions : {customerorder.note}</th>
+                          <th><Button 
+                           onClick={() => {
+                                this.viewreceipt(customerorder._id);
+                                }}>View Receipt</Button> 
+                             </th>   
+                        </tr>
+                        </thead>
+                        </Table>
+                      {/* <Table>
                         <thead>
                         <tr className="form-control-order">
                           <th>{customerorder.restaurantname}  <h4>{customerorder.orderstatus}</h4>
@@ -314,7 +350,7 @@ handleChange = (e) => {
                                 }}>View Receipt</Button></th>   
                         </tr>
                         </thead>
-                        </Table>
+                        </Table> */}
                         </div>
                       
                           )
@@ -346,6 +382,7 @@ handleChange = (e) => {
                 <option value="Delivered" >Delivered</option>
                 <option value="Pick up Ready" >Pick up Ready</option>
                 <option value="Picked up" >Picked up</option>
+                <option value="Cancelled">Cancelled Order</option>
             	</select>
               
 						<Button 

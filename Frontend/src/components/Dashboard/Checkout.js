@@ -34,7 +34,9 @@ class CheckOut extends Component {
           totalorderquantity:null,
           totalorderprice:null,
           show: false,
-          note:null
+          note:null,
+          delstatus:null,
+          del:null
           
         }
 
@@ -97,7 +99,19 @@ class CheckOut extends Component {
         const {history} = this.props;
         history.push('/restauranthome'); 
       }
-
+      choosePickUp= ()=>{
+        //e.preventDefault();
+        console.log("pickup")
+        localStorage.setItem("deliverytype","Pick Up")
+        this.setState({delstatus:"pickup"})
+        this.setState({del:"both"})
+      }
+      chooseDelivery = () =>{
+        console.log("delivert")
+        localStorage.setItem("deliverytype","Delivery")
+        this.setState({delstatus:"delivery"})
+        this.setState({del:"both"})
+      }
    addToOrders = (data) => {
     axios.defaults.headers.common.authorization = localStorage.getItem('token');
         axios.post(`${backendServer}/placeorder`, data)
@@ -114,9 +128,8 @@ class CheckOut extends Component {
         e.preventDefault();
         localStorage.setItem("checkout","NoCheckout");
         let street; let city ; let state; let country;
-        if(localStorage.getItem("deliverytype") === "Delivery"){
-          console.log("*****Delivery******");
-          console.log(this.state.selectedAddr);
+        if((localStorage.getItem("deliverytype") === "Delivery")|| this.state.delstatus === "delivery"){
+       
           if ((this.state.selectedAddr === null || this.state.selectedAddr === undefined)  ) {
             alert( 'Please select a delivery address option!')
             return;
@@ -193,7 +206,8 @@ class CheckOut extends Component {
               }
             }
           }
-        }else if(localStorage.getItem("deliverytype") === "Pick Up"){
+        }
+        if((localStorage.getItem("deliverytype") === "Pick Up") || (this.state.delstatus === "pickup") ){
           console.log("*****Pick Up******");
               city = "";
               state= "";
@@ -254,9 +268,10 @@ class CheckOut extends Component {
         var addresses = null;
         var addnewaddress = null;
         var cartitems = null;
-       
-      if(localStorage.getItem("deliverytype") === "Delivery") { 
-        console.log("***DEli***")
+        var showdeloptions = null;
+       console.log("I am hee")
+      if(localStorage.getItem("deliverytype") === "Delivery" || this.state.delstatus === "delivery") { 
+        // console.log("***DEli***")
        if(this.state.showDiv){
          addnewaddress = (
            <div>
@@ -306,14 +321,26 @@ class CheckOut extends Component {
           )
         }
 
-      }
-      if(localStorage.getItem("deliverytype") === "Pick Up"){
+      } 
+      if(localStorage.getItem("deliverytype") === "Pick Up" || this.state.delstatus === "pickup"){
         
         addresses = (
           <div><h1>Pick Up from Restaurant</h1></div>
         )
        
-        
+      } 
+      if(localStorage.getItem("deliverytype") === "Pick Up and Delivery" || this.state.del === "both")
+      {
+        showdeloptions = (
+          
+          
+       <div>
+         <h6>Select Delivery Option :</h6>
+         <br/>
+         <Button variant="light" onClick = {this.choosePickUp}>Pick Up</Button>
+         <Button variant="light" onClick = {this.chooseDelivery}>Delivery</Button>
+       </div>
+        )
       }
      
     return (
@@ -363,7 +390,7 @@ class CheckOut extends Component {
         <textarea type="text" className="form-control" name="note" value={this.state.note}
         onChange={this.handleChange} />
         <br/>
-       
+       {showdeloptions}
        {addresses}
      
       

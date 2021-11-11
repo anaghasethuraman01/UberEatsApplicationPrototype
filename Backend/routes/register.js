@@ -4,8 +4,8 @@ const router = express();
  const app = require('../app');
 
 const Users = require('../Models/UserModel');
-
-app.post('/register', (req, res) => {
+const { checkAuth } = require("../utils/passport");
+app.post('/',checkAuth, (req, res) => {
 	
 	var newuser = new Users({
 		username : req.body.name,

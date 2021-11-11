@@ -4,6 +4,9 @@ import {Card, ListGroup, ListGroupItem,Modal} from 'react-bootstrap';
 import { Button ,Input} from 'reactstrap';
 import axios from 'axios';
 import backendServer from "../../webConfig";
+import { connect } from "react-redux";
+import {BiDish} from 'react-icons/bi';
+
 //import 'bootstrap/dist/css/bootstrap.css';
 class RestaurantHome extends Component {
     
@@ -30,7 +33,11 @@ class RestaurantHome extends Component {
         }
       }
   
-      
+      addnewdish = (e) =>{
+        e.preventDefault();
+        const {history} = this.props;
+        history.push('/addrestaurantmenu'); 
+      }
       componentDidMount(){
         const data = {
           restaurantid : this.state.restaurantid
@@ -56,7 +63,7 @@ class RestaurantHome extends Component {
         history.push('/editdishpage'); 
       }
     render(){
-
+      
       var disheslist = null;
       if(this.state.statusmsg == "dishesfound"){
         
@@ -94,6 +101,11 @@ class RestaurantHome extends Component {
             
             <form>
             <h1>Hi {this.state.restaurantname} !</h1>
+            <div className="resthome">
+            <h6>Email : {this.state.email}</h6>
+            <h6>Location : {this.state.city}</h6>
+            </div>
+            <Button onClick = {this.addnewdish}>New Dish <BiDish/></Button>
             <div className='form-buttons'>
             </div>
             {disheslist}
@@ -105,5 +117,10 @@ class RestaurantHome extends Component {
     }
    
 }
- 
-export default RestaurantHome;
+const mapStateToProps = (state) => {
+  return {
+    login: state.login.login,
+  };
+};
+export default connect(mapStateToProps)(RestaurantHome);
+// export default RestaurantHome;

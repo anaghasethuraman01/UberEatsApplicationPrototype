@@ -1,7 +1,7 @@
 
 import Button from '@restart/ui/esm/Button';
 import React, {Component} from 'react'
-import {Modal,Table} from 'react-bootstrap';
+import {Modal,Table,Pagination} from 'react-bootstrap';
 import axios from 'axios';
 import backendServer from "../../webConfig";
 class OrdersPage extends Component {
@@ -20,6 +20,7 @@ class OrdersPage extends Component {
       dishname:null,
       status :null,
       restaurantorders : [],
+      restaurantorders1 : [],
       orderstatusmsg:null,
       updatestatus:false,
       orderstatus:null,
@@ -31,11 +32,22 @@ class OrdersPage extends Component {
       customernickname:null,
       customerabout:null,
       custprofilepic:null,
-    
+      curPage: 1,
+      pageSize: 5,
   
     }
      //this.handleCheckout = this.handleCheckout.bind(this);
   }
+  onPage = (e) => {
+    this.setState({
+      curPage: e.target.text,
+    });
+  };
+  OnChange = (e) => {
+    this.setState({
+      pageSize: parseInt(e.target.value, 10),
+    });
+  };
   
     handleModalCloseCustView(){
         this.setState({showcustprofile:!this.state.showcustprofile}) 
@@ -130,6 +142,14 @@ handleChange = (e, orderid) => {
     orders[index].orderstatus = e.target.value;
     this.setState({ restaurantorders: orders });
   }
+  handleChangenew = (e, orderid) => {
+    e.preventDefault();
+      const { restaurantorders1 } = this.state;
+      const index = restaurantorders1.findIndex((order) => order._id === orderid);
+      const orders = [...restaurantorders1];
+      orders[index].orderstatus = e.target.value;
+      this.setState({ restaurantorders1: orders });
+    }
 
  updateOrderStatus = (ordertypedata)=>{
    //console.log(ordertypedata)
@@ -163,20 +183,21 @@ handleordersearch = (e) => {
 }
 
 searchOrder = (ordersearch) => {
-    console.log(ordersearch);
+  this.setState({curPage : 1})
+  this.setState ({restaurantorders1 : [] })
     axios.defaults.headers.common["authorization"] = localStorage.getItem(
       "token"
   );
     axios.post(`${backendServer}/handleordermodesearch`,ordersearch).then((response) => {
                     if(response.data.length > 0){
-                        this.setState({ ordermsg: "searchdone" });
-                        this.setState({ orderstatusmsg: "notfound" });
+                        this.setState({ orderstatusmsg: "searchdone" });
+                        //this.setState({ orderstatusmsg: "notfound" });
                     }
                     // //update the state with the response data
                      this.setState({
-                      restaurantorders: this.state.restaurantorders.concat(response.data),
+                      restaurantorders1: this.state.restaurantorders1.concat(response.data),
                       });
-                      console.log(this.state.restaurantorders)
+                      
                     
     });
 }
@@ -185,19 +206,169 @@ searchOrder = (ordersearch) => {
 		this.setState({ [e.target.name]: e.target.value });
 	};
     render(){
+
+      let paginationItemsTag = []; let items = [];
+      if(this.state.orderstatusmsg === "found") {
+        items = this.state.restaurantorders;
+       
+      }else if(this.state.orderstatusmsg === "searchdone" ){
+        items = this.state.restaurantorders1;
+
+      }
+      let pgSize = this.state.pageSize;
       
+      let count = 1;
+      let num = items.length / pgSize;
+      console.log(items.length / pgSize);
+      console.log(Number.isInteger(items.length / pgSize));
+      if (Number.isInteger(num)) {
+        count = num;
+      } else {
+        count = Math.floor(num) + 1;
+      }
+      console.log("count:", count);
+    console.log("items.length:", items.length);
+
+    const active = parseInt(this.state.curPage, 10);
+
+    for (let number = 1; number <= count; number++) {
+      paginationItemsTag.push(
+        <Pagination.Item key={number} active={number === active}>
+          {number}
+        </Pagination.Item>
+      );
+    }
+        let start = parseInt(pgSize * (this.state.curPage - 1));
+        let end = this.state.pageSize + start;
+        //   console.log("start: ", start, ", end: ", end);
+        let displayitems = [];
+        if (end > items.length) {
+          end = items.length;
+        }
+        for (start; start < end; start++) {
+          displayitems.push(items[start]);
+        }
         const imgLink = `${backendServer}${this.state.custprofilepic}`;
       
        	var orderlist = null;
               if(this.state.orderstatusmsg === "found") {
                 orderlist = ( 
-                <div>
+                  <div>
+                     {displayitems && displayitems.length > 0 ? (
+                       <div>
                     <h1>  Orders Received </h1>
-                    <br/>
-                <div>
-                
-                    {this.state.restaurantorders.map((customerorder) => (
+                    {displayitems.map((customerorder) => {
+                          return (
+                  <div>
+                   
+                      <div>
                       
+                        <Table>
+                          <thead>
+                          <tr className="form-control-order">
+                            <th>Customer Name : {customerorder.customername}   <Button onClick={() => {
+                                  this.viewcustomerprofile(customerorder.userid);
+                                  }}>View Profile</Button> </th>
+          
+                            <th>Date : {customerorder.datetime} . <br/> Total Items : {customerorder.totalorderquantity} item(s).<br/> Total Price : ${customerorder.totalorderprice}</th>
+                            <th>Order Status : {customerorder.orderstatus} </th>
+                            <th>{
+                              customerorder.ordertype === "Pick Up" && (
+                                <form >
+                                Status Type :
+                                  <select  name="orderstatus"  value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                    <option value="Order Received" >Order Received</option>
+                                    <option value="Preparing">Preparing</option>
+                                    <option value="Pick up Ready" >Pick up Ready</option>
+                                    <option value="Picked up" >Picked up</option>
+                                    <option value="Cancelled" >Cancel Order</option>
+                                  </select>
+                                <Button 
+                                type="submit" 
+                                  onClick={(e) => {
+                                  this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
+                                  }}>
+                                  Update
+                                </Button>
+                              </form>
+                              )
+                              }  
+                              {
+                              customerorder.ordertype === "Delivery" && (
+                                <form >
+                                Status Type :
+                                  <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                    <option value="Order Received" >Order Received</option>
+                                    <option value="Preparing"  >Preparing</option>
+                                    <option value="On the way" >On the way</option>
+                                    <option value="Delivered" >Delivered</option>
+                                    <option value="Cancelled" >Cancel Order</option>
+                                  </select>
+                                  <Button 
+                                type="submit" 
+                                  onClick={(e) => {
+                                  this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
+                                  }}>
+                                  Update
+                                </Button>
+                              </form>
+                              )
+                              }  
+                              {
+                              customerorder.ordertype === "Pick Up and Delivery" && (
+                                <form >
+                                Status Type :
+                                  <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                    <option value="Order Received" >Order Received</option>
+                                    <option value="Preparing"  >Preparing</option>
+                                    <option value="On the way" >On the way</option>
+                                    <option value="Delivered" >Delivered</option>
+                                    <option value="Pick up Ready" >Pick up Ready</option>
+                                    <option value="Picked up" >Picked up</option>
+                                    <option value="Cancelled" >Cancel Order</option>
+                                  </select>
+                                  <Button 
+                                type="submit" 
+                                  onClick={(e) => {
+                                  this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
+                                  }}>
+                                  Update
+                                </Button>
+                              </form>
+                              )
+                              }  
+                            </th>
+                          
+                          
+                          </tr>
+                        </thead>
+                        </Table>
+                        
+                        
+                      </div>
+                  </div>
+                  )})}
+                    </div>
+                     ):
+                     (
+                       <div>
+                         <h4 className="">No Recent Orders </h4>
+                         </div>
+                     )
+                     }
+                </div>
+                );
+            }
+            if(this.state.orderstatusmsg === "searchdone"){
+              orderlist = ( 
+                <div>
+                   {displayitems && displayitems.length > 0 ? (
+                     <div>
+                  <h1>  Orders Received </h1>
+                  {displayitems.map((customerorder) => {
+                        return (
+                <div>
+                 
                     <div>
                     
                       <Table>
@@ -213,7 +384,7 @@ searchOrder = (ordersearch) => {
                             customerorder.ordertype === "Pick Up" && (
                               <form >
                               Status Type :
-                                <select  name="orderstatus"  value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                <select  name="orderstatus"  value={customerorder.orderstatus} onChange={(e) => { this.handleChangenew(e, customerorder._id)}} >
                                   <option value="Order Received" >Order Received</option>
                                   <option value="Preparing">Preparing</option>
                                   <option value="Pick up Ready" >Pick up Ready</option>
@@ -221,7 +392,7 @@ searchOrder = (ordersearch) => {
                                   <option value="Cancelled" >Cancel Order</option>
                                 </select>
                               <Button 
-                               type="submit" 
+                              type="submit" 
                                 onClick={(e) => {
                                 this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
                                 }}>
@@ -234,15 +405,15 @@ searchOrder = (ordersearch) => {
                             customerorder.ordertype === "Delivery" && (
                               <form >
                               Status Type :
-                                <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChangenew(e, customerorder._id)}} >
                                   <option value="Order Received" >Order Received</option>
                                   <option value="Preparing"  >Preparing</option>
                                   <option value="On the way" >On the way</option>
                                   <option value="Delivered" >Delivered</option>
                                   <option value="Cancelled" >Cancel Order</option>
                                 </select>
-                                 <Button 
-                               type="submit" 
+                                <Button 
+                              type="submit" 
                                 onClick={(e) => {
                                 this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
                                 }}>
@@ -255,7 +426,7 @@ searchOrder = (ordersearch) => {
                             customerorder.ordertype === "Pick Up and Delivery" && (
                               <form >
                               Status Type :
-                                <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
+                                <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChangenew(e, customerorder._id)}} >
                                   <option value="Order Received" >Order Received</option>
                                   <option value="Preparing"  >Preparing</option>
                                   <option value="On the way" >On the way</option>
@@ -264,8 +435,8 @@ searchOrder = (ordersearch) => {
                                   <option value="Picked up" >Picked up</option>
                                   <option value="Cancelled" >Cancel Order</option>
                                 </select>
-                                 <Button 
-                               type="submit" 
+                                <Button 
+                              type="submit" 
                                 onClick={(e) => {
                                 this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
                                 }}>
@@ -275,124 +446,29 @@ searchOrder = (ordersearch) => {
                             )
                             }  
                           </th>
-                         
-                         
+                        
+                        
                         </tr>
                       </thead>
                       </Table>
-                       
+                      
                       
                     </div>
-                    ))}
                 </div>
-                </div>
-                );
-            }
-            if(this.state.ordermsg === "searchdone"){
-              orderlist = ( 
-                <div>
-                    <h1>  Orders Received </h1>
-                    <br/>
-                <div>
-                
-                    {this.state.restaurantorders.map((customerorder) => (
-                      
-                    <div>
-                    
-                      <Table>
-                        <thead>
-                        <tr className="form-control-order">
-                          <th>Customer Name : {customerorder.customername} <Button onClick={() => {
-                                this.viewcustomerprofile(customerorder.userid);
-                                }}>View Profile</Button> </th>
-        
-                          <th>Date : {customerorder.datetime} . <br/> Total Items : {customerorder.totalorderquantity} item(s).<br/> Total Price : ${customerorder.totalorderprice}</th>
-                          <th>Order Status : {customerorder.orderstatus} </th>
-                          <th>{
-                            customerorder.ordertype === "Pick Up" && (
-                              <form >
-                              Status Type :
-                                <select  name="orderstatus"  value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
-                                  <option value="Order Received" >Order Received</option>
-                                  <option value="Preparing">Preparing</option>
-                                  <option value="Pick up Ready" >Pick up Ready</option>
-                                  <option value="Picked up" >Picked up</option>
-                                  <option value="Cancelled" >Cancel Order</option>
-                                </select>
-                              <Button 
-                               type="submit" 
-                                onClick={(e) => {
-                                this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
-                                }}>
-                                Update
-                              </Button>
-                            </form>
-                            )
-                            }  
-                            {
-                            customerorder.ordertype === "Delivery" && (
-                              <form >
-                              Status Type :
-                                <select  name="orderstatus"   value={customerorder.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
-                                  <option value="Order Received" >Order Received</option>
-                                  <option value="Preparing"  >Preparing</option>
-                                  <option value="On the way" >On the way</option>
-                                  <option value="Delivered" >Delivered</option>
-                                  <option value="Cancelled" >Cancel Order</option>
-                                </select>
-                                 <Button 
-                               type="submit" 
-                                onClick={(e) => {
-                                this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
-                                }}>
-                                Update
-                              </Button>
-                            </form>
-                            )
-                            }  
-                            {
-                            customerorder.ordertype === "Pick Up and Delivery" && (
-                              <form >
-                              Status Type :
-                                <select  name="orderstatus"   value={this.state.orderstatus} onChange={(e) => { this.handleChange(e, customerorder._id)}} >
-                                  <option value="Order Received" >Order Received</option>
-                                  <option value="Preparing"  >Preparing</option>
-                                  <option value="On the way" >On the way</option>
-                                  <option value="Delivered" >Delivered</option>
-                                  <option value="Pick up Ready" >Pick up Ready</option>
-                                  <option value="Picked up" >Picked up</option>
-                                  <option value="Cancelled" >Cancel Order</option>
-                                </select>
-                                 <Button 
-                               type="submit" 
-                                onClick={(e) => {
-                                this.updatestatusfn(e,customerorder._id,customerorder.orderstatus);
-                                }}>
-                                Update
-                              </Button>
-                            </form>
-                            )
-                            }  
-                          </th>
-                        </tr>
-                      </thead>
-                      </Table>
-                    </div>
-                    ))}
-                </div>
-                </div>
-                );
-
+                )})}
+                  </div>
+                   ):
+                   (
+                     <div>
+                       <h4 className="">No Recent Orders </h4>
+                       </div>
+                   )
+                   }
+              </div>
+              );
+            
             }
             
-            // else {
-            //    orderlist = ( 
-            //     <div>
-            //         <h1> No Orders </h1>
-            //     </div>
-            //    )
-
-            // }
      
     return (
         <div className="container" >
@@ -409,13 +485,25 @@ searchOrder = (ordersearch) => {
 						<Button onClick={this.handleordersearch} type="submit">
 							Search
 						</Button>
+            <div className="pageSelect">
+                Page Size :
+          <select style={{width:'3rem'}} value={this.state.pageSize} onChange={this.OnChange}>
+                <option>2</option>
+                <option>5</option>
+                <option>10</option>
+          </select>
+          </div>
 					</form>
           </div>
 
           <br/><br/><br/>
           <div> {orderlist} </div> 
           
-          
+          <Pagination
+                    onClick={this.onPage}
+                    style={{ display: "inline-flex" }}>
+                    {paginationItemsTag}
+          </Pagination>
       <div>
          <Modal size="md-down"
           aria-labelledby="contained-modal-title-vcenter"

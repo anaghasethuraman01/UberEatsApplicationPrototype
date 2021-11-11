@@ -4,8 +4,8 @@
 
 const Orders = require('../Models/OrderModel');
 function handle_request(req, callback){
-	// console.log("search") 
-    // console.log(req)
+	console.log("search") 
+    console.log(req)
 	Orders.find({orderstatus : req.orderstatus, userid : req.customerid}, (error, dish_results) => {
 	   
 		if (error) {
