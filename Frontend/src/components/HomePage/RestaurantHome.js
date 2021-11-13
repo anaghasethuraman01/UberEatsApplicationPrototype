@@ -4,7 +4,7 @@ import {Card, ListGroup, ListGroupItem,Modal} from 'react-bootstrap';
 import { Button ,Input} from 'reactstrap';
 import axios from 'axios';
 import backendServer from "../../webConfig";
-import { connect } from "react-redux";
+
 import {BiDish} from 'react-icons/bi';
 
 //import 'bootstrap/dist/css/bootstrap.css';
@@ -42,6 +42,7 @@ class RestaurantHome extends Component {
         const data = {
           restaurantid : this.state.restaurantid
         }
+        //this.props.restaurantHome(data);
           axios.defaults.headers.common.authorization = localStorage.getItem('token');
          axios.post(`${backendServer}/getrestaurantwithid`,data).then((response) => {
           //  console.log(response.data.length)
@@ -57,6 +58,8 @@ class RestaurantHome extends Component {
          })
 
       }
+
+    //  
       editdish = (dishObj) => {
         localStorage.setItem("SelectedDish",JSON.stringify(dishObj));
         const {history} = this.props;
@@ -65,7 +68,7 @@ class RestaurantHome extends Component {
     render(){
       
       var disheslist = null;
-      if(this.state.statusmsg == "dishesfound"){
+      //  if(this.state.statusmsg == "dishesfound"){
         
         disheslist = (
         <div className='card-list'>
@@ -93,7 +96,11 @@ class RestaurantHome extends Component {
       }
       </div>
         )
-        }
+      //  }else{
+      //   disheslist = (
+      //     <div><h3>Add a dish</h3></div>
+      //   )
+      //  }
 
     return (
       
@@ -117,10 +124,16 @@ class RestaurantHome extends Component {
     }
    
 }
-const mapStateToProps = (state) => {
-  return {
-    login: state.login.login,
-  };
-};
-export default connect(mapStateToProps)(RestaurantHome);
-// export default RestaurantHome;
+// RestaurantHome.propTypes = {
+// 	restaurantHome: PropTypes.func.isRequired,
+// 	resthome: PropTypes.object.isRequired,
+//   };
+  
+//   const mapStateToProps = (state) => {
+// 	return {
+// 		resthome: state.resthome.resthome
+// 	};
+//   };
+  
+// export default connect(mapStateToProps, {restaurantHome})(RestaurantHome);
+ export default RestaurantHome;

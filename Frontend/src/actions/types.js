@@ -10,3 +10,7 @@ export const USER_PROFILE = "USER_PROFILE";
 export const RESTAURANT_PROFILE = "RESTAURANT_PROFILE";
 
 export const FAVOURITES = "FAVOURITES";
+
+export const USER_HOME="USER_HOME";
+export const RESTAURANT_HOME="RESTAURANT_HOME";
+

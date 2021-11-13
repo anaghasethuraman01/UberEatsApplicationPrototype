@@ -7,6 +7,9 @@ import {Modal} from 'react-bootstrap';
 import ReactTooltip from 'react-tooltip';
 import backendServer from "../../webConfig";
 import {BiCartAlt} from 'react-icons/bi';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { restaurantHome } from "../../actions/restaurantHomeActions";
 
 
 class SingleRestDashboard extends Component {
@@ -56,16 +59,17 @@ class SingleRestDashboard extends Component {
         const restaurantid = {
           restaurantid: localStorage.getItem("restaurantid")
       };
-      axios.defaults.headers.common.authorization = localStorage.getItem('token');
-        axios.post(`${backendServer}/getrestaurantwithid`,restaurantid)
-                .then((response) => { 
-                  console.log(response.data)
-                //update the state with the response data
-                this.setState({
-                  dishes : this.state.dishes.concat(response.data) 
-                });
-               //console.log(this.state.dishes);
-            });
+      this.props.restaurantHome(restaurantid);
+      // axios.defaults.headers.common.authorization = localStorage.getItem('token');
+      //   axios.post(`${backendServer}/getrestaurantwithid`,restaurantid)
+      //           .then((response) => { 
+      //             console.log(response.data)
+      //           //update the state with the response data
+      //           this.setState({
+      //             dishes : this.state.dishes.concat(response.data) 
+      //           });
+      //          //console.log(this.state.dishes);
+      //       });
             
             // const userid = localStorage.getItem("restaurantid")
             // console.log(userid)
@@ -95,7 +99,17 @@ class SingleRestDashboard extends Component {
          });    
 
     }
-
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.resthome) {
+          var { resthome } = nextProps;
+  }
+  
+  this.setState({
+    dishes: this.state.dishes.concat(resthome)
+  });
+  // console.log(typeof(favourite))
+  
+  }
   handleCheckout(){
       //console.log(this.props);
       const {history} = this.props;
@@ -295,4 +309,17 @@ class SingleRestDashboard extends Component {
    
 }
  
-export default SingleRestDashboard;
+
+SingleRestDashboard.propTypes = {
+	restaurantHome: PropTypes.func.isRequired,
+	resthome: PropTypes.object.isRequired,
+  };
+  
+  const mapStateToProps = (state) => {
+	return {
+		resthome: state.resthome.resthome
+	};
+  };
+  
+export default connect(mapStateToProps, {restaurantHome})(SingleRestDashboard);
+//export default SingleRestDashboard;

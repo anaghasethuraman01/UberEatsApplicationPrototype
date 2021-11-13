@@ -9,7 +9,9 @@ import {IoIosRestaurant} from 'react-icons/io';
 import {MdFavoriteBorder} from 'react-icons/md';
 import {RiPhoneFill} from 'react-icons/ri';
 import {IoMail} from 'react-icons/io5';
-
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { customerHome } from "../../actions/customerHomeActions";
 
 class CustomerHome extends Component {
     
@@ -47,18 +49,17 @@ class CustomerHome extends Component {
       const data = {
 			city: city,
 		  };
-      console.log("city")
-      console.log(data)
-      axios.defaults.headers.common.authorization = localStorage.getItem('token');
-      axios.post(`${backendServer}/getrestaurantwithcity`,data).then((response) => {
-        //this.setState({ status: "notdone" });
-        //console.log(response.data);
-        //update the state with the response data
-        this.setState({
-          restaurants: this.state.restaurants.concat(response.data),
-        });
+      this.props.customerHome(data);
+      // console.log("city")
+      // console.log(data)
+      // axios.defaults.headers.common.authorization = localStorage.getItem('token');
+      // axios.post(`${backendServer}/getrestaurantwithcity`,data).then((response) => {
+        
+      //   this.setState({
+      //     restaurants: this.state.restaurants.concat(response.data),
+      //   });
        
-      });
+      // });
     } if(city === "null" || city === "Add" || city === undefined || this.state.restaurants.length === 0) {
       //console.log("here")
       axios.defaults.headers.common["authorization"] = localStorage.getItem(
@@ -66,8 +67,8 @@ class CustomerHome extends Component {
     );
       axios.get(`${backendServer}/getrestaurant`).then((response) => {
 			//this.setState({ status: "notdone" });
-        console.log("all det")
-			  console.log(response.data);
+        // console.log("all det")
+			  // console.log(response.data);
 			//update the state with the response data
 			this.setState({
 				restaurants1: this.state.restaurants1.concat(response.data),
@@ -76,6 +77,17 @@ class CustomerHome extends Component {
     }
 
 	}
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.userhome) {
+        var { userhome } = nextProps;
+}
+
+this.setState({
+  restaurants: this.state.restaurants.concat(userhome)
+});
+// console.log(typeof(favourite))
+
+}
   handleModalClose(){
 		this.setState({show:!this.state.show}) 
 		// const {history} = this.props;
@@ -135,6 +147,11 @@ class CustomerHome extends Component {
       
 
     render(){
+      // let {restaurants} = this.state;
+
+      // console.log(typeof(this.props.userhome))
+      // restaurants = restaurants.concat(this.props.userhome);
+      // console.log(restaurants)
       var beforeSearch = null;
       var afterSearch = null;
       // var fav=null;
@@ -149,7 +166,8 @@ class CustomerHome extends Component {
       //   )
       // }
       //console.log("city",this.state.city)
-      if(this.state.city === "null" || this.state.city === "Add" || this.state.restaurants.length === 0){
+      if(this.state.city === "null" || this.state.city === "Add" ||this.state.restaurants.length ===0){
+        console.log("Before")
           beforeSearch = ( 
           <div>
             <br/>
@@ -197,7 +215,7 @@ class CustomerHome extends Component {
         );
       }
       else{
-        
+        console.log("After")
           afterSearch = (
             <div>
             <h1> Restaurants Near You</h1>
@@ -320,5 +338,17 @@ class CustomerHome extends Component {
     }
    
 }
- 
-export default CustomerHome;
+CustomerHome.propTypes = {
+	customerHome: PropTypes.func.isRequired,
+	userhome: PropTypes.object.isRequired,
+  };
+  
+  const mapStateToProps = (state) => {
+	return {
+		userhome: state.userhome.userhome
+	};
+  };
+  
+export default connect(mapStateToProps, {customerHome})(CustomerHome);
+
+// export default CustomerHome;

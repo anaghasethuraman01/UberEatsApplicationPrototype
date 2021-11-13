@@ -20,35 +20,18 @@ class Favourites extends Component {
 		this.state = {
 			favrestaurants : []
 		};
-            // customerid : localStorage.getItem("userid"),
-			// zipcode: null,
-			// restid: null,
-			// city: null,
-			// dish: null,
-			// foodtype: null,
-			// status: "notdone",
-			// deliverytype: null,
-			// restaurants: [],
-			// restaurants1: [],
-            // favrestaurants: [],
-            // favourites:null,
-			
-		
-		// this.handleChange = this.handleChange.bind(this);
-		// this.handleSubmit = this.handleSubmit.bind(this);
+          
 	}
 
 	componentDidMount() {
-		// this.setState({
-		// 	favrestaurants: []
-		// });
+	
 		
             const customerid = {
                 customerid:localStorage.getItem("userid")
             }
 			
-			console.log(customerid);
-			console.log("******")
+			// console.log(customerid);
+			// console.log("******")
 			this.props.customerFavourite(customerid);
    
 	}
@@ -90,13 +73,7 @@ class Favourites extends Component {
 	
 	render() {
 		let favrestaurants = []; 
-		// console.log("***")
-		// console.log(this.state.favrestaurants)
-		// if(this.props){
-		//   favrestaurants = this.props.customerFavourite;
 		
-		// }
-		//console.log(favrestaurants)
 		var favouriterest = null;
         if(favrestaurants !== []){
                 favouriterest = ( 

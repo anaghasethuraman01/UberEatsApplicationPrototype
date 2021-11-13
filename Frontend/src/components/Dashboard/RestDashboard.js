@@ -26,6 +26,7 @@ class RestDashboard extends Component {
 			status: "notdone",
 			deliverytype: null,
 			restaurants: [],
+			filteredrestaurants: [],
 			restaurants1: [],
 			show:false,
 			message:''
@@ -72,7 +73,7 @@ class RestDashboard extends Component {
 			//console.log(res.data);
 			if(res.data !== 'No Dishes found'){
 				this.setState({
-					restaurants: res.data,
+					restaurants1: res.data,
 				});
 			}else{
 				this.setState({
@@ -163,21 +164,27 @@ class RestDashboard extends Component {
 	};
 	render() {
 		
-		const {status,city,deliverytype} = this.state;
-		let{restaurants,restaurants1} = this.state;
-		
-		if(status === 'done'){
-			console.log("Done")	
-			if (city !== null && city !== '') {
-				restaurants = restaurants.filter((restaurant) => restaurant.city === city);
-			}
-			if (deliverytype !== null && deliverytype !== '' && deliverytype !== "All") {
-				restaurants = restaurants.filter((restaurant) => restaurant.deliverytype === deliverytype);
-			}
-		}else if(status === 'notdone'){
-			 restaurants = restaurants1;
+		const {city,deliverytype,dish,foodtype} = this.state;
+		let{restaurants,restaurants1,filteredrestaurants} = this.state;
+		filteredrestaurants = restaurants;
+		if ((dish !== null && dish !== '') || (foodtype !== null && foodtype !== '') )  {
+			filteredrestaurants = restaurants1;
 		}
-		var beforeSearch = null;
+		if (city !== null && city !== '') {
+			filteredrestaurants = filteredrestaurants.filter((restaurant) => restaurant.city === city);
+		}
+		if (deliverytype !== null && deliverytype !== '' && deliverytype !== "All") {
+			filteredrestaurants = filteredrestaurants.filter( restaurant =>
+				 restaurant.deliverytype === deliverytype || restaurant.deliverytype === "Pick Up and Delivery");
+			// if(deliverytype === "Delivery"){
+			// 	filteredrestaurants = filteredrestaurants.filter((restaurant) => (restaurant.deliverytype).includes("Delivery"));
+			// }else{
+			// 	filteredrestaurants = filteredrestaurants.filter((restaurant) => (restaurant.deliverytype).includes("Pick Up"));
+			// }
+			
+		}
+		
+		
 		var afterSearch = null;
 		var fav=null;
 
@@ -190,95 +197,134 @@ class RestDashboard extends Component {
 			  <p>Added to Favourites !</p>
 			)
 		  }
-
-		if (this.state.status === "done") {
+		  afterSearch = (
+			<div className="card-list">
+				{filteredrestaurants.map((restaurant) => (
+					<div>
+						<Card style={{ width: "18rem" }}>
+						<Card.Img 
+								style={{ width: "18rem",height: "13rem" }}
+								variant="bottom"
+								src={`${backendServer}${restaurant.profilepic}`}
+							/>
+							<Card.Body>
+								<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
+								<ListGroup className="list-group-flush">
+									  <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
+										<ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
+								</ListGroup>
+								<ReactTooltip />
+								<div className="btngrp">
+									<Button data-tip="Explore" className="cardbtn"
+										onClick={() => {
+											this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
+										}}
+									>
+									<IoIosRestaurant/>
+									</Button>
+									<ReactTooltip />
+									
+									  <Button className="cardbtn" data-tip="Add To Favourites"
+									  onClick={() => {
+											this.addToFavourites(restaurant._id);
+										}}
+										>
+										<MdFavoriteBorder/></Button>
+										</div>
+							</Card.Body>
+						</Card> 
+					</div>
+				))}
+			</div>
+		);
+		// if (this.state.status === "done") {
 			
 	
-			afterSearch = (
-				<div className="card-list">
-					{restaurants.map((restaurant) => (
-						<div>
-							<Card style={{ width: "18rem" }}>
-							<Card.Img 
-									style={{ width: "18rem",height: "13rem" }}
-									variant="bottom"
-									src={`${backendServer}${restaurant.profilepic}`}
-								/>
-								<Card.Body>
-									<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
-									<ListGroup className="list-group-flush">
-										  <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
-                      					  <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
-									</ListGroup>
-									<ReactTooltip />
-									<div className="btngrp">
-										<Button data-tip="Explore" className="cardbtn"
-											onClick={() => {
-												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
-											}}
-										>
-										<IoIosRestaurant/>
-										</Button>
-										<ReactTooltip />
+		// 	afterSearch = (
+		// 		<div className="card-list">
+		// 			{restaurants.map((restaurant) => (
+		// 				<div>
+		// 					<Card style={{ width: "18rem" }}>
+		// 					<Card.Img 
+		// 							style={{ width: "18rem",height: "13rem" }}
+		// 							variant="bottom"
+		// 							src={`${backendServer}${restaurant.profilepic}`}
+		// 						/>
+		// 						<Card.Body>
+		// 							<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
+		// 							<ListGroup className="list-group-flush">
+		// 								  <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
+        //               					  <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
+		// 							</ListGroup>
+		// 							<ReactTooltip />
+		// 							<div className="btngrp">
+		// 								<Button data-tip="Explore" className="cardbtn"
+		// 									onClick={() => {
+		// 										this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
+		// 									}}
+		// 								>
+		// 								<IoIosRestaurant/>
+		// 								</Button>
+		// 								<ReactTooltip />
 										
-                      					<Button className="cardbtn" data-tip="Add To Favourites"
-										  onClick={() => {
-												this.addToFavourites(restaurant._id);
-											}}
-											>
-											<MdFavoriteBorder/></Button>
-											</div>
-								</Card.Body>
-							</Card> 
-						</div>
-					))}
-				</div>
-			);
-		} else {
+        //               					<Button className="cardbtn" data-tip="Add To Favourites"
+		// 								  onClick={() => {
+		// 										this.addToFavourites(restaurant._id);
+		// 									}}
+		// 									>
+		// 									<MdFavoriteBorder/></Button>
+		// 									</div>
+		// 						</Card.Body>
+		// 					</Card> 
+		// 				</div>
+		// 			))}
+		// 		</div>
+		// 	);
+		// } else {
 			
-			beforeSearch = (
+			// beforeSearch = (
 				
-				<div className="card-list">
-					{this.state.restaurants1.map((restaurant) => (
-						<div >
+			// 	<div className="card-list">
+			// 		{this.state.restaurants1.map((restaurant) => (
+			// 			<div >
 							
-							<Card  style={{ width: "18rem" }}>
+			// 				<Card  style={{ width: "18rem" }}>
 								
-								<Card.Img
-									style={{ width: "18rem" ,height:"13rem"}}
-									variant="top"
-									src={`${backendServer}${restaurant.profilepic}`}
-								/>
-								<Card.Body>
-									<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
-									<ListGroup className="list-group-flush">
-									  <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
-                      				  <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
-										<div className="btngrp">
-										<Button data-tip="Explore" className="cardbtn"
-											onClick={() => {
-												this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
-											}}
-										>
-										<IoIosRestaurant/>
-										</Button>
-										<ReactTooltip />
+			// 					<Card.Img
+			// 						style={{ width: "18rem" ,height:"13rem"}}
+			// 						variant="top"
+			// 						src={`${backendServer}${restaurant.profilepic}`}
+			// 					/>
+			// 					<Card.Body>
+			// 						<Card.Title className = "detailsincard">{restaurant.restaurantname} ({restaurant.city})</Card.Title>
+			// 						<ListGroup className="list-group-flush">
+			// 						  <ListGroupItem className = "detailsincard"><RiPhoneFill/>: {restaurant.phone} </ListGroupItem>
+            //           				  <ListGroupItem className = "detailsincard"><IoMail/>{restaurant.email}</ListGroupItem>
+			// 							<div className="btngrp">
+			// 							<Button data-tip="Explore" className="cardbtn"
+			// 								onClick={() => {
+			// 									this.navigatetorestaurant(restaurant._id,restaurant.restaurantname,restaurant.deliverytype);
+			// 								}}
+			// 							>
+			// 							<IoIosRestaurant/>
+			// 							</Button>
+			// 							<ReactTooltip />
 										
-                      					<Button className="cardbtn" data-tip="Add To Favourites"
-										  onClick={() => {
-												this.addToFavourites(restaurant._id);
-											}}
-											>
-											<MdFavoriteBorder/></Button>
-											</div>
-									</ListGroup>
-								</Card.Body>
-							</Card>
-						</div>
-					))}
-				</div>
-			);
-		}
+            //           					<Button className="cardbtn" data-tip="Add To Favourites"
+			// 							  onClick={() => {
+			// 									this.addToFavourites(restaurant._id);
+			// 								}}
+			// 								>
+			// 								<MdFavoriteBorder/></Button>
+			// 								</div>
+			// 						</ListGroup>
+			// 					</Card.Body>
+			// 				</Card>
+			// 			</div>
+			// 		))}
+			// 	</div>
+			// );
+		//}
 		return (
 			<div >
 				{/* <AddToCart/> */}
@@ -333,7 +379,7 @@ class RestDashboard extends Component {
 					</Row>
 				</Form>
 				
-				{beforeSearch}
+				
 				{afterSearch}
 				</div>
 
