@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
 		  res.writeHead(400, {
 			"content-type": "text/plain",
 		  });
-		  console.log(error.message)
+		  console.log(err.message)
 		  res.end("Invalid Credentials");
 		}else{
 
