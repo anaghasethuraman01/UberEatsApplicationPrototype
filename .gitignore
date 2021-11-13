@@ -4,3 +4,7 @@ Frontend/node_modules
 Backend/package-lock.json
 Frontend/package-lock.json
 kafka-backend/node_modules/
+Backend/.DS_Store
+Frontend/.DS_Store
+Backend/.env
+Backend/.DS_Store
