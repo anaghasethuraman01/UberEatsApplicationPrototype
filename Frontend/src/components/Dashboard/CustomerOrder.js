@@ -31,7 +31,7 @@ class CustomerOrder extends Component {
       totalamount:null,
       totalquantity:null,
       curPage: 1,
-      pageSize: 2,
+      pageSize: 5,
   
     }
      //this.handleCheckout = this.handleCheckout.bind(this);
