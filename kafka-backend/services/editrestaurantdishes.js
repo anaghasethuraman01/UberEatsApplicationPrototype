@@ -18,9 +18,7 @@ function handle_request(req, callback){
 	Dishes.findOneAndUpdate({_id: req.dishid },newdishes,(error, dishresult) => {
 	   
 		if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			callback(null, error);
 			console.log(error.message)
 		}
 		if (dishresult) {

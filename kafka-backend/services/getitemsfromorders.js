@@ -10,8 +10,7 @@ function handle_request(req, callback){
     Orders.find({ userid: req.customerid },(error, getorder) => {
         //console.log("#############")
         if (error) {
-            // res.status = '500';
-            // callback(null,res)
+            callback(null, error);
         }
         if (getorder) {
             // res.status = 200;

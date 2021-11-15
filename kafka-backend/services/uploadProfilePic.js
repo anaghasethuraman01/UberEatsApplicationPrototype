@@ -13,9 +13,9 @@ function handle_request(req, callback){
 	if(usertype === "Customer"){
 		Users.updateOne({_id: userid },{$set : {profilepic : profileImg}},(error, imageupload) => {
 			if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
 			console.log(error.message)
 			}
 			if (imageupload) {
@@ -26,9 +26,9 @@ function handle_request(req, callback){
 	}else if(usertype === "Restaurant"){
 		Restaurants.updateOne({_id: userid },{$set : {profilepic : profileImg}},(error, imageupload) => {
 			if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
 			console.log(error.message)
 			}
 			if (imageupload) {
@@ -39,9 +39,9 @@ function handle_request(req, callback){
 	}else{
 		Dishes.updateOne({_id: userid },{$set : {profilepic : profileImg}},(error, imageupload) => {
 			if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
 			console.log(error.message)
 			}
 			if (imageupload) {

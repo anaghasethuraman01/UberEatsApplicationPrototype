@@ -39,7 +39,7 @@ var options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    poolSize: 500,
+    //poolSize: 500,
     bufferMaxEntries: 0
 };
 

@@ -26,7 +26,7 @@ app.post('/',checkAuth, (req, res) => {
 		if (register) {
 			
 			 console.log("Email already exists");
-			 res.send({ message: "User email already registered" });
+			 res.status('400').send({ message: "User email already registered" });
 			
 		}
 		else {
@@ -35,7 +35,7 @@ app.post('/',checkAuth, (req, res) => {
 					// res.writeHead(500, {
 					// 	'Content-Type': 'text/plain'
 					// })
-					res.send();
+					res.statys('404').send();
 				}
 				else {
 					console.log("added");

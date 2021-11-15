@@ -14,9 +14,9 @@ function handle_request(req, callback){
         Carts.deleteMany( { _id : req._id },(error, dishresult) => {
 	   
             if (error) {
-                res.writeHead(500, {
-                    'Content-Type': 'text/plain'
-                })
+                // res.writeHead(500, {
+                //     'Content-Type': 'text/plain'
+                // })
                 console.log(error.message)
             }
             if (dishresult) {
@@ -29,9 +29,9 @@ function handle_request(req, callback){
         Carts.updateMany({_id: req._id },{$set : {quantity : req.quantity , quantityprice : quantityprice}},(error, dishresult) => {
 	   
             if (error) {
-                res.writeHead(500, {
-                    'Content-Type': 'text/plain'
-                })
+                // res.writeHead(500, {
+                //     'Content-Type': 'text/plain'
+                // })
                 console.log(error.message)
             }
             if (dishresult) {

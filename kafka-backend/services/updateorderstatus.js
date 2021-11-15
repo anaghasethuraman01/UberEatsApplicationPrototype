@@ -17,9 +17,9 @@ function handle_request(req, callback){
     }
     Orders.updateMany({_id: orderid },{$set : {orderstatus : orderstatus, ordermodetype : ordermodetype}},(error, dishresult) => {
                 if (error) {
-                res.writeHead(500, {
-                    'Content-Type': 'text/plain'
-                })
+                // res.writeHead(500, {
+                //     'Content-Type': 'text/plain'
+                // })
                 console.log(error.message)
                 }
                 if (dishresult) {

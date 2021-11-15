@@ -7,10 +7,6 @@ function handle_request(req,callback){
     Restaurants.find((error, restaurant_results) => {
 	   
 		if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
-			//res.send();
 			//callback(null, error); 
 		}
 		if (restaurant_results) {

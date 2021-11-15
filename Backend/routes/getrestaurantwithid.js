@@ -10,13 +10,13 @@ router.post('/',checkAuth, (req, res) => {
 	kafka.make_request('dishes_list', req.body, (err, data) => {
     
 		if (err) {
-		  res.writeHead(400, {
-			"content-type": "text/plain",
-		  });
+		//   res.writeHead(400, {
+		// 	"content-type": "text/plain",
+		//   });
 		  //res.end("Invalid Credentials");
 		}else{
 
-			res.send(JSON.stringify(data))
+			res.status('200').send(JSON.stringify(data))
 			//console.log("Login success");
 		}
 	});

@@ -4,7 +4,7 @@ const express = require('express');
 const kafka = require('../kafka/client');
 const router = express.Router();
 const { checkAuth } = require("../utils/passport");
-router.get('/',checkAuth, (req, res) => {
+router.get('/',(req,res) => {
   
 	kafka.make_request('restaurant_list',req.body, (err, data) => {
    

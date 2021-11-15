@@ -81,7 +81,7 @@ class Login extends Component {
             redirectHome = <Redirect to="/" />
            
         }
-    
+        console.log(this.props.login)
 
        
     

@@ -9,9 +9,9 @@ function handle_request(req, callback){
 	Orders.find({orderstatus : req.orderstatus, userid : req.customerid}, (error, dish_results) => {
 	   
 		if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
 			//res.send();
 		}
 		if (dish_results) {

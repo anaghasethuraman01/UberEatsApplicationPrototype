@@ -10,10 +10,7 @@ function handle_request(req, callback){
 	Favourites.find({userid : req.customerid},{restaurantid : 1}, (error, rest_results) => {
 	   
 		if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
-			//res.send();
+			callback(null, error);
 		}
 		if (rest_results) {
                      
@@ -28,9 +25,9 @@ function handle_request(req, callback){
             Restaurants.find({_id : {$in : rest }}, (error, dish_results) => {
 	   
                 if (error) {
-                    res.writeHead(500, {
-                        'Content-Type': 'text/plain'
-                    })
+                    // res.writeHead(500, {
+                    //     'Content-Type': 'text/plain'
+                    // })
                    console.log(error.message)
                 }
                 if (dish_results) {

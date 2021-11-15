@@ -9,9 +9,7 @@ function handle_request(req, callback){
     AddToCart.find({ userid: req.customerid  }, (error, cartitems) => {
 	   
 		if (error) {   
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			callback(null, error);
 			//res.send();
 		}
 		if (cartitems.length == 0 ) {

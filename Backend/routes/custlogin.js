@@ -15,11 +15,14 @@ router.post('/', (req, res) => {
 	// 	console.log("*****")
     //  console.log(data.message)
 		if (err) {
-		  res.writeHead(400, {
-			"content-type": "text/plain",
-		  });
+		//   res.writeHead(400, {
+		// 	"content-type": "text/plain",
+		//   });
 		  res.end("Invalid Credentials");
 		}else if(data.message === "Customer Found"){
+			// res.writeHead(200, {
+			// 	"content-type": "text/plain",
+			//   });
 			const payload = {
                 _id: data.result._id,
                 username : data.result.username,
@@ -39,10 +42,15 @@ router.post('/', (req, res) => {
 				expiresIn: 1008000,
 			  });
 			  data.token = "JWT " + token;
-			  res.send(JSON.stringify(data))
+			  res.status('200').send(JSON.stringify(data))
 			// console.log("Login success");
 		}else if(data.message === "Invalid credentials" || data.message === "Invalid User"){
-			res.send(JSON.stringify(data))
+			// res.writeHead(400, {
+			// 	"content-type": "text/plain",
+			//   });
+			//res.send({ message: "Invalid credentials" });
+			// console.log(JSON.stringify(data))
+			  res.status('400').send(JSON.stringify(data))
 		}
 	});
 	

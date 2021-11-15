@@ -8,11 +8,11 @@ function handle_request(req,callback){
     Restaurants.find({city : req.city},(error, restaurant_results) => {
 	   
 		if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
 			//res.send();
-			//callback(null, error); 
+			callback(null, error); 
 		}
 		if (restaurant_results) {
            

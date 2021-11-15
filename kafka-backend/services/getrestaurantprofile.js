@@ -9,10 +9,7 @@ function handle_request(req, callback){
     Restaurants.findOne({ _id: req.userid }, (error, getprofile) => {
 	  // console.log("I am here")
     if (error) {
-        res.writeHead(500, {
-        	'Content-Type': 'text/plain'
-        })
-        //res.send();
+        callback(null, error);
     }
     if (getprofile) {
                       

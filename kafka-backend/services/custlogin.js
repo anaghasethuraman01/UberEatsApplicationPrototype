@@ -10,9 +10,7 @@ function handle_request(req, callback){
   Users.find({ email: req.email}, (error, custlogin) => {
     //console.log(custlogin)
     if (error) {
-        res.writeHead(500, {
-            'Content-Type': 'text/plain'
-        })
+        callback(null, error);
         console.log('Failed to fetch data');
     }
     if (custlogin.length > 0) {

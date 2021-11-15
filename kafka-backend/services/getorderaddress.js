@@ -15,8 +15,7 @@ var res = {status: '', address : []};
 Users.find({ _id: req.customerid },(error, getcustomeraddress) => {
 
      if (error) {
-        res.status = '500';
-        callback(null,res)
+        callback(null, error);
      }
      if (getcustomeraddress) {
 		res.status = 200;

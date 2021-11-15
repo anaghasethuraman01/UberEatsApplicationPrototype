@@ -9,9 +9,9 @@ function handle_request(req, callback){
     Restaurants.find({ email: req.email}, (error, restlogin) => {
      
       if (error) {
-          res.writeHead(500, {
-              'Content-Type': 'text/plain'
-          })
+        //   res.writeHead(500, {
+        //       'Content-Type': 'text/plain'
+        //   })
           console.log('Failed to fetch data');
       }
       if (restlogin.length > 0) {

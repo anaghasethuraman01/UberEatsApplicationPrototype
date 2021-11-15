@@ -12,9 +12,7 @@ function handle_request(req, callback){
     Favourites.findOne({ restaurantid: req.restaurantid ,userid: req.customerid }, (error, favresult) => {
 	   
 		if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			callback(null, error);
 			//res.send();
 		}
 		if (favresult) {
@@ -30,9 +28,7 @@ function handle_request(req, callback){
 		else {
 			customerfavourite.save((error, data) => {
 				if (error) {
-					res.writeHead(500, {
-						'Content-Type': 'text/plain'
-					})
+					callback(null, error);
 					//res.send();
 				}
 				else {

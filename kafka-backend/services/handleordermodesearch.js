@@ -9,9 +9,9 @@ function handle_request(req, callback){
 	Orders.find({ordermodetype : req.ordermodetype, restaurantid : req.restaurantid}, (error, orderresults) => {
 	   
 		if (error) {
-			res.writeHead(500, {
-				'Content-Type': 'text/plain'
-			})
+			// res.writeHead(500, {
+			// 	'Content-Type': 'text/plain'
+			// })
 			//res.send();
 		}
 		if (orderresults) {
