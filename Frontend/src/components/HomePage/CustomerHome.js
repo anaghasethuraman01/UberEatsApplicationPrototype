@@ -316,6 +316,7 @@ this.setState({
               centered
               show={this.state.show} onHide={()=>this.handleModalClose()}>
                 <Modal.Header closeButton></Modal.Header>
+                
                 <Modal.Body>
                 {this.state.message}
                 </Modal.Body>
