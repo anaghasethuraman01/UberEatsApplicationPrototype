@@ -1,4 +1,4 @@
 
-const backendServer = "http://localhost:5000";
+const backendServer = "http://13.59.210.87:5000";
 
 export default backendServer;

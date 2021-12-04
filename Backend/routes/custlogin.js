@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
 	console.log("Inside Login");
  
 	kafka.make_request('customer_login', req.body, (err, data) => {
-		console.log("*****")
+	// 	console.log("*****")
     //  console.log(data.message)
 		if (err) {
 		//   res.writeHead(400, {
