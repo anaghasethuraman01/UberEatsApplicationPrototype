@@ -4,8 +4,7 @@ const S3 = require('aws-sdk/clients/s3')
 
 const bucketName = "ubereatsimagebucket"
 const region = "us-west-1"
-const accessKeyId = "AKIAZZWDMJIONBW2DJGK"
-const secretAccessKey = "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"
+
 
 const s3 = new S3({
   region,
